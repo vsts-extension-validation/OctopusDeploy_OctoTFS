@@ -10,11 +10,12 @@ Custom Build Steps for [Team Build vNext](http://aka.ms/tfbuild)
 
 For usage, see the [Build Steps Readme](source/VSTSExtensions).
 
-* [Create Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/CreateOctopusRelease)
-* [Deploy Octopus Release](https://github.com/OctopusDeploy/OctoTFS/issues/40) _coming soon!_
-* [Promote Octopus Release](https://github.com/OctopusDeploy/OctoTFS/issues/38) _coming soon!_
-* [Push Packages to Octopus](https://github.com/OctopusDeploy/OctoTFS/issues/39) _coming soon!_
- 
+* [Create Octopus Package](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Pack)
+* [Push Packages to Octopus](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Push)
+* [Create Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/CreateOctopusRelease)
+* [Deploy Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Deploy)
+* [Promote Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Promote)
+
 ## PowerShell Scripts
 
 PowerShell Scripts that can be used independently or with [Team Build vNext](http://aka.ms/tfbuild). For usage, see the [PowerShell Scripts Readme](source/BuildPowershellScripts).
