@@ -28,6 +28,11 @@
             "isExpanded": false
         },
         {
+            "name": "tenant",
+            "displayName": "Tenants",
+            "isExpanded": false
+        },
+        {
             "name": "additional",
             "displayName": "Additional Options",
             "isExpanded": false
@@ -90,7 +95,7 @@
             "label": "Custom Notes",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Custom notes appended to Octopus Release notes",
+            "helpMarkDown": "Custom notes appended to Octopus Release notes.",
             "groupName": "releasenotes"
         },
         {
@@ -99,17 +104,26 @@
             "label": "To Environment",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Deploy the release to this environment after creating it",
+            "helpMarkDown": "Deploy the release to this environment after creating it.",
             "groupName": "deployment"
         },
         {
             "name": "DeployForTenants",
             "type": "string",
-            "label": "For Tenants(s)",
+            "label": "Tenant(s)",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Deploy the release for this tag delimited list of tenants after creating it",
-            "groupName": "deployment"
+            "helpMarkDown": "Deploy the release for this comma delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "groupName": "tenant"
+        },
+        {
+            "name": "DeployForTenantTags",
+            "type": "string",
+            "label": "Tenant tag(s)",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
+            "groupName": "tenant"
         },
         {
             "name": "DeploymentProgress",

@@ -17,6 +17,11 @@
     },
     "minimumAgentVersion": "1.95.0",
     "groups": [
+         {
+            "name": "tenant",
+            "displayName": "Tenants",
+            "isExpanded": false
+        },
         {
             "name": "advanced",
             "displayName": "Advanced Options",
@@ -63,6 +68,24 @@
             "defaultValue": "False",
             "required": false,
             "helpMarkDown": "If checked, the build process will only succeed if the deployment is successful."
+        },
+         {
+            "name": "DeployForTenants",
+            "type": "string",
+            "label": "Tenant(s)",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Deploy the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "groupName": "tenant"
+        },
+        {
+            "name": "DeployForTenantTags",
+            "type": "string",
+            "label": "Tenant tag(s)",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
+            "groupName": "tenant"
         },
         {
             "name": "AdditionalArguments",

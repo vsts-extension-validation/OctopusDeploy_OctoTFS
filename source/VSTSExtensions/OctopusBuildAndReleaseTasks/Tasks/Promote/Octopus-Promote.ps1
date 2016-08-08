@@ -12,6 +12,8 @@ try {
     $From = Get-VstsInput -Name From -Require
     $To = Get-VstsInput -Name To -Require
     $ShowProgress = Get-VstsInput -Name ShowProgress -AsBool
+    $DeployForTenants = Get-VstsInput -Name DeployForTenants
+	$DeployForTenantTags = Get-VstsInput -Name DeployForTenantTags
     $AdditionalArguments = Get-VstsInput -Name AdditionalArguments
 
     $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
@@ -31,6 +33,20 @@ try {
             $Arguments = $Arguments + " --to=`"$Environment`""
         }
     }
+
+    # optional deployment tenants & tags
+	if (-not [System.String]::IsNullOrWhiteSpace($DeployForTenants)) {
+        ForEach($Tenant in $DeployForTenants.Split(',').Trim()) {
+            $Arguments = $Arguments + " --tenant=`"$Tenant`""
+        }
+	}
+
+	if (-not [System.String]::IsNullOrWhiteSpace($DeployForTenantTags)) {
+        ForEach($Tenant in $DeployForTenantTags.Split(',').Trim()) {
+            $Arguments = $Arguments + " --tenanttag=`"$Tenant`""
+		}
+	}
+    
     Invoke-VstsTool -FileName $octoPath -Arguments $Arguments -RequireExitCodeZero
 
 } finally {
