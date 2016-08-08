@@ -7,7 +7,7 @@ $shareWith = $OctopusParameters["ShareWith"]
 
 
 & "$PSScriptRoot\pack.ps1" -environment $environment -version $version
-& "$PSScriptRoot\publish.ps1" -environment $environment -version $version -accessToken $accessToken
+& "$PSScriptRoot\publish.ps1" -environment $environment -version $version -accessToken $accessToken -shareWith $shareWith
 
 $vsixPackages = Get-ChildItem "$PSScriptRoot\build\Artifacts\$environment\*.vsix"
 
