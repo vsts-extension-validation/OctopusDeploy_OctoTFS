@@ -99,7 +99,7 @@
             "groupName": "releasenotes"
         },
         {
-            "name": "DeployTo",
+            "name": "DeployToEnvironment",
             "type": "string",
             "label": "To Environment",
             "defaultValue": "",

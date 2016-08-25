@@ -117,7 +117,7 @@ try {
     $ChangesetCommentReleaseNotes = Get-VstsInput -Name ChangesetCommentReleaseNotes -AsBool
     $WorkItemReleaseNotes = Get-VstsInput -Name WorkItemReleaseNotes -AsBool
     $CustomReleaseNotes = Get-VstsInput -Name CustomReleaseNotes
-    $DeployToEnvironment = Get-VstsInput -Name DeployTo
+    $DeployToEnvironment = Get-VstsInput -Name DeployToEnvironment
 	$DeployForTenants = Get-VstsInput -Name DeployForTenants
 	$DeployForTenantTags = Get-VstsInput -Name DeployForTenantTags
     $DeploymentProgress = Get-VstsInput -Name DeploymentProgress -AsBool
