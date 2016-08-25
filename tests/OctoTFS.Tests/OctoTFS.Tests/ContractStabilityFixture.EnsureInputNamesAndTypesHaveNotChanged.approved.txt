@@ -1,0 +1,49 @@
+﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
+	'ConnectedServiceName': connectedService:Generic
+	'ProjectName': string
+	'ReleaseNumber': string
+	'Channel': string
+	'ChangesetCommentReleaseNotes': boolean
+	'WorkItemReleaseNotes': boolean
+	'CustomReleaseNotes': string
+	'DeployToEnvironment': string
+	'DeployForTenants': string
+	'DeployForTenantTags': string
+	'DeploymentProgress': boolean
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.task.json
+	'ConnectedServiceName': connectedService:Generic
+	'Project': string
+	'ReleaseNumber': string
+	'Environments': string
+	'ShowProgress': boolean
+	'DeployForTenants': string
+	'DeployForTenantTags': string
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.task.json
+	'PackageId': string
+	'PackageFormat': string
+	'PackageVersion': string
+	'SourcePath': filePath
+	'OutputPath': filePath
+	'NuGetAuthor': string
+	'NuGetTitle': string
+	'NuGetDescription': string
+	'NuGetReleaseNotes': string
+	'NuGetReleaseNotesFile': filePath
+	'Include': multiLine
+	'Overwrite': boolean
+OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote.task.json
+	'ConnectedServiceName': connectedService:Generic
+	'Project': string
+	'From': string
+	'To': string
+	'ShowProgress': boolean
+	'DeployForTenants': string
+	'DeployForTenantTags': string
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Push.task.json
+	'ConnectedServiceName': connectedService:Generic
+	'Package': multiLine
+	'Replace': boolean
+	'AdditionalArguments': string
