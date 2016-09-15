@@ -40,19 +40,30 @@
     ],
     "inputs": [
         {
-            "name": "ConnectedServiceName",
-            "type": "connectedService:Generic",
+            "name": "OctoConnectedServiceName",
+            "type": "connectedService:OctopusEndpoint",
             "label": "Octopus Deploy Server",
             "defaultValue": "",
-            "required": true,
+            "required": false,
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
+            "name": "ConnectedServiceName",
+            "type": "connectedService:Generic",
+            "label": "Octopus Deploy Server [deprecated]",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "*Note: This connection type is deprecated and will be removed in a future release.* Please configure a new Octopus Deploy connected service."
+        },
+        {
             "name": "ProjectName",
-            "type": "string",
+            "type": "pickList",
             "label": "Project Name",
             "defaultValue": "",
             "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
@@ -142,6 +153,13 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Creating+releases) for available parameters.",
             "groupName": "additional"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "ProjectName",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjects"
         }
     ],
     "instanceNameFormat": "Create Octopus Release: $(ProjectName)",

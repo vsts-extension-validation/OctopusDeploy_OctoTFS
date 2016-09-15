@@ -13,3 +13,9 @@ function Get-OctoCredentialArgs($serviceDetails) {
         return "--user=""$un"" --pass=""$pwd"""
     }
 }
+
+# Returns the Octo.exe arguments for credentials from an Octopus-specific endpoint connection
+function Get-OctoCredentialArgsForOctoConnection($serviceDetails) {
+    $apikey = $serviceDetails.Auth.Parameters.apitoken
+    return "--apiKey=""$apiKey"""
+}
