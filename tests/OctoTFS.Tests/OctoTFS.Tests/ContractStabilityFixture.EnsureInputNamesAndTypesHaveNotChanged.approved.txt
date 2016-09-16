@@ -1,6 +1,6 @@
 ﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
-	'ConnectedServiceName': connectedService:Generic
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'ConnectedServiceName': connectedService:Generic
 	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': string
