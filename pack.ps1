@@ -73,7 +73,7 @@ function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environme
     $manifest.version = $version
 
     $overridesFilePath = "$extensionBuildTempPath\extension-manifest.$environment.$version.json"
-    ConvertTo-JSON $manifest | Out-File $overridesFilePath -Encoding ASCII # tfx-cli doesn't support UTF8 with BOM
+    ConvertTo-JSON $manifest -Depth 6 | Out-File $overridesFilePath -Encoding ASCII # tfx-cli doesn't support UTF8 with BOM
     Get-Content $overridesFilePath | Write-Host
     return Get-Item $overridesFilePath
 }
@@ -90,7 +90,7 @@ function UpdateTaskManifests($extensionBuildTempPath, $version) {
         
         $task.helpMarkDown = "Version: $version. [More Information](http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task)"
         
-        ConvertTo-JSON $task | Out-File $taskManifestFile -Encoding UTF8
+        ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
     }
 }
 
