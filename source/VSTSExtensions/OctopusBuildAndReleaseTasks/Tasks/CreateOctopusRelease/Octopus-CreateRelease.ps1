@@ -141,7 +141,7 @@ try {
         $vssEndPoint = Get-VstsEndpoint -Name "SystemVssConnection" -Require
         $linkedReleaseNotes = Get-LinkedReleaseNotes $vssEndPoint $ChangesetCommentReleaseNotes $WorkItemReleaseNotes
     }
-    $releaseNotesParam = Create-ReleaseNotes $linkedReleaseNotes
+    $releaseNotesParam = Get-ReleaseNotes $linkedReleaseNotes
 
     #deployment arguments
     if (-not [System.String]::IsNullOrWhiteSpace($DeployToEnvironment)) {
