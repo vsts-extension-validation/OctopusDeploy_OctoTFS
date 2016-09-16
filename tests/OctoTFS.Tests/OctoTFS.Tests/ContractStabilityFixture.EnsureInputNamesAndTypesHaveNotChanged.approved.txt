@@ -1,6 +1,7 @@
 ﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
 	'ConnectedServiceName': connectedService:Generic
-	'ProjectName': string
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': string
 	'ChangesetCommentReleaseNotes': boolean
