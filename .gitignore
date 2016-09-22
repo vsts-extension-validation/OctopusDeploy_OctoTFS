@@ -114,3 +114,4 @@ UpgradeLog*.XML
 build/
 
 *.received.*
+*.DS_Store
