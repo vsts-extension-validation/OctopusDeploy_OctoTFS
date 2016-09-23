@@ -1,6 +1,6 @@
 param (
-    [Parameter(Mandatory=$true,HelpMessage="Test or Production")]
-    [ValidateSet("Test", "Production")]
+    [Parameter(Mandatory=$true,HelpMessage="LocalTest, Test or Production")]
+    [ValidateSet("LocalTest", "Test", "Production")]
     [string]
     $environment,
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
