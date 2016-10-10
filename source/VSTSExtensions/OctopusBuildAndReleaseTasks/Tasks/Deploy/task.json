@@ -30,20 +30,31 @@
     ],
     "inputs": [
         {
-            "name": "ConnectedServiceName",
-            "type": "connectedService:Generic",
+            "name": "OctoConnectedServiceName",
+            "type": "connectedService:OctopusEndpoint",
             "label": "Octopus Deploy Server",
             "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Octopus Deploy server connection"
+            "required": false,
+            "helpMarkDown": "Octopus Deploy server connection" 
+        },
+        {
+            "name": "ConnectedServiceName",
+            "type": "connectedService:Generic",
+            "label": "Octopus Deploy Server [deprecated]",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "*Note: This connection type is deprecated and will be removed in a future release.*Please configure a new Octopus Deploy connected service."
         },
         {
             "name": "Project",
-            "type": "string",
+            "type": "pickList",
             "label": "Project",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "Name of the Octopus Deploy project"
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
             "name": "ReleaseNumber",
@@ -95,6 +106,14 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Deploying+releases) for available parameters.",
             "groupName": "advanced"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "Project",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjects",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Deploy Octopus Release: $(Project) to $(Environments)",

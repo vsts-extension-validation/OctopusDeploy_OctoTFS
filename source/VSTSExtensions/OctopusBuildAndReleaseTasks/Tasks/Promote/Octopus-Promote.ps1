@@ -7,7 +7,8 @@ try {
 
     . .\Octopus-VSTS.ps1
 
-    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName -Require
+    $OctoConnectedServiceName = Get-VstsInput -Name OctoConnectedServiceName
+    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
     $Project = Get-VstsInput -Name Project -Require
     $From = Get-VstsInput -Name From -Require
     $To = Get-VstsInput -Name To -Require
@@ -16,13 +17,22 @@ try {
 	$DeployForTenantTags = Get-VstsInput -Name DeployForTenantTags
     $AdditionalArguments = Get-VstsInput -Name AdditionalArguments
 
-    $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
-    $credentialArgs = Get-OctoCredentialArgs($connectedServiceDetails)
+    # Get required parameters
+	if ([System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName) -and [System.String]::IsNullOrWhiteSpace($ConnectedServiceName)) {
+		throw "No Service Endpoint has been specified. You must provide either a Generic or an Octopus Endpoint."
+	}
+	if (-not [System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName)) {
+		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
+		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
+	} else {
+		$connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
+		$credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
+	}
     $octopusUrl = $connectedServiceDetails.Url
 
     # Call Octo.exe
     $octoPath = Get-OctoExePath
-    $Arguments = "promote-release --project=`"$Project`" --from=`"$From`" --server=$octopusUrl $credentialArgs $AdditionalArguments"
+    $Arguments = "promote-release --project=`"$Project`" --from=`"$From`" --server=$octopusUrl $credentialParams $AdditionalArguments"
     
     if ($ShowProgress) {
        $Arguments += " --progress"

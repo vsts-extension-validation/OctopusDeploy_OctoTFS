@@ -108,8 +108,8 @@ try {
 
     . .\Octopus-VSTS.ps1
 
-    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
 	$OctoConnectedServiceName = Get-VstsInput -Name OctoConnectedServiceName
+    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
     $ProjectName = Get-VstsInput -Name ProjectName -Require
     $ReleaseNumber = Get-VstsInput -Name ReleaseNumber
     $Channel = Get-VstsInput -Name Channel

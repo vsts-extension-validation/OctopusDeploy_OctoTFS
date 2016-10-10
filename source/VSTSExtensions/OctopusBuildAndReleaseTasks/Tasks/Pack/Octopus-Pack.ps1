@@ -20,9 +20,16 @@ try {
     $Overwrite = Get-VstsInput -Name Overwrite -AsBool
     $Include = Get-VstsInput -Name Include
 
+    Write-Host "Release notes file: $NugetReleaseNotesFile"
+    $releaseNotesFileArg = ""
+    if (-not [System.String]::IsNullOrWhiteSpace($NuGetReleaseNotesFile))
+    {
+        $releaseNotesFileArg = "--releaseNotesFile=`"$NugetReleaseNotesFile`""
+    }
+
     # Call Octo.exe
     $octoPath = Get-OctoExePath
-    $Arguments = "pack --id=`"$PackageId`" --format=$PackageFormat --version=$PackageVersion --outFolder=`"$OutputPath`" --basePath=`"$SourcePath`" --author=`"$NugetAuthor`" --title=`"$NugetTitle`" --description=`"$NugetDescription`" --releaseNotes=`"$NuGetReleaseNotes`" --releaseNotesFile=`"$NugetReleaseNotesFile`" --overwrite=$Overwrite"
+    $Arguments = "pack --id=`"$PackageId`" --format=$PackageFormat --version=$PackageVersion --outFolder=`"$OutputPath`" --basePath=`"$SourcePath`" --author=`"$NugetAuthor`" --title=`"$NugetTitle`" --description=`"$NugetDescription`" --releaseNotes=`"$NuGetReleaseNotes`" $releaseNotesFileArg --overwrite=$Overwrite"
     if ($Include) {
        ForEach ($IncludePath in $Include.replace("`r", "").split("`n")) {
        $Arguments = $Arguments + " --include=`"$IncludePath`""

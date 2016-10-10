@@ -30,20 +30,31 @@
     ],
     "inputs": [
         {
-            "name": "ConnectedServiceName",
-            "type": "connectedService:Generic",
+            "name": "OctoConnectedServiceName",
+            "type": "connectedService:OctopusEndpoint",
             "label": "Octopus Deploy Server",
             "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Octopus Deploy server connection"
+            "required": false,
+            "helpMarkDown": "Octopus Deploy server connection" 
+        },
+        {
+            "name": "ConnectedServiceName",
+            "type": "connectedService:Generic",
+            "label": "Octopus Deploy Server [deprecated]",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "*Note: This connection type is deprecated and will be removed in a future release.*Please configure a new Octopus Deploy connected service."
         },
         {
             "name": "Project",
-            "type": "string",
+            "type": "pickList",
             "label": "Project",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "The Octopus project to promote"
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
             "name": "From",
@@ -95,6 +106,14 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Promoting+releases) for available parameters.",
             "groupName": "advanced"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "Project",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjects",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Promote $(Project) from $(From) to $(To)",

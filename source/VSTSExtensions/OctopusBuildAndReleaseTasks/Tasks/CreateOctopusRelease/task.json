@@ -159,7 +159,8 @@
         {
             "target": "ProjectName",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllProjects"
+            "dataSourceName": "OctopusAllProjects",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Create Octopus Release: $(ProjectName)",

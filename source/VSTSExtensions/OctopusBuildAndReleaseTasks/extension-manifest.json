@@ -124,7 +124,7 @@
                     {
                         "name": "OctopusAllProjects",
                         "endpointUrl": "$(endpoint.url)/api/projects/all",
-                        "resultSelector": "jsonpath:$.[*].Name"
+                        "resultSelector": "jsonpath:$.[*]"
                     }
                 ],
                 "authenticationSchemes": [
