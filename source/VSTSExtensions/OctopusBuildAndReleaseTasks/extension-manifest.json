@@ -109,6 +109,51 @@
             "properties": {
                 "name": "Tasks/Promote"
             }
+        },
+        {
+            "id": "octopus-endpoint-type",
+            "description": "Octopus Deploy Endpoint type for Octopus Build tasks",
+            "type": "ms.vss-endpoint.service-endpoint-type",
+            "targets": [
+                "ms.vss-endpoint.endpoint-types"
+            ],
+            "properties": {
+                "name": "OctopusEndpoint",
+                "displayName": "Octopus Deploy",
+                "dataSources": [
+                    {
+                        "name": "OctopusAllProjects",
+                        "endpointUrl": "$(endpoint.url)/api/projects/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    }
+                ],
+                "authenticationSchemes": [
+                    {
+                        "type": "ms.vss-endpoint.endpoint-auth-scheme-token",
+                        "inputDescriptors": [
+                            {
+                                "id": "apitoken",
+                                "name": "API Key",
+                                "description": "API key for connection to Octopus Deploy",
+                                "inputMode": "passwordBox",
+                                "isConfidential": true,
+                                "validation": {
+                                    "isRequired": true,
+                                    "dataType": "string",
+                                    "maxLength": 32
+                                }
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "X-Octopus-ApiKey",
+                                "value": "{{endpoint.apitoken}}"
+                            }
+                        ]
+                    }
+                ],
+                "helpMarkDown": "The Octopus URL must be accessible from both VSTS and any agents that are running builds or releases. See [g.octopushq.com/ApiKey](http://g.octopushq.com/ApiKey) for details on how to generate an API key."
+            }
         }
     ]
 }

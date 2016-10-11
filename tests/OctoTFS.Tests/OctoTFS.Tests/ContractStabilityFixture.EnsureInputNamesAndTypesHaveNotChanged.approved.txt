@@ -1,6 +1,7 @@
 ﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ConnectedServiceName': connectedService:Generic
-	'ProjectName': string
+	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': string
 	'ChangesetCommentReleaseNotes': boolean
@@ -12,8 +13,9 @@
 	'DeploymentProgress': boolean
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ConnectedServiceName': connectedService:Generic
-	'Project': string
+	'Project': pickList
 	'ReleaseNumber': string
 	'Environments': string
 	'ShowProgress': boolean
@@ -34,8 +36,9 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.ta
 	'Include': multiLine
 	'Overwrite': boolean
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ConnectedServiceName': connectedService:Generic
-	'Project': string
+	'Project': pickList
 	'From': string
 	'To': string
 	'ShowProgress': boolean
@@ -43,6 +46,7 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Push.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ConnectedServiceName': connectedService:Generic
 	'Package': multiLine
 	'Replace': boolean

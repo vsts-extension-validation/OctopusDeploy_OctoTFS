@@ -43,19 +43,30 @@
     ],
     "inputs": [
         {
-            "name": "ConnectedServiceName",
-            "type": "connectedService:Generic",
+            "name": "OctoConnectedServiceName",
+            "type": "connectedService:OctopusEndpoint",
             "label": "Octopus Deploy Server",
             "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Octopus Deploy server connection"
+            "required": false,
+            "helpMarkDown": "Octopus Deploy server connection" 
+        },
+        {
+            "name": "ConnectedServiceName",
+            "type": "connectedService:Generic",
+            "label": "Octopus Deploy Server [deprecated]",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "*Note: This connection type is deprecated and will be removed in a future release.*Please configure a new Octopus Deploy connected service."
         },
         {
             "name": "ProjectName",
-            "type": "string",
+            "type": "pickList",
             "label": "Project Name",
             "defaultValue": "",
             "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
@@ -64,7 +75,7 @@
             "label": "Release Number",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The number to use for this release"
+            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus."
         },
         {
             "name": "Channel",
@@ -72,7 +83,7 @@
             "label": "Channel",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release"
+            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release."
         },
         {
             "name": "ChangesetCommentReleaseNotes",
@@ -80,7 +91,7 @@
             "label": "Include Changeset Comments",
             "defaultValue": "false",
             "required": false,
-            "helpMarkDown": "Whether to include linked Changeset comments in Octopus Release notes",
+            "helpMarkDown": "Whether to include linked Changeset comments in Octopus Release notes.",
             "groupName": "releasenotes"
         },
         {
@@ -89,7 +100,7 @@
             "label": "Include Work Items",
             "defaultValue": "false",
             "required": false,
-            "helpMarkDown": "Whether to include linked Work Item Titles in Octopus Release notes",
+            "helpMarkDown": "Whether to include linked Work Item Titles in Octopus Release notes.",
             "groupName": "releasenotes"
         },
         {
@@ -116,7 +127,7 @@
             "label": "Tenant(s)",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Deploy the release for this comma delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
             "groupName": "tenant"
         },
         {
@@ -145,6 +156,14 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Creating+releases) for available parameters.",
             "groupName": "additional"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "ProjectName",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjects",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Create Octopus Release: $(ProjectName)",

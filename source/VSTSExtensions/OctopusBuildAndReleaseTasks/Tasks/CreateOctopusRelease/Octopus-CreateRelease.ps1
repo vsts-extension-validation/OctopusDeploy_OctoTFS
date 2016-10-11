@@ -75,16 +75,13 @@ function CommitUrl($change) {
 }
 
 # Create a Release Notes file for Octopus
-function Create-ReleaseNotes($linkedItemReleaseNotes) {
-	$buildNumber = $env:BUILD_BUILDNUMBER #works
-	$buildId = $env:BUILD_BUILDID #works
-	$projectName = $env:SYSTEM_TEAMPROJECT	#works
-	#$buildUri = $env:BUILD_BUILDURI #works but is a vstfs:/// link
-	#Note: This URL will undoubtedly change in the future
+function Get-ReleaseNotes($linkedItemReleaseNotes) {
+	$buildNumber = $env:BUILD_BUILDNUMBER
+	$buildId = $env:BUILD_BUILDID
+	$projectName = $env:SYSTEM_TEAMPROJECT
 	$buildUri = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$projectName/_build/index?_a=summary&buildId=$buildId"
-	$buildName = $env:BUILD_DEFINITIONNAME	#works
-	$repoName = $env:BUILD_REPOSITORY_NAME	#works
-	#$repoUri = $env:BUILD_REPOSITORY_URI #nope :(
+	$buildName = $env:BUILD_DEFINITIONNAME
+	$repoName = $env:BUILD_REPOSITORY_NAME
 	$notes = "Release created by Build [${buildName} #${buildNumber}](${buildUri}) in Project ${projectName} from the ${repoName} repository."
 	if (-not [System.String]::IsNullOrWhiteSpace($linkedItemReleaseNotes)) {
 		$notes += "`r`n`r`n$linkedItemReleaseNotes"
@@ -102,6 +99,7 @@ function Create-ReleaseNotes($linkedItemReleaseNotes) {
 	return "--releaseNotesFile=`"$fileLocation`""
 }
 
+
 ### Execution starts here ###
 
 Trace-VstsEnteringInvocation $MyInvocation
@@ -110,7 +108,8 @@ try {
 
     . .\Octopus-VSTS.ps1
 
-    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName -Require
+	$OctoConnectedServiceName = Get-VstsInput -Name OctoConnectedServiceName
+    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
     $ProjectName = Get-VstsInput -Name ProjectName -Require
     $ReleaseNumber = Get-VstsInput -Name ReleaseNumber
     $Channel = Get-VstsInput -Name Channel
@@ -124,8 +123,16 @@ try {
     $AdditionalArguments = Get-VstsInput -Name AdditionalArguments
 
     # Get required parameters
+	if ([System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName) -and [System.String]::IsNullOrWhiteSpace($ConnectedServiceName)) {
+		throw "No Service Endpoint has been specified. You must provide either a Generic or an Octopus Endpoint."
+	}
+	if (-not [System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName)) {
+		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
+		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
+	} else {
     $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
     $credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
+	}
     $octopusUrl = $connectedServiceDetails.Url
 
     # Get release notes
@@ -134,7 +141,7 @@ try {
         $vssEndPoint = Get-VstsEndpoint -Name "SystemVssConnection" -Require
         $linkedReleaseNotes = Get-LinkedReleaseNotes $vssEndPoint $ChangesetCommentReleaseNotes $WorkItemReleaseNotes
     }
-    $releaseNotesParam = Create-ReleaseNotes $linkedReleaseNotes
+    $releaseNotesParam = Get-ReleaseNotes $linkedReleaseNotes
 
     #deployment arguments
     if (-not [System.String]::IsNullOrWhiteSpace($DeployToEnvironment)) {
