@@ -25,7 +25,7 @@ try {
 		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
 		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
 	} else {
-		$connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
+    $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
 		$credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
 	}
     $octopusUrl = $connectedServiceDetails.Url

@@ -15,6 +15,9 @@
         "Minor": 0,
         "Patch": 0
     },
+    "demands": [
+        "DotNetFramework"
+    ],
     "minimumAgentVersion": "1.95.0",
     "groups": [
         {

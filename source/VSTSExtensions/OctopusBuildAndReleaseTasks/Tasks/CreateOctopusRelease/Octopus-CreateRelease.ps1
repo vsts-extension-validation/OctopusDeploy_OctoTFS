@@ -79,7 +79,7 @@ function Get-ReleaseNotes($linkedItemReleaseNotes) {
 	$buildNumber = $env:BUILD_BUILDNUMBER
 	$buildId = $env:BUILD_BUILDID
 	$projectName = $env:SYSTEM_TEAMPROJECT
-	$buildUri = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$projectName/_BuildvNext#_a=summary&buildId=$buildId"
+	$buildUri = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$projectName/_build/index?_a=summary&buildId=$buildId"
 	$buildName = $env:BUILD_DEFINITIONNAME
 	$repoName = $env:BUILD_REPOSITORY_NAME
 	$notes = "Release created by Build [${buildName} #${buildNumber}](${buildUri}) in Project ${projectName} from the ${repoName} repository."
@@ -130,8 +130,8 @@ try {
 		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
 		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
 	} else {
-		$connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
-		$credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
+    $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
+    $credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
 	}
     $octopusUrl = $connectedServiceDetails.Url
 
