@@ -130,8 +130,9 @@ try {
 		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
 		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
 	} else {
-    $connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
-    $credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
+		$connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
+		$credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
+		Write-Warning "You're currently using a Generic Service Endpoint to connect to Octopus Deploy. This Endpoint Type will be deprecated in Octopus Deploy tasks in the future. We strongly recommend updating to the new Octopus Deploy Service Endpoint type."
 	}
     $octopusUrl = $connectedServiceDetails.Url
 
