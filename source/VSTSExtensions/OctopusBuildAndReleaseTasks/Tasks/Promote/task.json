@@ -61,18 +61,24 @@
         },
         {
             "name": "From",
-            "type": "string",
+            "type": "pickList",
             "label": "Promote From",
             "defaultValue": "",
             "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'"
         },
         {
             "name": "To",
-            "type": "string",
+            "type": "pickList",
             "label": "Promote To",
             "defaultValue": "",
             "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "Comma separated list of environments to deploy to"
         },
         {
@@ -85,10 +91,13 @@
         },
         {
             "name": "DeployForTenants",
-            "type": "string",
+            "type": "pickList",
             "label": "Tenant(s)",
             "defaultValue": "",
             "required": false,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "Promote the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
             "groupName": "tenant"
         },
@@ -116,6 +125,24 @@
             "target": "Project",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllProjects",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "From",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironments",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "To",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironments",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "DeployForTenants",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllTenants",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],

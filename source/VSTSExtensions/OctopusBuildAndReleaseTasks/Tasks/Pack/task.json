@@ -42,10 +42,14 @@
         },
         {
             "name": "PackageFormat",
-            "type": "string",
+            "type": "pickList",
             "label": "Package Format",
             "required": true,
             "defaultValue": "NuPkg",
+            "options": {
+                "NuPkg": "NuPkg",
+                "Zip": "Zip"
+            },
             "helpMarkDown": "Package format. Must be either NuPkg or Zip."
         },
         {

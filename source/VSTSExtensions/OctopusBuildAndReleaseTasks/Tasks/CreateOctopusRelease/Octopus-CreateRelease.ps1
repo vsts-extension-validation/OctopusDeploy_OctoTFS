@@ -136,6 +136,14 @@ try {
 	}
     $octopusUrl = $connectedServiceDetails.Url
 
+    # Get the Project name if we have the Project Id
+    if ($ProjectName -match 'Projects-\d*') {
+        Write-Verbose "Project Id passed, getting project name"
+		$ProjectId = $ProjectName
+        $ProjectName = Get-ProjectNameFromId $connectedServiceDetails $ProjectName
+        Write-Verbose "Project Name is $ProjectName"
+    }
+
     # Get release notes
     $linkedReleaseNotes = ""
     if ($WorkItemReleaseNotes -or $ChangesetCommentReleaseNotes) {

@@ -30,9 +30,18 @@ try {
 	}
     $octopusUrl = $connectedServiceDetails.Url
 
+    # Get the Project name if we have the Project Id
+    if ($Project -match 'Projects-\d*') {
+        Write-Verbose "Project Id passed, getting project name"
+        $ProjectName = Get-ProjectNameFromId $connectedServiceDetails $Project
+        Write-Verbose "Project Name is $ProjectName"
+    } else {
+        $ProjectName = $Project
+    }
+
     # Call Octo.exe
     $octoPath = Get-OctoExePath
-    $Arguments = "deploy-release --project=`"$Project`" --releaseNumber=`"$ReleaseNumber`" --server=$octopusUrl $credentialParams $AdditionalArguments"
+    $Arguments = "deploy-release --project=`"$ProjectName`" --releaseNumber=`"$ReleaseNumber`" --server=$octopusUrl $credentialParams $AdditionalArguments"
     
     if ($ShowProgress) {
        $Arguments += " --progress"

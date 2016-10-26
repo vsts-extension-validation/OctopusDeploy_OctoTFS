@@ -125,6 +125,21 @@
                         "name": "OctopusAllProjects",
                         "endpointUrl": "$(endpoint.url)/api/projects/all",
                         "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusAllEnvironments",
+                        "endpointUrl": "$(endpoint.url)/api/environments/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusAllTenants",
+                        "endpointUrl": "$(endpoint.url)/api/tenants/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusProjectChannels",
+                        "endpointUrl": "$(endpoint.url)/api/projects/$(ProjectName)/channels",
+                        "resultSelector": "jsonpath:$.Items[*]"
                     }
                 ],
                 "authenticationSchemes": [
