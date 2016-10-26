@@ -3,12 +3,12 @@
 	'ConnectedServiceName': connectedService:Generic
 	'ProjectName': pickList
 	'ReleaseNumber': string
-	'Channel': string
+	'Channel': pickList
 	'ChangesetCommentReleaseNotes': boolean
 	'WorkItemReleaseNotes': boolean
 	'CustomReleaseNotes': string
-	'DeployToEnvironment': string
-	'DeployForTenants': string
+	'DeployToEnvironment': pickList
+	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
 	'AdditionalArguments': string
@@ -17,14 +17,14 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.
 	'ConnectedServiceName': connectedService:Generic
 	'Project': pickList
 	'ReleaseNumber': string
-	'Environments': string
+	'Environments': pickList
 	'ShowProgress': boolean
-	'DeployForTenants': string
+	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.task.json
 	'PackageId': string
-	'PackageFormat': string
+	'PackageFormat': pickList
 	'PackageVersion': string
 	'SourcePath': filePath
 	'OutputPath': filePath
@@ -39,10 +39,10 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ConnectedServiceName': connectedService:Generic
 	'Project': pickList
-	'From': string
-	'To': string
+	'From': pickList
+	'To': pickList
 	'ShowProgress': boolean
-	'DeployForTenants': string
+	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Push.task.json
