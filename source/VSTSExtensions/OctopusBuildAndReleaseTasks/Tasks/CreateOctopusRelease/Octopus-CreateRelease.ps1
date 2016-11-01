@@ -82,7 +82,17 @@ function Get-ReleaseNotes($linkedItemReleaseNotes) {
 	$buildUri = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$projectName/_build/index?_a=summary&buildId=$buildId"
 	$buildName = $env:BUILD_DEFINITIONNAME
 	$repoName = $env:BUILD_REPOSITORY_NAME
-	$notes = "Release created by Build [${buildName} #${buildNumber}](${buildUri}) in Project ${projectName} from the ${repoName} repository."
+	$releaseName = $env:RELEASE_RELEASENAME
+	$releaseUri = $env:RELEASE_RELEASEWEBURL
+	$releaseId = $env:RELEASE_RELEASEID
+	$notes = "Release created by "
+	if (-not [System.String]::IsNullOrWhiteSpace($releaseId)) {
+		$notes += "Release Management Release [${releaseName} #${releaseId}](${releaseUri}) "
+	}
+	if (-not [System.String]::IsNullOrWhiteSpace($buildId)) {
+		$notes += "Build [${buildName} #${buildNumber}](${buildUri}) from the ${repoName} repository "
+	}
+	$notes += "in Team Project ${projectName}"
 	if (-not [System.String]::IsNullOrWhiteSpace($linkedItemReleaseNotes)) {
 		$notes += "`r`n`r`n$linkedItemReleaseNotes"
 	}
