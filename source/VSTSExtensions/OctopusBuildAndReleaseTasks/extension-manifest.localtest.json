@@ -1,6 +1,6 @@
 {
     "id": "octopus-deploy-build-release-tasks-localtest",
-    "name": "[LocalTest] Octopus Deploy Build and Release Tasks",
+    "name": "[LocalTest] Octopus Deploy Integration",
     "version": "set-by-pack.ps1",
     "publisher": "octopusdeploy",
     "public": false,

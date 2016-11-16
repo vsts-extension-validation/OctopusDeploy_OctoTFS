@@ -37,16 +37,8 @@
             "type": "connectedService:OctopusEndpoint",
             "label": "Octopus Deploy Server",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "helpMarkDown": "Octopus Deploy server connection" 
-        },
-        {
-            "name": "ConnectedServiceName",
-            "type": "connectedService:Generic",
-            "label": "Octopus Deploy Server [deprecated]",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "*Note: This connection type is deprecated and will be removed in a future release.*Please configure a new Octopus Deploy connected service."
         },
         {
             "name": "Project",

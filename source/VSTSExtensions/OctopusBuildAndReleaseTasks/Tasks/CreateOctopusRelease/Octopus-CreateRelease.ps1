@@ -118,8 +118,7 @@ try {
 
     . .\Octopus-VSTS.ps1
 
-	$OctoConnectedServiceName = Get-VstsInput -Name OctoConnectedServiceName
-    $ConnectedServiceName = Get-VstsInput -Name ConnectedServiceName
+	$OctoConnectedServiceName = Get-VstsInput -Name OctoConnectedServiceName -Require
     $ProjectName = Get-VstsInput -Name ProjectName -Require
     $ReleaseNumber = Get-VstsInput -Name ReleaseNumber
     $Channel = Get-VstsInput -Name Channel
@@ -133,17 +132,8 @@ try {
     $AdditionalArguments = Get-VstsInput -Name AdditionalArguments
 
     # Get required parameters
-	if ([System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName) -and [System.String]::IsNullOrWhiteSpace($ConnectedServiceName)) {
-		throw "No Service Endpoint has been specified. You must provide either a Generic or an Octopus Endpoint."
-	}
-	if (-not [System.String]::IsNullOrWhiteSpace($OctoConnectedServiceName)) {
-		$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
-		$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
-	} else {
-		$connectedServiceDetails = Get-VstsEndpoint -Name "$ConnectedServiceName" -Require
-		$credentialParams = Get-OctoCredentialArgs($connectedServiceDetails)
-		Write-Warning "You're currently using a Generic Service Endpoint to connect to Octopus Deploy. This Endpoint Type will be deprecated in Octopus Deploy tasks in the future. We strongly recommend updating to the new Octopus Deploy Service Endpoint type."
-	}
+	$connectedServiceDetails = Get-VstsEndpoint -Name "$OctoConnectedServiceName" -Require
+	$credentialParams = Get-OctoCredentialArgsForOctoConnection($connectedServiceDetails)
     $octopusUrl = $connectedServiceDetails.Url
 
     # Get the Project name if we have the Project Id
