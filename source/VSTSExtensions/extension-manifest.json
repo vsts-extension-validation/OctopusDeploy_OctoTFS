@@ -24,7 +24,7 @@
     },
     "screenshots": [
         {
-            "path": "img/tfsbuild-addbuildstep.png"
+            "path": "OctopusBuildAndReleaseTasks/img/tfsbuild-addbuildstep.png"
         }
     ],
     "content": {
@@ -48,10 +48,10 @@
     },
     "files": [
         {
-            "path": "Tasks"
+            "path": "OctopusBuildAndReleaseTasks/Tasks"
         },
         {
-            "path": "img",
+            "path": "OctopusBuildAndReleaseTasks/img",
             "addressable": true
         }
     ],
@@ -67,7 +67,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Tasks/CreateOctopusRelease"
+                "name": "OctopusBuildAndReleaseTasks/Tasks/CreateOctopusRelease"
             }
         },
         {
@@ -77,7 +77,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Tasks/Deploy"
+                "name": "OctopusBuildAndReleaseTasks/Tasks/Deploy"
             }
         },
         {
@@ -87,7 +87,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Tasks/Pack"
+                "name": "OctopusBuildAndReleaseTasks/Tasks/Pack"
             }
         },
         {
@@ -97,7 +97,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Tasks/Push"
+                "name": "OctopusBuildAndReleaseTasks/Tasks/Push"
             }
         },
         {
@@ -107,7 +107,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "Tasks/Promote"
+                "name": "OctopusBuildAndReleaseTasks/Tasks/Promote"
             }
         },
         {

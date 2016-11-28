@@ -137,4 +137,4 @@ UpdateTfxCli
 InstallNodeModules
 PrepareBuildDirectory
 CopyCommonTaskItems
-Pack "OctopusBuildAndReleaseTasks"
+Pack "VSTSExtensions"

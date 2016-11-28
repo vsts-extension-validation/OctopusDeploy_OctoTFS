@@ -8,9 +8,9 @@ For example, if your build needs to create a Release for Project A, the user who
 
 *Note: If you're using the Generic Octopus Connection, this will be deprecated in the near future. We strongly recommend moving to the new Octopus Deploy Connected Service Type.*
 
-![Connected Service](img/vstsbuild-octopusendpoint-1.png)
+![Connected Service](OctopusBuildAndReleaseTasks/img/vstsbuild-octopusendpoint-1.png)
 
-![Connected Service](img/vstsbuild-octopusendpoint-2.png)
+![Connected Service](OctopusBuildAndReleaseTasks/img/vstsbuild-octopusendpoint-2.png)
 
 ## Tasks
 
@@ -26,7 +26,7 @@ This extension adds the following tasks:
 
 *Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus.*
 
- ![Configure Package Application Step](img/create-package-options-1.3.png)
+ ![Configure Package Application Step](OctopusBuildAndReleaseTasks/img/create-package-options-1.3.png)
  Options include:
  * **Package ID**: The ID of the package. e.g. MyCompany.App
  * **Package Format**: NuPkg or Zip
@@ -38,7 +38,7 @@ This extension adds the following tasks:
 
 ### Push Packages to Octopus
 
- ![Configure Package Application Step](img/push-packages-options-1.3.png)
+ ![Configure Package Application Step](OctopusBuildAndReleaseTasks/img/push-packages-options-1.3.png)
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).
  * **Octopus Deploy Server [deprecated]**: Legacy Generic connection to an Octopus Server. This field will be removed soon, so we recommend moving to the new service type as soon as possible.
@@ -48,7 +48,7 @@ This extension adds the following tasks:
 
 ### Create Octopus Release
 
- ![Configure Create Release Step](img/create-release-options-1.3.png)
+ ![Configure Create Release Step](OctopusBuildAndReleaseTasks/img/create-release-options-1.3.png)
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).
@@ -69,11 +69,11 @@ This extension adds the following tasks:
 
 The *Release Notes* options, if selected, will result in nicely formatted release notes with deep links to Team Foundation Server or Visual Studio Team Services. Even if no additional options are selected, the related VSTS Build number will be included in the Octopus release notes.
 
-![Release Notes in Octopus Deploy Release](img/tfsbuild-releasenotes.png)
+![Release Notes in Octopus Deploy Release](OctopusBuildAndReleaseTasks/img/tfsbuild-releasenotes.png)
 
 ###  Deploy Octopus Release
 
- ![Configure Deploy Release Step](img/deploy-release-options-1.3.png)
+ ![Configure Deploy Release Step](OctopusBuildAndReleaseTasks/img/deploy-release-options-1.3.png)
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).
@@ -88,7 +88,7 @@ The *Release Notes* options, if selected, will result in nicely formatted releas
 
 ### Promote Octopus Release
 
-![Configure Deploy Release Step](img/promote-release-options-1.3.png)
+![Configure Deploy Release Step](OctopusBuildAndReleaseTasks/img/promote-release-options-1.3.png)
 
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).
  * **Octopus Deploy Server [deprecated]**: Legacy Generic connection to an Octopus Server. This field will be removed soon, so we recommend moving to the new service type as soon as possible.
