@@ -24,7 +24,13 @@
     },
     "screenshots": [
         {
-            "path": "OctopusBuildAndReleaseTasks/img/tfsbuild-addbuildstep.png"
+            "path": "OctopusBuildAndReleaseTasks/img/octopus-alltasks.png"
+        },
+        {
+            "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-package.png"
+        },
+        {
+            "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-deploy.png"
         }
     ],
     "content": {
