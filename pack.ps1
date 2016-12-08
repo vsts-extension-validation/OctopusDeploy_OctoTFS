@@ -10,11 +10,11 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$sourcePath = "$PSScriptRoot\source" 
+$sourcePath = "$PSScriptRoot/source" 
 $extensionsDirectoryPath = Join-Path $sourcePath "VSTSExtensions"
-$buildDirectoryPath = "$PSScriptRoot\build"
-$buildArtifactsPath = "$buildDirectoryPath\Artifacts"
-$buildTempPath = "$buildDirectoryPath\Temp"
+$buildDirectoryPath = "$PSScriptRoot/build"
+$buildArtifactsPath = "$buildDirectoryPath/Artifacts"
+$buildTempPath = "$buildDirectoryPath/Temp"
 $tasksTempPath = Join-Path -Path $buildTempPath -ChildPath "VSTSExtensions" | Join-Path -ChildPath "OctopusBuildAndReleaseTasks" | Join-Path -ChildPath "Tasks"
 
 function UpdateTfxCli() {
@@ -61,7 +61,7 @@ function CopyCommonTaskItems() {
 
 function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environment, $version) {
     Write-Host "Finding environment-specific manifest overrides..."
-    $overridesSourceFilePath = "$extensionBuildTempPath\extension-manifest.$environment.json"
+    $overridesSourceFilePath = "$extensionBuildTempPath/extension-manifest.$environment.json"
     $overridesSourceFile = Get-ChildItem -Path $overridesSourceFilePath
     if ($overridesSourceFile -eq $null) {
         Write-Error "Could not find the extension-manifest override file: $overridesSourceFilePath"
@@ -72,7 +72,7 @@ function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environme
     $manifest = ConvertFrom-JSON -InputObject (Get-Content $overridesSourceFile -Raw)
     $manifest.version = $version
 
-    $overridesFilePath = "$extensionBuildTempPath\extension-manifest.$environment.$version.json"
+    $overridesFilePath = "$extensionBuildTempPath/extension-manifest.$environment.$version.json"
     ConvertTo-JSON $manifest -Depth 6 | Out-File $overridesFilePath -Encoding ASCII # tfx-cli doesn't support UTF8 with BOM
     Get-Content $overridesFilePath | Write-Host
     return Get-Item $overridesFilePath
@@ -95,7 +95,7 @@ function UpdateTaskManifests($extensionBuildTempPath, $version) {
 }
 
 function OverrideExtensionLogo($extensionBuildTempPath, $environment) {
-    $extensionLogoOverrideFile = Get-Item "$extensionBuildTempPath\extension-icon.$environment.png" -ErrorAction SilentlyContinue
+    $extensionLogoOverrideFile = Get-Item "$extensionBuildTempPath/extension-icon.$environment.png" -ErrorAction SilentlyContinue
     if ($extensionLogoOverrideFile) {
         $directory = Split-Path $extensionLogoOverrideFile
         $target = Join-Path $directory "extension-icon.png"
@@ -103,7 +103,7 @@ function OverrideExtensionLogo($extensionBuildTempPath, $environment) {
         Move-Item $extensionLogoOverrideFile $target -Force
     }
     
-    Remove-Item "$extensionBuildTempPath\extension-icon.*.png" -Force
+    Remove-Item "$extensionBuildTempPath/extension-icon.*.png" -Force
 }
 
 function OverrideTaskLogos($extensionBuildTempPath, $environment) {
@@ -130,7 +130,7 @@ function Pack($extensionName) {
     OverrideTaskLogos $extensionBuildTempPath $environment
     
     Write-Host "Creating VSIX using tfx..."
-    & tfx extension create --root $extensionBuildTempPath --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath\$environment" --no-prompt
+    & tfx extension create --root $extensionBuildTempPath --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
 UpdateTfxCli
