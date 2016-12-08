@@ -1,6 +1,5 @@
 ﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'ConnectedServiceName': connectedService:Generic
 	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': pickList
@@ -14,7 +13,6 @@
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'ConnectedServiceName': connectedService:Generic
 	'Project': pickList
 	'ReleaseNumber': string
 	'Environments': pickList
@@ -37,7 +35,6 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.ta
 	'Overwrite': boolean
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'ConnectedServiceName': connectedService:Generic
 	'Project': pickList
 	'From': pickList
 	'To': pickList
@@ -47,7 +44,6 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'ConnectedServiceName': connectedService:Generic
 	'Package': multiLine
 	'Replace': boolean
 	'AdditionalArguments': string
