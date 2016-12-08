@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
-    "description": "Build and Release tasks for integrating with Octopus Deploy",
+    "description": "Build and Release tasks and additional features for integrating with Octopus Deploy",
     "public": false,
     "categories": [
         "Build and release"
