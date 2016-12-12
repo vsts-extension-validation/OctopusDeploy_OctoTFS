@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<script src="vss/lib/VSS.SDK.min.js"></script>
+	<script type="text/javascript">
+				VSS.init({                        
+					explicitNotifyLoaded: true,
+					usePlatformStyles: true
+				});
+               
+				VSS.require("TFS/Dashboards/WidgetHelpers", "VSS/Authentication/Services", function (WidgetHelpers, VSS_Auth_Service) {
+					VSS.register("OctoProjectEnvironmentWidget.Configuration", function () {   
+						var $connectionDropdown = $("#octopus-connection");
+
+						return {
+							load: function (widgetSettings, widgetConfigurationContext) {
+								//var settings = JSON.parse(widgetSettings.customSettings.data);
+
+								VSS.getAccessToken().then(function(token) {
+									var webContext = VSS.getWebContext();
+									var baseUri = webContext.collection.uri + 'defaultcollection' + webContext.project.name;
+									var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints?type=OctopusEndpoint&api-version=3.0-preview.1';
+
+									var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
+
+									$.ajax({
+										type: "GET",
+										url: endpointUri,
+										headers: {'Authorization': authToken}
+									})
+									.done(function(data) {
+										$(data.value).each(function(i,e) {
+											console.debug(e);
+											$connectionDropdown.append($('<option value="'+ e.id + '">'+ e.name + '</option>'));
+										})
+									});
+
+									return WidgetHelpers.WidgetStatusHelper.Success();
+
+									/*
+									if (settings && settings.connectionId) {
+										$connectionDropdown.val(settings.connectionId);
+									}
+
+									$connectionDropdown.on("change", function () {
+										var customSettings = {
+											data: JSON.stringify({
+													connectionId: $connectionDropdown.val()
+												})
+										};
+										var eventName = WidgetHelpers.WidgetEvent.ConfigurationChange;
+										var eventArgs = WidgetHelpers.WidgetEvent.Args(customSettings);
+										widgetConfigurationContext.notify(eventName, eventArgs);
+
+									});
+									*/
+								});
+							},
+							onSave: function() {
+								var customSettings = {
+									data: JSON.stringify({
+											connectionId: $queryDropdown.val()
+										})
+								};
+								return WidgetHelpers.WidgetConfigurationSave.Valid(customSettings);
+							}
+						}
+					});
+					VSS.notifyLoadSucceeded();
+				});
+			</script>
+</head>
+
+<body>
+	<div class="container">
+		<fieldset>
+			<label class="label">Octopus Connection: </label>
+			<select id="octopus-connection" style="margin-top:10px"></select>
+		</fieldset>
+	</div>
+</body>
+
+</html>

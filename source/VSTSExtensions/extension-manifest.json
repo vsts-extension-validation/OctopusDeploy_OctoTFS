@@ -59,13 +59,58 @@
         {
             "path": "OctopusBuildAndReleaseTasks/img",
             "addressable": true
+        },
+        {
+            "path": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
+            "addressable": true
+        },
+        {
+            "path": "OctopusDashboardWidgets/Widgets",
+            "addressable": true
         }
     ],
     "scopes": [
         "vso.build",
         "vso.build_execute"
     ],
+    "demands": ["contribution/ms.vss-dashboards-web.widget-sdk-version-2"],
     "contributions": [
+        {
+            "id": "OctoProjectEnvironmentWidget",
+            "type": "ms.vss-dashboards-web.widget",
+            "targets": [
+                "ms.vss-dashboards-web.widget-catalog",
+                ".OctoProjectEnvironmentWidget.Configuration"
+            ],
+            "properties": {
+                "name": "Octopus Deploy Project and Environment Status",
+                "description": "Shows the status of a project in an environment",
+                "catalogIconUrl": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
+                "previewImageUrl": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
+                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/octo-status.html",
+                "supportedSizes": [
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 1
+                    }
+                ],
+                "supportedScopes": [
+                    "project_team"
+                ]
+            }
+        },
+        {
+            "id": "OctoProjectEnvironmentWidget.Configuration",
+            "type": "ms.vss-dashboards-web.widget-configuration",
+            "targets": [
+                "ms.vss-dashboards-web.widget-configuration"
+            ],
+            "properties": {
+                "name": "Octopus Project and Environment Status Configuration",
+                "description": "Configures Octopus Project and Environment Status Widget",
+                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/configuration.html"
+            }
+        },
         {
             "id": "octopus-create-release",
             "type": "ms.vss-distributed-task.task",

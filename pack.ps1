@@ -16,6 +16,7 @@ $buildDirectoryPath = "$PSScriptRoot/build"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 $buildTempPath = "$buildDirectoryPath/Temp"
 $tasksTempPath = Join-Path -Path $buildTempPath -ChildPath "VSTSExtensions" | Join-Path -ChildPath "OctopusBuildAndReleaseTasks" | Join-Path -ChildPath "Tasks"
+$widgetsTempPath = Join-Path -Path $buildTempPath -ChildPath "VSTSExtensions" | Join-Path -ChildPath "OctopusDashboardWidgets" | Join-Path -ChildPath "Widgets"
 
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."
@@ -57,6 +58,22 @@ function CopyCommonTaskItems() {
          Copy-Item -Path $CommonFile.FullName -Destination $TaskPath | Out-Null 
       }
    }
+}
+
+function CopyCommonWidgetItems() {
+    Write-Host "Copying common widget components into widgets"
+    #for each widget
+    ForEach($WidgetPath in Get-ChildItem -Path $widgetsTempPath -Exclude "Common") {
+
+        # Copy VSTS SDK file from node_modules to each task's vss directory
+        $VstsSdkJsNpmPath = Join-Path -Path $sourcePath -ChildPath "node_modules" | Join-Path -ChildPath "vss-web-extension-sdk" | Join-Path -ChildPath "lib"
+        $VssSdkPath = Join-Path $WidgetPath "vss"
+
+        New-Item -Type Directory -Path $VssSdkPath -Force | Out-Null
+        Copy-Item -Path $VstsSdkJsNpmPath -Destination $VssSdkPath -Recurse -Force
+
+        #No common widget items yet
+    }
 }
 
 function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environment, $version) {
@@ -137,4 +154,5 @@ UpdateTfxCli
 InstallNodeModules
 PrepareBuildDirectory
 CopyCommonTaskItems
+CopyCommonWidgetItems
 Pack "VSTSExtensions"

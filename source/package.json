@@ -8,6 +8,7 @@
   },
   "author": "Octopus Deploy",
   "dependencies": {
-    "vsts-task-sdk": "^0.6.2"
+    "vsts-task-sdk": "^0.6.2",
+    "vss-web-extension-sdk": "^1.95.2"
   }
 }
