@@ -9,7 +9,7 @@
 					usePlatformStyles: true
 				});
                
-				VSS.require("TFS/Dashboards/WidgetHelpers", "VSS/Authentication/Services", function (WidgetHelpers, VSS_Auth_Service) {
+				VSS.require(["TFS/Dashboards/WidgetHelpers", "VSS/Authentication/Services"], function (WidgetHelpers, VSS_Auth_Service) {
 					VSS.register("OctoProjectEnvironmentWidget.Configuration", function () {   
 						var $connectionDropdown = $("#octopus-connection");
 
@@ -17,12 +17,18 @@
 							load: function (widgetSettings, widgetConfigurationContext) {
 								//var settings = JSON.parse(widgetSettings.customSettings.data);
 
+								console.debug('Entered load for new version');
+
 								VSS.getAccessToken().then(function(token) {
+									console.debug('Token retrieved:');
+									console.debug(token);
 									var webContext = VSS.getWebContext();
 									var baseUri = webContext.collection.uri + 'defaultcollection' + webContext.project.name;
 									var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints?type=OctopusEndpoint&api-version=3.0-preview.1';
 
 									var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
+									console.debug('authToken header retrieved:');
+									console.debug(authToken);
 
 									$.ajax({
 										type: "GET",
@@ -30,13 +36,14 @@
 										headers: {'Authorization': authToken}
 									})
 									.done(function(data) {
+										console.debug('Endpoints retrieved');
+										console.debug(data);
 										$(data.value).each(function(i,e) {
 											console.debug(e);
 											$connectionDropdown.append($('<option value="'+ e.id + '">'+ e.name + '</option>'));
-										})
+										});
+										return WidgetHelpers.WidgetStatusHelper.Success();
 									});
-
-									return WidgetHelpers.WidgetStatusHelper.Success();
 
 									/*
 									if (settings && settings.connectionId) {
