@@ -192,6 +192,11 @@
                         "name": "OctopusProjectChannels",
                         "endpointUrl": "$(endpoint.url)/api/projects/$(ProjectName)/channels",
                         "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusProjectEnvironmentDeployments",
+                        "endpointUrl": "$(endpoint.url)/api/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
+                        "resultSelector": "jsonpath:$.Items[*]"
                     }
                 ],
                 "authenticationSchemes": [

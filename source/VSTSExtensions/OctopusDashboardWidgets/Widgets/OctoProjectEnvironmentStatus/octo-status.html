@@ -1,68 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<script src="vss/lib/VSS.SDK.min.js"></script>
-	<script type="text/javascript">
+<head></head>
+<body>
+    <style scoped>
+        .success {
+            background-color: #393;
+        }
+        .success #octo-info-version:before {
+            content: "\e977";
+        }
+        .failure {
+            background-color: #DA0A00
+        }
+        .failure #octo-info-version:before {
+            content: "\e94f";
+        }
+    </style>
+    <div id="octo-widget" class="widget">
+        <h2 id="octo-info-project"></h2>
+        <h2 id="octo-info-environment"></h2>
+        <div class="octo-info-container">
+            <div id="octo-info-version"></div>
+        </div>
+    </div>
+
+    <script src="vss/lib/VSS.SDK.min.js"></script>
+    <script src="js/octo-status.js"></script>
+    <script type="text/javascript">
         VSS.init({
-            explicitNotifyLoaded: true,
-			usePlatformStyles: true
-        });
-        VSS.require(["TFS/Dashboards/WidgetHelpers"], function (WidgetHelpers) {
-			WidgetHelpers.IncludeWidgetStyles();
-            VSS.register("OctoProjectEnvironmentWidget", function () {
-                /*
-                var projectId = VSS.getWebContext().project.id;
-                var getQueryInfo = function (widgetSettings) {
-                    // Extract query path from widgetSettings.customSettings and ask user to configure one if none is found
-                    var settings = JSON.parse(widgetSettings.customSettings.data);
-                    if (!settings || !settings.queryPath) {
-                        var $container = $('#query-info-container');
-                        $container.empty();
-                        $container.text("Sorry nothing to show, please configure a query path");
-                        return WidgetHelpers.WidgetStatusHelper.Success();
-                    }
-                    // Get a WIT client to make REST calls to VSTS
-                    return TFS_Wit_WebApi.getClient().getQuery(projectId, settings.queryPath)
-                        .then(function (query) {
-                            // Create a list with query details
-                            var $list = $('<ul>');
-                            $list.append($('<li>').text("Query Id: " + query.id));
-                            $list.append($('<li>').text("Query Name: " + query.name));
-                            $list.append($('<li>').text("Created By: " + (query.createdBy ? query.createdBy.displayName:"<unknown>") ));
-                            // Append the list to the query-info-container
-                            var $container = $('#query-info-container');
-                            $container.empty();
-                            $container.append($list);
-                            // Use the widget helper and return success as Widget Status
-                            return WidgetHelpers.WidgetStatusHelper.Success();
-                        }, function (error) {
-                            // Use the widget helper and return failure as Widget Status
-                            return WidgetHelpers.WidgetStatusHelper.Failure(error.message);
-                        });
-                    
-                }
-                */
-                return {
-                    load: function (widgetSettings) {
-                        // Set your title
-                        var $title = $('h2.title');
-                        $title.text('Hello World');
-                        //return getQueryInfo(widgetSettings);
-                    },
-                    reload: function (widgetSettings) {
-                        //return getQueryInfo(widgetSettings);
-                    }
-                }
-            });
-            VSS.notifyLoadSucceeded();
+			explicitNotifyLoaded: true,
+			setupModuleLoader: true,
+			usePlatformStyles: true,
+			usePlatformScripts: true
+		});
+        VSS.ready(function () {
+            var statusWidget = new OctopusStatusWidget();
+            VSS.require(["TFS/Dashboards/WidgetHelpers", "VSS/Authentication/Services"], statusWidget.Configure);
         });
     </script>
 
-</head>
-<body>
-	<div class="widget">
-		<h2 class="title"></h1>
-		<div id="query-info-container"></div>
-	</div>
 </body>
 </html>
