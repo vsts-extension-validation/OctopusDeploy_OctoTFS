@@ -5,7 +5,10 @@ param (
     $environment,
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
-    $version
+    $version,
+    [Parameter(Mandatory=$false,HelpMessage="Set this to true if you need fresh task IDs for testing")]
+    [boolean]
+    $newTaskId
 )
 
 $ErrorActionPreference = "Stop"
@@ -78,7 +81,7 @@ function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environme
     return Get-Item $overridesFilePath
 }
 
-function UpdateTaskManifests($extensionBuildTempPath, $version) {
+function UpdateTaskManifests($extensionBuildTempPath, $version, $generateNewTaskId) {
     $taskManifestFiles = Get-ChildItem $extensionBuildTempPath -Include "task.json" -Recurse
     foreach ($taskManifestFile in $taskManifestFiles) {
         Write-Host "Updating version to $version in $taskManifestFile..."
@@ -89,6 +92,23 @@ function UpdateTaskManifests($extensionBuildTempPath, $version) {
         $task.version.Patch = $netVersion.Build
         
         $task.helpMarkDown = "Version: $version. [More Information](http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task)"
+        
+        ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
+    }
+
+    if ($generateNewTaskId) {
+        Write-Host "Creating new Guids for the tasks"
+        UpdateWithNewTaskGuids $extensionBuildTempPath
+    }
+}
+
+function UpdateWithNewTaskGuids($extensionBuildTempPath) {
+    $taskManifestFiles = Get-ChildItem $extensionBuildTempPath -Include "task.json" -Recurse
+    foreach ($taskManifestFile in $taskManifestFiles) {
+        Write-Host "Updating version to $version in $taskManifestFile..."
+        $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
+        
+        $task.id = [System.Guid]::NewGuid()
         
         ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
     }
@@ -118,7 +138,7 @@ function OverrideTaskLogos($extensionBuildTempPath, $environment) {
     Get-ChildItem $extensionBuildTempPath -Include "icon.*.png" -Recurse | Remove-Item -Force
 }
 
-function Pack($extensionName) {
+function Pack($extensionName, $newTaskId) {
     Write-Host "Packing $extensionName..."
     $extensionBuildTempPath = Get-ChildItem $buildTempPath -Include $extensionName -Recurse
     Write-Host "Found extension working directory $extensionBuildTempPath"
@@ -126,7 +146,7 @@ function Pack($extensionName) {
     $overridesFile = UpdateExtensionManifestOverrideFile $extensionBuildTempPath $environment $version
     OverrideExtensionLogo $extensionBuildTempPath $environment
     
-    UpdateTaskManifests $extensionBuildTempPath $version
+    UpdateTaskManifests $extensionBuildTempPath $version $newTaskId
     OverrideTaskLogos $extensionBuildTempPath $environment
     
     Write-Host "Creating VSIX using tfx..."
@@ -137,4 +157,4 @@ UpdateTfxCli
 InstallNodeModules
 PrepareBuildDirectory
 CopyCommonTaskItems
-Pack "VSTSExtensions"
+Pack "VSTSExtensions" $newTaskId

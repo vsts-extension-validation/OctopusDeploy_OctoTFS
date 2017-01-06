@@ -63,7 +63,8 @@
     ],
     "scopes": [
         "vso.build",
-        "vso.build_execute"
+        "vso.build_execute",
+        "vso.serviceendpoint_query"
     ],
     "contributions": [
         {
