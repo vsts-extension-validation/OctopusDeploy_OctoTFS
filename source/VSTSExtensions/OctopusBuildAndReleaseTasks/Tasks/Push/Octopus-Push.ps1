@@ -24,7 +24,7 @@ try {
     ForEach($Package in ($Packages.Split("`r`n|`r|`n").Trim())) {
         if (-not [string]::IsNullOrEmpty($Package)) {
 
-            foreach ($file in (Get-Item -Path $Package)){
+            foreach ($file in (Get-ChildItem -Path $Package -Recurse)){
                 $Arguments = $Arguments + " --package=`"$file`""
             }
         }
