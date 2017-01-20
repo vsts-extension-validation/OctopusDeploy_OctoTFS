@@ -27,13 +27,6 @@ try {
         $releaseNotesFileArg = "--releaseNotesFile=`"$NugetReleaseNotesFile`""
     }
 
-    if ($OutputPath){
-        $OutputPath = $OutputPath.TrimEnd('\')
-    }
-    if ($SourcePath){
-        $SourcePath = $SourcePath.TrimEnd('\')
-    }
-
     # Call Octo.exe
     $octoPath = Get-OctoExePath
     $Arguments = "pack --id=`"$PackageId`" --format=$PackageFormat --version=$PackageVersion --outFolder=`"$OutputPath`" --basePath=`"$SourcePath`" --author=`"$NugetAuthor`" --title=`"$NugetTitle`" --description=`"$NugetDescription`" --releaseNotes=`"$NuGetReleaseNotes`" $releaseNotesFileArg --overwrite=$Overwrite"
