@@ -1,12 +1,14 @@
 This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com).
 
+<div style="border:1px solid #800;background-color: #fcc;color:#800;">
+Note: This extension is incompatible with on-premises TFS 2015. See <a href="https://octopus.com/docs/api-and-integration/team-foundation-server-tfs">the Octopus Documentation for an alternative extension</a>
+</div>
+
 ## Create an Octopus Deploy Connected Service
 Before adding any Build or Release tasks to your process, configure an "Octopus Deploy" connected service in the administration section for your project.
 
 You'll need an API Key for a user that has sufficient permissions for the tasks you want to perform in your build and release process.
 For example, if your build needs to create a Release for Project A, the user who owns that API key will need ReleaseCreate role either unscoped or scoped to Project A.
-
-*Note: If you're using the Generic Octopus Connection, this will be deprecated in the near future. We strongly recommend moving to the new Octopus Deploy Connected Service Type.*
 
 ![Connected Service](OctopusBuildAndReleaseTasks/img/vstsbuild-octopusendpoint-1.png)
 
