@@ -1,7 +1,6 @@
 This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com).
 
-<div style="border:1px solid #800;background-color: #fcc;color:#800;">
-Note: This extension is incompatible with on-premises TFS 2015. See <a href="https://octopus.com/docs/api-and-integration/team-foundation-server-tfs">the Octopus Documentation for an alternative extension</a>
+<div style="border:1px solid #800;background-color: #fcc;color:#800;padding:5px;">Note: This extension is incompatible with on-premises TFS 2015. See <a href="https://octopus.com/docs/api-and-integration/team-foundation-server-tfs">the Octopus Documentation for an alternative extension</a>
 </div>
 
 ## Create an Octopus Deploy Connected Service
