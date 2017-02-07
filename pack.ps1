@@ -98,7 +98,7 @@ function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environme
     return Get-Item $overridesFilePath
 }
 
-function UpdateTaskManifests($extensionBuildTempPath, $version, $generateNewTaskId) {
+function UpdateTaskManifests($extensionBuildTempPath, $version, $envName) {
     $taskManifestFiles = Get-ChildItem $extensionBuildTempPath -Include "task.json" -Recurse
     foreach ($taskManifestFile in $taskManifestFiles) {
         Write-Host "Updating version to $version in $taskManifestFile..."
@@ -110,13 +110,16 @@ function UpdateTaskManifests($extensionBuildTempPath, $version, $generateNewTask
         
         $task.helpMarkDown = "Version: $version. [More Information](http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task)"
         
+        # replace the task ID 
+        $task.id = Get-TaskId $envName $task.name
+
         ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
     }
+}
 
-    if ($generateNewTaskId) {
-        Write-Host "Creating new Guids for the tasks"
-        UpdateWithNewTaskGuids $extensionBuildTempPath
-    }
+function Get-TaskId($envName, $taskName) {
+    $taskIds = ConvertFrom-Json -InputObject (Get-Content "task-ids.json" -Raw)
+    return $taskIds.$envName.$taskName
 }
 
 function UpdateWithNewTaskGuids($extensionBuildTempPath) {
@@ -175,4 +178,4 @@ InstallNodeModules
 PrepareBuildDirectory
 CopyCommonTaskItems
 CopyCommonWidgetItems
-Pack "VSTSExtensions" $newTaskId
+Pack "VSTSExtensions" $environment
