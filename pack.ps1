@@ -119,18 +119,6 @@ function Get-TaskId($envName, $taskName) {
     return $taskIds.$envName.$taskName
 }
 
-function UpdateWithNewTaskGuids($extensionBuildTempPath) {
-    $taskManifestFiles = Get-ChildItem $extensionBuildTempPath -Include "task.json" -Recurse
-    foreach ($taskManifestFile in $taskManifestFiles) {
-        Write-Host "Updating version to $version in $taskManifestFile..."
-        $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
-        
-        $task.id = [System.Guid]::NewGuid()
-        
-        ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
-    }
-}
-
 function OverrideExtensionLogo($extensionBuildTempPath, $environment) {
     $extensionLogoOverrideFile = Get-Item "$extensionBuildTempPath/extension-icon.$environment.png" -ErrorAction SilentlyContinue
     if ($extensionLogoOverrideFile) {
@@ -155,7 +143,7 @@ function OverrideTaskLogos($extensionBuildTempPath, $environment) {
     Get-ChildItem $extensionBuildTempPath -Include "icon.*.png" -Recurse | Remove-Item -Force
 }
 
-function Pack($extensionName, $newTaskId) {
+function Pack($extensionName, $envName) {
     Write-Host "Packing $extensionName..."
     $extensionBuildTempPath = Get-ChildItem $buildTempPath -Include $extensionName -Recurse
     Write-Host "Found extension working directory $extensionBuildTempPath"
@@ -163,7 +151,7 @@ function Pack($extensionName, $newTaskId) {
     $overridesFile = UpdateExtensionManifestOverrideFile $extensionBuildTempPath $environment $version
     OverrideExtensionLogo $extensionBuildTempPath $environment
     
-    UpdateTaskManifests $extensionBuildTempPath $version $newTaskId
+    UpdateTaskManifests $extensionBuildTempPath $version $envName
     OverrideTaskLogos $extensionBuildTempPath $environment
     
     Write-Host "Creating VSIX using tfx..."
