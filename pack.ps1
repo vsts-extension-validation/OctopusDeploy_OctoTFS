@@ -5,10 +5,7 @@ param (
     $environment,
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
-    $version,
-    [Parameter(Mandatory=$false,HelpMessage="Set this to true if you need fresh task IDs for testing")]
-    [boolean]
-    $newTaskId
+    $version
 )
 
 $ErrorActionPreference = "Stop"
