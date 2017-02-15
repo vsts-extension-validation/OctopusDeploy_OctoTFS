@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
-    "description": "Build and Release tasks and additional features for integrating with Octopus Deploy",
+    "description": "Build and Release tasks and other features for integrating with Octopus Deploy. Octopus is great for deploying ASP.NET or Core apps to on IIS or Azure, SQL databases, Windows services and much more.",
     "public": false,
     "categories": [
         "Build and release"
@@ -17,7 +17,8 @@
     "tags": [
         "octopus",
         "octopus deploy",
-        "deploy"
+        "deploy",
+        "devops"
     ],
     "icons": {
         "default": "extension-icon.png"
