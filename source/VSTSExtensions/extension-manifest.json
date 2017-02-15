@@ -197,6 +197,11 @@
                         "name": "OctopusProjectEnvironmentDeployments",
                         "endpointUrl": "$(endpoint.url)/api/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
                         "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusTaskDetails",
+                        "endpointUrl": "$(endpoint.url)$(TaskApiUri)",
+                        "resultSelector": "jsonpath:$"
                     }
                 ],
                 "authenticationSchemes": [

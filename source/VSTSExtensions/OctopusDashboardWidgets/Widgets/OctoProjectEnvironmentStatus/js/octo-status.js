@@ -3,7 +3,9 @@ function OctopusStatusWidget() {
         WidgetHelpers.IncludeWidgetStyles();
         VSS.register("OctoProjectEnvironmentWidget", function () {
             var $octoWidget = $('#octo-widget');
-            var $versionDiv = $('#octo-info-version');
+            var $statusIconDiv = $('#octo-info-statusIcon')
+            var $statusDiv = $('#octo-info-status')
+            var $descriptionDiv = $('#octo-info-description');
             var $projectH2 = $('#octo-info-project');
             var $environmentH2 = $('#octo-info-environment');
 
@@ -17,7 +19,6 @@ function OctopusStatusWidget() {
 
                     var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
 
-                    /* THIS ISN'T WORKING - WAITING ON MS TO HELP :) */
                     var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + settings.connectionId + '&api-version=3.0-preview.1';
                     var deploymentQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusProjectEnvironmentDeployments", "parameters":{"ProjectId": "' + settings.projectId + '", "EnvironmentId": "' + settings.environmentId + '"}}}';
                     $.ajax({
@@ -30,8 +31,7 @@ function OctopusStatusWidget() {
                     })
                         .done(function (data) {
                             var lastDeployment = JSON.parse(data.result[0]);    // todo: safely get last
-                            // todo: this needs to be a data source in the manifestß
-                            var taskQueryContent = '{"dataSourceDetails": {"dataSourceUrl":"{{endpoint.url}}' + lastDeployment.Links.Task + '}}';
+                            var taskQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusTaskDetails", "parameters": {"TaskApiUri": "' + lastDeployment.Links.Task + '"}}}';
                             $.ajax({
                                 type: "POST",
                                 url: queryUri,
@@ -42,9 +42,18 @@ function OctopusStatusWidget() {
                             })
                                 .done(function (data) {
                                     debugger;
-                                    $projectH2.text(widgetSettings.projectName);
-                                    $environmentH2.text(widgetSettings.environmentName);
-                                    $versionDiv.text(data.Description + data.Status);
+                                    taskHeaders = JSON.parse(widgetSettings.customSettings.data);
+                                    taskDetail = JSON.parse(data.result[0]);
+                                    finishedSuccessfully = taskDetail.FinishedSuccessfully;
+                                    $projectH2.text(taskHeaders.projectName);
+                                    $environmentH2.text(taskHeaders.environmentName);
+                                    $statusDiv.text(taskDetail.State);
+                                    $descriptionDiv.text(taskDetail.Completed);
+                                    if (finishedSuccessfully) {
+                                        $statusIconDiv.addClass('bowtie-status-success').removeClass('bowtie-status-failure');
+                                    } else {
+                                        $statusIconDiv.addClass('bowtie-status-failure').removeClass('bowtie-status-success');
+                                    }
                                 });
                         });
                     /*
