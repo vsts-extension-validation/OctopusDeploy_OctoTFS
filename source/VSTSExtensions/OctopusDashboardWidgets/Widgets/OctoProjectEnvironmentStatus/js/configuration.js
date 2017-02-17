@@ -1,5 +1,6 @@
 function OctopusStatusWidgetConfiguration() {
     this.Configure = function (WidgetHelpers, VSS_Auth_Service) {
+        WidgetHelpers.IncludeWidgetConfigurationStyles();
         VSS.register("OctoProjectEnvironmentWidget.Configuration", function () {
             var $connectionDropdown = $("#octopus-connection");
             var $projectDropdown = $("#octopus-project");
