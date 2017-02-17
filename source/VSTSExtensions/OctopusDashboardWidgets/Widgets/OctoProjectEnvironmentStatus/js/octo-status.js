@@ -3,70 +3,96 @@ function OctopusStatusWidget() {
         WidgetHelpers.IncludeWidgetStyles();
         VSS.register("OctoProjectEnvironmentWidget", function () {
             var $octoWidget = $('#octo-widget');
-            var $statusIconDiv = $('#octo-info-statusIcon')
-            var $statusDiv = $('#octo-info-status')
-            var $descriptionDiv = $('#octo-info-description');
+            var $statusIconDiv = $('#octo-info-statusIcon');
+            var $versionSpan = $('#octo-info-version');
+            var $releaseDateSpan = $('#octo-info-releasedate');
+            var $linkElement = $('#octo-info-link');
             var $projectH2 = $('#octo-info-project');
-            var $environmentH2 = $('#octo-info-environment');
+            var $environmentH3 = $('#octo-info-environment');
+            var $statusDescriptionDiv = $("#octo-extra-description");
 
             var getOctopusStatus = function (widgetSettings) {
                 var settings = JSON.parse(widgetSettings.customSettings.data);
 
+                // clear
+                $projectH2.text('Loading...');
+                $environmentH3.text('');
+                $versionSpan.text('');
+                $releaseDateSpan.text('')
+                $linkElement.removeAttr('href');
+                $statusIconDiv.removeClass('bowtie-status-success bowtie-status-failure bowtie-status-run bowtie-status-warning bowtie-status-help');
+                $statusDescriptionDiv.text('');
+
                 VSS.getAccessToken().then(function (token) {
                     var webContext = VSS.getWebContext();
                     var baseUri = webContext.collection.uri + 'defaultcollection/' + webContext.project.name;
-                    var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints?type=OctopusEndpoint&api-version=3.0-preview.1';
+                    var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints/' + settings.connectionId + '?api-version=3.0-preview.1';
 
                     var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
 
-                    var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + settings.connectionId + '&api-version=3.0-preview.1';
-                    var deploymentQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusProjectEnvironmentDeployments", "parameters":{"ProjectId": "' + settings.projectId + '", "EnvironmentId": "' + settings.environmentId + '"}}}';
                     $.ajax({
-                        type: "POST",
-                        url: queryUri,
-                        data: deploymentQueryContent,
+                        type: "GET",
+                        url: endpointUri,
                         contentType: 'application/json',
                         dataType: 'json',
                         headers: { 'Authorization': authToken }
                     })
                         .done(function (data) {
-                            var lastDeployment = JSON.parse(data.result[0]);    // todo: safely get last
-                            var taskQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusTaskDetails", "parameters": {"TaskApiUri": "' + lastDeployment.Links.Task + '"}}}';
+                            var endpointDetails = data;
+
+                            var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + settings.connectionId + '&api-version=3.0-preview.1';
+                            var dashboardQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusDashboardForProject", "parameters":{"ProjectId": "' + settings.projectId + '"}}}';
                             $.ajax({
                                 type: "POST",
                                 url: queryUri,
-                                data: taskQueryContent,
+                                data: dashboardQueryContent,
                                 contentType: 'application/json',
                                 dataType: 'json',
                                 headers: { 'Authorization': authToken }
                             })
                                 .done(function (data) {
-                                    debugger;
-                                    taskHeaders = JSON.parse(widgetSettings.customSettings.data);
-                                    taskDetail = JSON.parse(data.result[0]);
-                                    finishedSuccessfully = taskDetail.FinishedSuccessfully;
-                                    $projectH2.text(taskHeaders.projectName);
-                                    $environmentH2.text(taskHeaders.environmentName);
-                                    $statusDiv.text(taskDetail.State);
-                                    $descriptionDiv.text(taskDetail.Completed);
-                                    if (finishedSuccessfully) {
-                                        $statusIconDiv.addClass('bowtie-status-success').removeClass('bowtie-status-failure');
+                                    var dashboard = JSON.parse(data.result[0]);    // todo: safely get last
+                                    var deploymentElement = null;
+                                    dashboard.Items.some(function (element) {
+                                        if (element.EnvironmentId === settings.environmentId) {
+                                            deploymentElement = element;
+                                            return true;
+                                        }
+                                    });
+                                    if (deploymentElement) {
+                                        $projectH2.text(settings.projectName).attr('title', settings.projectName);
+                                        $environmentH3.text(settings.environmentName);
+                                        $versionSpan.text(deploymentElement.ReleaseVersion);
+                                        if (deploymentElement.IsCompleted) {
+                                            $releaseDateSpan.text(moment(deploymentElement.CompletedTime).format('LL'));
+                                        } else {
+                                            $releaseDateSpan.text(deploymentElement.State);
+                                        }
+                                        $linkElement.attr("href", endpointDetails.url + '/app#/tasks/' + deploymentElement.TaskId);
+
+                                        if (deploymentElement.State === "Success" &&
+                                            !deploymentElement.HasWarningsOrErrors) {
+                                            $statusIconDiv.addClass('bowtie-status-success');
+                                            $statusDescriptionDiv.text("Duration: " + deploymentElement.Duration);
+                                        } else if (deploymentElement.State === "Success") {
+                                            $statusIconDiv.addClass('bowtie-status-warning')
+                                            $statusDescriptionDiv.text("Duration: " + deploymentElement.Duration);
+                                        } else if (deploymentElement.State === "Failed") {
+                                            $statusIconDiv.addClass('bowtie-status-failure');
+                                            $statusDescriptionDiv.text(deploymentElement.ErrorMessage);
+                                        } else if (!deploymentElement.IsCompleted) {
+                                            $statusIconDiv.addClass('bowtie-status-run');
+                                        } else {
+                                            $statusIconDiv.addClass('bowtie-status-help');
+                                        }
                                     } else {
-                                        $statusIconDiv.addClass('bowtie-status-failure').removeClass('bowtie-status-success');
+                                        $projectH2.text('');
+                                        $environmentH3.text("No deployment found for " + settings.projectName + " to " + settings.environmentName);
                                     }
+
                                 });
                         });
-                    /*
-                    var state = prompt("State (success | failure)?");
-                    $projectH2.text("Deploy to Azure (#2)");
-                    $environmentH2.text("Test");
-                    $versionDiv.text("0.0.1");
-                    if (state == 'success') {
-                        $octoWidget.addClass('success').removeClass('failure');
-                    } else {
-                        $octoWidget.addClass('failure').removeClass('success');
-                    }
-                    */
+
                 });
                 return WidgetHelpers.WidgetStatusHelper.Success();
             }

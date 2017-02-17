@@ -61,7 +61,7 @@
             "addressable": true
         },
         {
-            "path": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
+            "path": "OctopusDashboardWidgets/img",
             "addressable": true
         },
         {
@@ -84,15 +84,19 @@
                 ".OctoProjectEnvironmentWidget.Configuration"
             ],
             "properties": {
-                "name": "Octopus Deploy Project and Environment Status",
-                "description": "Shows the status of a project in an environment",
-                "catalogIconUrl": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
-                "previewImageUrl": "OctopusDashboardWidgets/img/octo-projenv-widget-icon.png",
+                "name": "Octopus Deploy Status",
+                "description": "Shows the status of an Octopus Deploy Project for a given Environment",
+                "catalogIconUrl": "OctopusDashboardWidgets/img/catalog-image.jpg",
+                "previewImageUrl": "OctopusDashboardWidgets/img/preview-image.jpg",
                 "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/octo-status.html",
                 "supportedSizes": [
                     {
                         "rowSpan": 1,
                         "columnSpan": 1
+                    },
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 2
                     }
                 ],
                 "supportedScopes": [
@@ -197,6 +201,11 @@
                         "name": "OctopusProjectEnvironmentDeployments",
                         "endpointUrl": "$(endpoint.url)/api/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
                         "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusDashboardForProject",
+                        "endpointUrl": "$(endpoint.url)/api/dashboard?projectId=$(ProjectId)",
+                        "resultSelector": "jsonpath:$"
                     },
                     {
                         "name": "OctopusTaskDetails",

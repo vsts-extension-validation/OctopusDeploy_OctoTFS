@@ -47,6 +47,9 @@ function OctopusStatusWidgetConfiguration() {
                                     console.debug(e);
                                     $connectionDropdown.append($('<option value="' + e.id + '">' + e.name + '</option>'));
                                 });
+                                if (settings && settings.connectionId) {
+                                    $connectionDropdown.val(settings.connectionId);
+                                }
 
                                 var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + $connectionDropdown.val() + '&api-version=3.0-preview.1';
                                 var projectQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusAllProjects"}}';
@@ -63,7 +66,11 @@ function OctopusStatusWidgetConfiguration() {
                                             var el = JSON.parse(e);
                                             $projectDropdown.append($('<option value="' + el.Id + '">' + el.Name + '</option>'));
                                         });
+                                        if (settings && settings.projectId) {
+                                            $projectDropdown.val(settings.projectId);
+                                        }
                                     });
+
                                 var environmentQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusAllEnvironments"}}';
                                 $.ajax({
                                     type: "POST",
@@ -78,17 +85,10 @@ function OctopusStatusWidgetConfiguration() {
                                             var el = JSON.parse(e);
                                             $environmentDropdown.append($('<option value="' + el.Id + '">' + el.Name + '</option>'));
                                         });
+                                        if (settings && settings.environmentId) {
+                                            $environmentDropdown.val(settings.environmentId);
+                                        }
                                     });
-
-                                if (settings && settings.connectionId) {
-                                    $connectionDropdown.val(settings.connectionId);
-                                }
-                                if (settings && settings.projectId) {
-                                    $projectDropdown.val(settings.projectId);
-                                }
-                                if (settings && settings.environmentId) {
-                                    $environmentDropdown.val(settings.environmentId);
-                                }
 
                                 $connectionDropdown.on("change", function () {
                                     saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
