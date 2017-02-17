@@ -30,6 +30,9 @@
             "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-package.png"
         },
         {
+            "path": "OctopusDashboardWidgets/img/multiple-widget-preview.jpg"
+        },
+        {
             "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-deploy.png"
         }
     ],
@@ -43,7 +46,7 @@
             "uri": "https://octopus.com"
         },
         "getstarted": {
-            "uri": "http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task"
+            "uri": "https://octopus.com/docs/guides/use-the-team-foundation-build-custom-task"
         },
         "support": {
             "uri": "https://octopus.com/support"
