@@ -1,4 +1,9 @@
-This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com).
+This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com), as well as a dashboard widget to show the status of a deployment in Octopus.
+
+[Octopus Deploy](https://octopus.com) is great for deploying ASP.NET or .NET Core applications running on IIS or Azure, Windows services, SQL databases, and much, much more.
+
+<div style="border:1px solid #800;background-color: #fcc;color:#800;padding:5px;">Note: This extension is incompatible with on-premises TFS 2015. See <a href="https://octopus.com/docs/api-and-integration/team-foundation-server-tfs">the Octopus Documentation for an alternative extension</a>
+</div>
 
 ## Create an Octopus Deploy Connected Service
 Before adding any Build or Release tasks to your process, configure an "Octopus Deploy" connected service in the administration section for your project.
