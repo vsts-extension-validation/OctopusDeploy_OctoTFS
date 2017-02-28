@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+    <style scoped>
+        #octo-info-link {
+            font-size: 0.8em;
+            clear: both;
+            margin: 0;
+        }
+        #octo-info-project {
+            margin-bottom: 5px;
+        }
+        #octo-info-environment {
+            margin-top: 0;
+        }
+        #octo-info-statusIcon {
+            margin-top: 5px;
+            float: left;
+            width: 32px;
+            height: 32px;
+            font-size: 28px;
+            line-height: 28px;
+        }
+        .version-release-wrapper {
+            float: left;
+            margin-left: 5px;
+        }
+        #octo-info-version {
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 11pt;
+            margin-bottom: 2px;
+            word-wrap: break-word;
+            display: block;
+        }
+        #octo-info-releasedate {
+            color: rgba(37, 51, 38, .64);
+            display: block;
+        }
+        #octo-extra-description {
+            clear: both;
+            padding-top: 10px;
+        }
+        .bowtie-status-run {
+            color: #1b80c2;
+        }
+    </style>
+    <div id="octo-widget" class="widget clickable">
+        <a id="octo-info-link" title="View in Octopus" target="_blank">
+            <h2 id="octo-info-project" class="title"></h2>
+            <h3 id="octo-info-environment"></h3>
+            <div class="octo-info-container">
+                <div id="octo-info-statusIcon" class="icon bowtie-icon"></div>
+                <div class="version-release-wrapper">
+                    <span id="octo-info-version"></span>
+                    <span id="octo-info-releasedate"></span>
+                </div>
+            </div>
+            <div id="octo-extra-description"></div>
+        </a>
+    </div>
+
+    <script src="vss/lib/VSS.SDK.min.js"></script>
+    <script src="js/octo-status.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script type="text/javascript">
+        VSS.init({
+            explicitNotifyLoaded: true,
+            setupModuleLoader: true,
+            usePlatformStyles: true,
+            usePlatformScripts: true
+        });
+        VSS.ready(function () {
+            var statusWidget = new OctopusStatusWidget();
+            VSS.require(["TFS/Dashboards/WidgetHelpers", "VSS/Authentication/Services"], statusWidget.Configure);
+        });
+    </script>
+
+</body>
+
+</html>

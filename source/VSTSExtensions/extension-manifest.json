@@ -31,6 +31,9 @@
             "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-package.png"
         },
         {
+            "path": "OctopusDashboardWidgets/img/multiple-widget-preview.jpg"
+        },
+        {
             "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-deploy.png"
         }
     ],
@@ -44,7 +47,7 @@
             "uri": "https://octopus.com"
         },
         "getstarted": {
-            "uri": "http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task"
+            "uri": "https://octopus.com/docs/guides/use-the-team-foundation-build-custom-task"
         },
         "support": {
             "uri": "https://octopus.com/support"
@@ -60,6 +63,14 @@
         {
             "path": "OctopusBuildAndReleaseTasks/img",
             "addressable": true
+        },
+        {
+            "path": "OctopusDashboardWidgets/img",
+            "addressable": true
+        },
+        {
+            "path": "OctopusDashboardWidgets/Widgets",
+            "addressable": true
         }
     ],
     "scopes": [
@@ -67,7 +78,48 @@
         "vso.build_execute",
         "vso.serviceendpoint_query"
     ],
+    "demands": ["contribution/ms.vss-dashboards-web.widget-sdk-version-2"],
     "contributions": [
+        {
+            "id": "OctoProjectEnvironmentWidget",
+            "type": "ms.vss-dashboards-web.widget",
+            "targets": [
+                "ms.vss-dashboards-web.widget-catalog",
+                ".OctoProjectEnvironmentWidget.Configuration"
+            ],
+            "properties": {
+                "name": "Octopus Deploy Status",
+                "description": "Shows the status of an Octopus Deploy Project for a given Environment",
+                "catalogIconUrl": "OctopusDashboardWidgets/img/catalog-image.jpg",
+                "previewImageUrl": "OctopusDashboardWidgets/img/preview-image.jpg",
+                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/octo-status.html",
+                "supportedSizes": [
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 1
+                    },
+                    {
+                        "rowSpan": 1,
+                        "columnSpan": 2
+                    }
+                ],
+                "supportedScopes": [
+                    "project_team"
+                ]
+            }
+        },
+        {
+            "id": "OctoProjectEnvironmentWidget.Configuration",
+            "type": "ms.vss-dashboards-web.widget-configuration",
+            "targets": [
+                "ms.vss-dashboards-web.widget-configuration"
+            ],
+            "properties": {
+                "name": "Octopus Project and Environment Status Configuration",
+                "description": "Configures Octopus Project and Environment Status Widget",
+                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/configuration.html"
+            }
+        },
         {
             "id": "octopus-create-release",
             "type": "ms.vss-distributed-task.task",
@@ -148,6 +200,21 @@
                         "name": "OctopusProjectChannels",
                         "endpointUrl": "$(endpoint.url)/api/projects/$(ProjectName)/channels",
                         "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusProjectEnvironmentDeployments",
+                        "endpointUrl": "$(endpoint.url)/api/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
+                        "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusDashboardForProject",
+                        "endpointUrl": "$(endpoint.url)/api/dashboard?projectId=$(ProjectId)",
+                        "resultSelector": "jsonpath:$"
+                    },
+                    {
+                        "name": "OctopusTaskDetails",
+                        "endpointUrl": "$(endpoint.url)$(TaskApiUri)",
+                        "resultSelector": "jsonpath:$"
                     }
                 ],
                 "authenticationSchemes": [
