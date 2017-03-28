@@ -33,6 +33,7 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.ta
 	'NuGetReleaseNotesFile': filePath
 	'Include': multiLine
 	'Overwrite': boolean
+	'ListFiles': boolean
 OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Project': pickList

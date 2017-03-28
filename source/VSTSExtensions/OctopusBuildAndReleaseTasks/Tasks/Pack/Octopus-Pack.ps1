@@ -19,12 +19,15 @@ try {
     $NuGetReleaseNotesFile = Get-VstsInput -Name NuGetReleaseNotesFile
     $Overwrite = Get-VstsInput -Name Overwrite -AsBool
     $Include = Get-VstsInput -Name Include
+    $ListFiles = Get-VstsInput -Name ListFiles -AsBool
 
-    Write-Host "Release notes file: $NugetReleaseNotesFile"
     $releaseNotesFileArg = ""
-    if (-not [System.String]::IsNullOrWhiteSpace($NuGetReleaseNotesFile))
+    if ((-not [System.String]::IsNullOrWhiteSpace($NuGetReleaseNotesFile)) -and (Test-Path $NuGetReleaseNotesFile -PathType leaf))
     {
+        Write-Host "Release notes file: $NugetReleaseNotesFile"
         $releaseNotesFileArg = "--releaseNotesFile=`"$NugetReleaseNotesFile`""
+    } else {
+        Write-Host "No Release notes file found"
     }
 
     if ($OutputPath){
@@ -41,6 +44,9 @@ try {
        ForEach ($IncludePath in $Include.replace("`r", "").split("`n")) {
        $Arguments = $Arguments + " --include=`"$IncludePath`""
        }
+    }
+    if ($ListFiles) {
+        $Arguments = $Arguments + " --verbose"
     }
 
     Invoke-VstsTool -FileName $octoPath -Arguments $Arguments -RequireExitCodeZero
