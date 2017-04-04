@@ -54,7 +54,7 @@ function OctopusStatusWidget() {
                                     var dashboard = JSON.parse(data.result[0]);    // todo: safely get last
                                     var deploymentElement = null;
                                     dashboard.Items.some(function (element) {
-                                        if (element.EnvironmentId === settings.environmentId) {
+                                        if (element.EnvironmentId === settings.environmentId && element.IsCurrent) {
                                             deploymentElement = element;
                                             return true;
                                         }
