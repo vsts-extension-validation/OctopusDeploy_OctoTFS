@@ -2,7 +2,7 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 
 [Octopus Deploy](https://octopus.com) is great for deploying ASP.NET or .NET Core applications running on IIS or Azure, Windows services, SQL databases, and much, much more.
 
-<div style="border:1px solid #800;background-color: #ffc;color:#444;padding:5px;">Note: This extension is only compatible with Visual Studio Team Services (VSTS) and Team Foundation Server (TFS) 2017 Update 1 and above.<br/>There is an alternative extension for TFS 2015 Update 2 and above.<br/>See <a href="https://octopus.com/docs/guides/use-the-team-foundation-build-custom-task/extension-compatibility">the Octopus Documentation</a> for extension compatibility details and a download link for the alternative extension.
+<div style="border:1px solid #888;background-color: #ffc;color:#444;padding:5px;">Note: This extension is only compatible with Visual Studio Team Services (VSTS) and Team Foundation Server (TFS) 2017 Update 1 and above.<br/>There is an alternative extension for TFS 2015 Update 2 and above.<br/>See <a href="https://octopus.com/docs/guides/use-the-team-foundation-build-custom-task/extension-compatibility">the Octopus Documentation</a> for extension compatibility details and a download link for the alternative extension.
 </div>
 
 ## Create an Octopus Deploy Connected Service
