@@ -33,7 +33,7 @@ function OctopusStatusWidgetConfiguration() {
 
                     VSS.getAccessToken().then(function (token) {
                         var webContext = VSS.getWebContext();
-                        var baseUri = webContext.collection.uri + 'defaultcollection/' + webContext.project.name;
+                        var baseUri = webContext.collection.uri + "/" + webContext.project.name;
                         var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints?type=OctopusEndpoint&api-version=3.0-preview.1';
 
                         var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
