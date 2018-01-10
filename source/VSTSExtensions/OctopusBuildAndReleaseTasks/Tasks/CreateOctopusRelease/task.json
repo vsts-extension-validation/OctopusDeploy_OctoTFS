@@ -104,7 +104,7 @@
             "label": "Custom Notes",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Custom notes appended to Octopus Release notes.",
+            "helpMarkDown": "Custom notes appended to Octopus Release notes. This field supports markdown. To include newlines, you can use HTML linebreaks.",
             "groupName": "releasenotes"
         },
         {
