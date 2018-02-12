@@ -4,6 +4,16 @@ OctoTFS is a repository containing components for integration with Team Foundati
 
 > Visual Studio Team Services (VSTS) was formerly known as Visual Studio Online (VSO)
 
+## Building and Testing
+
+```
+sudo npm install -g tfx-cli
+# Increment version number from the one shown at https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test&targetId=7b703d9c-2348-4d6d-b8fb-df60fdec5ec4&utm_source=vstsproduct&utm_medium=ExtHubManageList
+./pack.ps1 Test 2.0.91
+# Get access token from https://octopus-deploy.visualstudio.com/_details/security/tokens. Remember to select "All accessible accounts".
+./publish.ps1 Test 2.0.91 wieufvliuwefliquwefliqwevfliqwevfliqweuvfliqwevf
+```
+
 ## Team Build Preview Custom Steps
 
 Custom Build Steps for [Team Build vNext](http://aka.ms/tfbuild)
