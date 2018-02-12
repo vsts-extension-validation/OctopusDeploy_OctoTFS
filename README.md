@@ -4,7 +4,9 @@ OctoTFS is a repository containing components for integration with Team Foundati
 
 > Visual Studio Team Services (VSTS) was formerly known as Visual Studio Online (VSO)
 
-## Building and Testing
+## Manual Building and Testing
+
+Note: Use the project in Octopus to deploy. These steps are only for manual releases, which should be avoided.
 
 ```
 sudo npm install -g tfx-cli
