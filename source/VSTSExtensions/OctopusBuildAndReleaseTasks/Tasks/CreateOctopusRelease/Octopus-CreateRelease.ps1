@@ -12,8 +12,15 @@ function Get-LinkedReleaseNotes($vssEndpoint, $comments, $workItems) {
 	$headers = @{Authorization = "Bearer $personalAccessToken"}
 	$changesResponse = Invoke-WebRequest -Uri $changesUri -Headers $headers -UseBasicParsing
 	$relatedChanges = $changesResponse.Content | ConvertFrom-Json
+
+	# Change messages will be truncated if they go over 100 chars. We need to make an additional call
+	# to get the full message in this case.
+	$relatedChanges.value |
+	    Where-Object -FilterScript { $_.messageTruncated -eq "true" } |
+	    ForEach-Object { $_.message = (Invoke-WebRequest -Uri $_.location -Headers $headers -UseBasicParsing | ConvertFrom-Json).comment }
+
 	Write-Host "Related Changes = $($relatedChanges.value)"
-	
+
 	$releaseNotes = ""
 	$nl = "`r`n`r`n"
 	if ($comments -eq $true) {
