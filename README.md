@@ -11,9 +11,9 @@ Note: Use the project in Octopus to deploy. These steps are only for manual rele
 ```
 sudo npm install -g tfx-cli
 # Increment version number from the one shown at https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test&targetId=7b703d9c-2348-4d6d-b8fb-df60fdec5ec4&utm_source=vstsproduct&utm_medium=ExtHubManageList
-./pack.ps1 Test 2.0.91
+./pack.ps1 Test 2.0.96
 # Get access token from https://octopus-deploy.visualstudio.com/_details/security/tokens. Remember to select "All accessible accounts".
-./publish.ps1 Test 2.0.91 wieufvliuwefliquwefliqwevfliqwevfliqweuvfliqwevf
+./publish.ps1 Test 2.0.96 wieufvliuwefliquwefliqwevfliqwevfliqweuvfliqwevf
 ```
 
 ## Team Build Preview Custom Steps
