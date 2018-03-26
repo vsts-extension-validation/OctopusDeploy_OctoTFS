@@ -1,9 +1,15 @@
 ﻿[CmdletBinding()]
 param()
 
+# https://github.com/OctopusDeploy/Issues/issues/4341
+# Enable TLS 1.0, 1.1 and 1.2
+[Net.ServicePointManager]::SecurityProtocol = `
+ 		[Net.SecurityProtocolType]::Tls12 -bor `
+ 		[Net.SecurityProtocolType]::Tls11 -bor `
+ 		[Net.SecurityProtocolType]::Tls10
+
 # Get release notes from linked changesets and work items
 function Get-LinkedReleaseNotes($vssEndpoint, $comments, $workItems) {
-
     Write-Host "Environment = $env:BUILD_REPOSITORY_PROVIDER"
 	Write-Host "Comments = $comments, WorkItems = $workItems"
 	$personalAccessToken = $vssEndpoint.Auth.Parameters.AccessToken
