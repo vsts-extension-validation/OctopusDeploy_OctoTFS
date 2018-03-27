@@ -3,7 +3,6 @@ param()
 
 # Get release notes from linked changesets and work items
 function Get-LinkedReleaseNotes($vssEndpoint, $comments, $workItems) {
-
     Write-Host "Environment = $env:BUILD_REPOSITORY_PROVIDER"
 	Write-Host "Comments = $comments, WorkItems = $workItems"
 	$personalAccessToken = $vssEndpoint.Auth.Parameters.AccessToken
@@ -122,6 +121,13 @@ function Get-ReleaseNotes($linkedItemReleaseNotes) {
 Trace-VstsEnteringInvocation $MyInvocation
 
 try {
+	# https://github.com/OctopusDeploy/Issues/issues/4341
+	# Enable TLS 1.0, 1.1 and 1.2, and SSL 3. The most secure option will be used by default.
+	[Net.ServicePointManager]::SecurityProtocol = `
+ 		[Net.SecurityProtocolType]::Tls12 -bor `
+ 		[Net.SecurityProtocolType]::Tls11 -bor `
+ 		[Net.SecurityProtocolType]::Tls -bor `
+ 		[Net.SecurityProtocolType]::Ssl3
 
     . .\Octopus-VSTS.ps1
 
