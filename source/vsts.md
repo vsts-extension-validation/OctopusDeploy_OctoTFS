@@ -11,9 +11,9 @@ Before adding any Build or Release tasks to your process, configure an "Octopus 
 You'll need an API Key for a user that has sufficient permissions for the tasks you want to perform in your build and release process.
 For example, if your build needs to create a Release for Project A, the user who owns that API key will need ReleaseCreate role either unscoped or scoped to Project A.
 
-![Connected Service](OctopusBuildAndReleaseTasks/img/vstsbuild-octopusendpoint-1.png)
+![Connected Service](img/vstsbuild-octopusendpoint-1.png)
 
-![Connected Service](OctopusBuildAndReleaseTasks/img/vstsbuild-octopusendpoint-2.png)
+![Connected Service](img/vstsbuild-octopusendpoint-2.png)
 
 <hr/>
 
@@ -33,11 +33,11 @@ And the following widget:
 
 <hr />
 
-### <a name="package-application"></a>![Package Icon](OctopusBuildAndReleaseTasks/img/octopus_package-03.png) Package Application
+### <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application
 
 *Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus.*
 
- ![Configure Package Application Step](OctopusBuildAndReleaseTasks/img/create-package-options-2.0.png)
+ ![Configure Package Application Step](img/create-package-options-2.0.png)
  Options include:
  * **Package ID**: The ID of the package. e.g. MyCompany.App
  * **Package Format**: NuPkg or Zip
@@ -47,18 +47,18 @@ And the following widget:
  * **NuGet Section**: This section lets you include additional details for the NuGet Package Metadata.
  * **Advanced Options Section**: Additional files to include in the package, and whether to overwrite any existing file of the same name.
 
-### <a name="push-packages-to-octopus"></a>![Push Package Icon](OctopusBuildAndReleaseTasks/img/octopus_push-01.png) Push Packages to Octopus
+### <a name="push-packages-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Packages to Octopus
 
- ![Configure Push Application Step](OctopusBuildAndReleaseTasks/img/push-packages-options-2.0.png)
+ ![Configure Push Application Step](img/push-packages-options-2.0.png)
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
  * **Package**: Package file to push. To push multiple packages, enter on multiple lines.
  * **Replace Existing**: If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to 'True' to overwrite the existing package.
  * **Additional Arguments**: Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Pushing+packages) to include
 
-### <a name="create-octopus-release"></a>![Create Release Icon](OctopusBuildAndReleaseTasks/img/octopus_create-release-04.png) Create Octopus Release
+### <a name="create-octopus-release"></a>![Create Release Icon](img/octopus_create-release-04.png) Create Octopus Release
 
- ![Configure Create Release Step](OctopusBuildAndReleaseTasks/img/create-release-options-2.0.png)
+ ![Configure Create Release Step](img/create-release-options-2.0.png)
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
@@ -78,11 +78,11 @@ And the following widget:
 
 The *Release Notes* options, if selected, will result in nicely formatted release notes with deep links to Team Foundation Server or Visual Studio Team Services. Even if no additional options are selected, the related VSTS Build number will be included in the Octopus release notes.
 
-![Release Notes in Octopus Deploy Release](OctopusBuildAndReleaseTasks/img/tfsbuild-releasenotes.png)
+![Release Notes in Octopus Deploy Release](img/tfsbuild-releasenotes.png)
 
-### <a name="deploy-octopus-release"></a>![Deploy Release Image](OctopusBuildAndReleaseTasks/img/octopus_deploy-02.png) Deploy Octopus Release
+### <a name="deploy-octopus-release"></a>![Deploy Release Image](img/octopus_deploy-02.png) Deploy Octopus Release
 
- ![Configure Deploy Release Step](OctopusBuildAndReleaseTasks/img/deploy-release-options-2.0.png)
+ ![Configure Deploy Release Step](img/deploy-release-options-2.0.png)
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
@@ -94,9 +94,9 @@ The *Release Notes* options, if selected, will result in nicely formatted releas
  * **Tenant tag(s)**: Comma-separated list of Tenant tags matching Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
  * **Additional Arguments**:  Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Creating+releases) to include
 
-### <a name="promote-octopus-release"></a>![Promote Release Image](OctopusBuildAndReleaseTasks/img/octopus_promote-05.png) Promote Octopus Release
+### <a name="promote-octopus-release"></a>![Promote Release Image](img/octopus_promote-05.png) Promote Octopus Release
 
-![Configure Promote Release Step](OctopusBuildAndReleaseTasks/img/promote-release-options-2.0.png)
+![Configure Promote Release Step](img/promote-release-options-2.0.png)
 
 Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).

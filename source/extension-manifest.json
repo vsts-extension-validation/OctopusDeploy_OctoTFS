@@ -29,16 +29,16 @@
     },
     "screenshots": [
         {
-            "path": "OctopusBuildAndReleaseTasks/img/octopus-alltasks.png"
+            "path": "img/octopus-alltasks.png"
         },
         {
-            "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-package.png"
+            "path": "img/octopus-add-tasks-package.png"
         },
         {
-            "path": "OctopusDashboardWidgets/img/multiple-widget-preview.jpg"
+            "path": "img/multiple-widget-preview.jpg"
         },
         {
-            "path": "OctopusBuildAndReleaseTasks/img/octopus-add-tasks-deploy.png"
+            "path": "img/octopus-add-tasks-deploy.png"
         }
     ],
     "content": {
@@ -62,18 +62,14 @@
     },
     "files": [
         {
-            "path": "OctopusBuildAndReleaseTasks/Tasks"
+            "path": "tasks"
         },
         {
-            "path": "OctopusBuildAndReleaseTasks/img",
+            "path": "img",
             "addressable": true
         },
         {
-            "path": "OctopusDashboardWidgets/img",
-            "addressable": true
-        },
-        {
-            "path": "OctopusDashboardWidgets/Widgets",
+            "path": "widgets",
             "addressable": true
         }
     ],
@@ -131,7 +127,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "OctopusBuildAndReleaseTasks/Tasks/CreateOctopusRelease"
+                "name": "tasks/CreateOctopusRelease"
             }
         },
         {
@@ -141,7 +137,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "OctopusBuildAndReleaseTasks/Tasks/Deploy"
+                "name": "tasks/Deploy"
             }
         },
         {
@@ -151,7 +147,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "OctopusBuildAndReleaseTasks/Tasks/Pack"
+                "name": "tasks/Pack"
             }
         },
         {
@@ -161,7 +157,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "OctopusBuildAndReleaseTasks/Tasks/Push"
+                "name": "tasks/Push"
             }
         },
         {
@@ -171,7 +167,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties":{
-                "name": "OctopusBuildAndReleaseTasks/Tasks/OctoInstaller"
+                "name": "tasks/OctoInstaller"
             }
         },
         {
@@ -181,7 +177,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "OctopusBuildAndReleaseTasks/Tasks/Promote"
+                "name": "tasks/Promote"
             }
         },
         {

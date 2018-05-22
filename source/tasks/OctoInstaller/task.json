@@ -3,7 +3,7 @@
     "name": "OctoInstaller",
     "friendlyName": "Use a specific octo version",
     "description": "Use a specific version of the octopus command line utility",
-    "helpMarkDown": "set-by-pack.ps1",
+    "helpMarkDown": "Use a specific version of the octopus command line utility",
     "category": "Tool",
     "runsOn": [
         "Agent",
@@ -17,7 +17,7 @@
     "version": {
         "Major": 0,
         "Minor": 0,
-        "Patch": 8
+        "Patch": 9
     },
     "satisfies": ["Octo"],
     "demands": [],
@@ -42,7 +42,7 @@
     "instanceNameFormat": "Use octo tools version $(version)",
     "execution": {
         "Node": {
-            "target": "octoinstaller.js"
+            "target": "index.js"
         }
     }
 }
