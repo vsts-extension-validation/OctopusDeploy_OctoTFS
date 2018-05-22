@@ -4,13 +4,12 @@ import * as TypedRestClient from "typed-rest-client/RestClient";
 import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
+import { ToolName } from "tasks/Utils";
 
 interface LatestResponse {
     "tag_name":string;
 }
 const RestClient = TypedRestClient.RestClient;
-
-const toolName = "Octo";
 
 var github = new RestClient("OctoTFS/OctoInstaller",  "https://api.github.com");
 
@@ -50,11 +49,11 @@ const resolveVersion = async (version: string) => {
 
 function getLocalTool(version:string): string {
     console.log("Checking local tool cache");
-    return tools.findLocalTool(toolName, version);
+    return tools.findLocalTool(ToolName, version);
 }
 
 function findOcto(rootFolder: string){
-    var octoPath = path.join(rootFolder, "*" + toolName + getExecutableExtention());
+    var octoPath = path.join(rootFolder, "*" + ToolName + getExecutableExtention());
     console.log(`Looking for ${octoPath}`);
     var allPaths = tasks.find(rootFolder);
     var matches = tasks.match(allPaths, octoPath, rootFolder);
@@ -77,7 +76,7 @@ async function download(version: string): Promise<string>{
         try{
             let downloadPath = await tools.downloadTool(resolveDownloadUrl(version));
             let toolPath = await extract(downloadPath);
-            cachedToolPath = await tools.cacheDir(toolPath, toolName, version);
+            cachedToolPath = await tools.cacheDir(toolPath, ToolName, version);
 
         }catch(exception){
             throw new Error(`Failed to download octo tools from ${resolveDownloadUrl(version)}`)

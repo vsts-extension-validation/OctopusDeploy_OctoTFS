@@ -1,3 +1,3 @@
-export function DoSomething(){
-    return "Hello World";
-}
+export * from "./connection";
+export * from "./tool";
+export * from "./inputs";
