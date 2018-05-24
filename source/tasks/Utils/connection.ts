@@ -20,7 +20,7 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
     }
 }
 
-export function getProjectNameFromId(details: OctoServerConnectionDetails, projectId: string){
+export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string){
     const client = new RestClient("OctoTFS",  details.url);
     return client.get<{name: string}>(`api/projects/${projectId}`)
         .then(x => {
@@ -30,5 +30,15 @@ export function getProjectNameFromId(details: OctoServerConnectionDetails, proje
 
             return Either.Left<string,string>(`Could not resolve project name given id "{projectId}". Server returned status code: ${x.statusCode}`);
         }
-    )
+    ).catch(error => Either.Left<string,string>(error))
+}
+
+export const isProjectId = (projectNameOrId: string) => /Project-\d*/.test(projectNameOrId);
+
+export function resolveProjectName(connection: OctoServerConnectionDetails, projectNameOrId: string){
+    if(isProjectId(projectNameOrId)) {
+        return fetchProjectName(connection, projectNameOrId);
+    }
+
+    return Promise.resolve(Either.Right<string, string>(projectNameOrId));
 }

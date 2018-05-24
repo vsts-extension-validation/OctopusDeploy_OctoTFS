@@ -12,23 +12,24 @@ import {
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetails();
+        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
+        .then(x => x.right());
 
-        const releaseNumber = tasks.getInput("ReleaseNumber", true);
-        const environments = utils.getRequiredCsvInput("Environments");
+        const from = tasks.getInput("From", true);
+        const to = utils.getRequiredCsvInput("To");
         const showProgress = tasks.getBoolInput("ShowProgress");
         const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
         const deployForTenantTags = utils.getOptionalCsvInput("DeplyForTentantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
-        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
-            .then(x => x.right());
 
-        const octo = utils.getOctoCommandRunner("deploy-release");
+        const octo = utils.getOctoCommandRunner("promote-release");
 
         const configure = configureTool([
+
             argument("project", project),
-            argument("releaseNumber", releaseNumber),
             connectionArguments(connection),
-            multiArgument("deployTo", environments),
+            argument("from", from),
+            multiArgument("to", to),
             multiArgument("tenant", deploymentForTenants),
             multiArgument("tenanttag", deployForTenantTags),
             flag("progress", showProgress),
