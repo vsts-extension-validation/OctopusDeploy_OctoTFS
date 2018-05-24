@@ -40,7 +40,7 @@ async function run() {
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
     }catch(err){
         tasks.error(err);
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to execute octo pack command. " + err.message);
+        tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);
     }
 }
 

@@ -12,7 +12,7 @@ export function safeTrim(value: string): string | null {
 }
 
 export function getLineSeparatedItems(value: string): Array<string>{
-    return value ? value.replace("\r", "").split("\n") : [];
+    return value ? value.split(/[\r\n]+/g) : [];
 }
 
 const getRequiredInput = (name: string) => {
