@@ -40,7 +40,7 @@ async function run() {
         }
 
         if(include){
-            utils.addMultiArg("include", include, octo);
+            utils.multiArgument("include", include, octo);
         }
 
         const code: number = await octo.exec();
