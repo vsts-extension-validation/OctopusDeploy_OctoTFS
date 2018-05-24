@@ -30,7 +30,7 @@
             "label": "Octopus Deploy Server",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "Octopus Deploy server connection" 
+            "helpMarkDown": "Octopus Deploy server connection"
         },
         {
             "name": "Package",
@@ -60,8 +60,8 @@
     ],
     "instanceNameFormat": "Push Packages to Octopus",
     "execution": {
-        "PowerShell3": {
-            "target": "Octopus-Push.ps1"
+        "Node": {
+            "target": "index.js"
         }
     }
 }
