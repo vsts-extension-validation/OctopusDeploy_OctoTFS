@@ -36,3 +36,9 @@ export const configureTool = curry((configurations: Array<(tool: ToolRunner) => 
 export const flag = curry((name: string, value: boolean, tool: ToolRunner) => {
     return value ? tool.arg(`--${name}`) : tool;
 });
+
+export const argumentIf = curry((predicate: () => boolean, name: string, value: () => string, tool: ToolRunner) : ToolRunner => {
+    if(predicate()){
+        return argument(name, value(), tool);
+    }
+});

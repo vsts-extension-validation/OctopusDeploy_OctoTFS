@@ -1,0 +1,161 @@
+import { isNullOrWhitespace } from "./inputs";
+import * as tasks from "vsts-task-lib";
+import * as uuidv1  from "uuid/v1";
+import * as path from "path";
+import * as vsts from "vso-node-api/WebApi";
+import * as wit from "vso-node-api/interfaces/WorkItemTrackingInterfaces"
+import * as bi from "vso-node-api/interfaces/BuildInterfaces";
+
+export interface ReleaseEnvironmentVariables {
+    releaseName: string;
+    releaseId: string;
+    releaseUri: string;
+}
+
+export interface BuildEnvironmentVariables{
+    buildNumber: number;
+    buildId: number;
+    buildName: string;
+    buildRepositoryName: string;
+    buildRepositoryProvider: string;
+}
+
+export interface SystemEnvironmentVariables{
+    projectName: string;
+    projectId: Number;
+    teamCollectionUri: string;
+    defaultWorkingDirectory: string;
+}
+
+export type VstsEnvironmentVariables = ReleaseEnvironmentVariables & BuildEnvironmentVariables & SystemEnvironmentVariables
+
+export const getVstsEnvironmentVariables= () : VstsEnvironmentVariables =>{
+    return {
+        projectId: Number(process.env("SYSTEM_TEAMPROJECTID")),
+        projectName: process.env["SYSTEM_TEAMPROJECT"],
+        buildNumber: Number(process.env["BUILD_BUILDNUMBER"]),
+        buildId: process.env["BUILD_BUILDID"],
+        buildName: process.env["BUILD_DEFINITIONNAME"],
+        buildRepositoryName: process.env["BUILD_REPOSITORY_NAME"],
+        releaseName: process.env["RELEASE_RELEASENAME"],
+        releaseUri: process.env["RELEASE_RELEASEWEBURL"],
+        releaseId: process.env["RELEASE_RELEASEID"],
+        teamCollectionUri: process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"],
+        defaultWorkingDirectory: process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"],
+        buildRepositoryProvider: process.env["BUILD_REPOSITORY_PROVIDER"],
+    }
+}
+
+
+export const generateReleaseNotesContent = (environment: VstsEnvironmentVariables, linkedItemReleaseNote: string, customReleaseNotes: string) => {
+    let notes: string = "Release created by ";
+    const buildUri = `${environment.teamCollectionUri}${environment.projectName}/_build/index?_a=summary&buildId=${environment.buildId}`;
+
+    if(!isNullOrWhitespace(environment.releaseId)){
+        notes += `Release Management Release [${environment.releaseName}] #${environment.releaseId}(${environment.releaseUri}) `;
+    }
+
+    if(environment.buildId){
+        notes += `Build [${environment.buildName} #${environment.buildNumber}](${buildUri} from the ${environment.buildRepositoryName} repository `;
+    }
+
+    notes += `in Team Project ${environment.projectName}`;
+    if(!isNullOrWhitespace(linkedItemReleaseNote)){
+        notes += `\r\n\r\n${linkedItemReleaseNote}`;
+    }
+
+    if(!isNullOrWhitespace(customReleaseNotes)){
+        notes += `\r\n\r\n**Custom Notes:**`
+        notes += `\r\n\r\n${customReleaseNotes}`;
+    }
+
+    return notes;
+}
+
+export const createReleaseNotesFile = (content: () => string, directory: string) : string => {
+    const filePath = path.join(directory, `release-notes-${uuidv1()}.md`);
+    tasks.writeFile(filePath, content(), { encoding: "utf8" });
+    return filePath;
+}
+
+export const getWorkItemState= (workItem: wit.WorkItem) => {
+    return `<span class='label'>${ workItem && workItem.fields ? workItem.fields["System.State"]: ""}</span>`;
+}
+
+export const getWorkItemTags = (workItem: wit.WorkItem) => {
+    if(workItem && workItem.fields && !isNullOrWhitespace(workItem.fields["System.Tags"])){
+        const tags = workItem.fields["System.Tags"].split(";");
+        return tags.reduce((prev: string, current:string) => {
+            return prev += `<span class='label label-info'>${current}</span>`
+        }, "");
+    }
+
+    return "";
+}
+
+
+export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments: boolean, includeWorkItems: boolean) => {
+    const environment = getVstsEnvironmentVariables();
+    console.log(`Environment = ${environment.buildRepositoryProvider}`);
+    console.log(`Comments = ${includeComments}, WorkItems = ${ includeWorkItems}`);
+
+    const changes = await client.getBuildApi()
+        .then(x => x.getBuildChanges(environment.projectName, environment.buildId));
+
+    let releaseNotes = "";
+    let newLine = "\r\n\r\n";
+
+    if(includeComments){
+        if(environment.buildRepositoryProvider === "TfsVersionControl"){
+            console.log("Adding changeset comments to release notes");
+            releaseNotes += changes.reduce((prev, current) => {
+                return prev + `* [${current.id} - ${current.author.displayName}](ChangesetUrl ${current.location}): ${current.message}${newLine}`;
+            }, `**Changeset Comments:**${newLine}`)
+        }else{
+            console.log("Adding commit message to release notes");
+            releaseNotes += changes.reduce((prev, current) => {
+                return prev + `* [${current.id} - ${current.author.displayName}](CommitUrl ${current.location}): ${current.message}${newLine}`;
+            },`**Commit Messages:${newLine}`);
+        }
+    }
+
+    if(includeWorkItems){
+        console.log("adding work items to release notes");
+        releaseNotes += `**Work Items:**${newLine}`;
+
+        const workItemRefs = await client.getBuildApi()
+        .then(x => x.getBuildWorkItemsRefs(environment.projectName, environment.buildId));
+
+        if(workItemRefs.length > 0){
+            var workItems = await client.getWorkItemTrackingApi()
+                .then(x => x.getWorkItems(workItemRefs.map(x => Number(x.id))));
+
+            let workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
+            releaseNotes += workItems.reduce((prev, current) => {
+                return prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}: ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`;
+            },"");
+        }
+    }
+
+    console.log(`Release notes:\r\n${releaseNotes}`);
+    return releaseNotes;
+}
+
+const getChangesetUrl = (environment: VstsEnvironmentVariables, apiUrl: string) => {
+    let workItemId = apiUrl.substr(apiUrl.lastIndexOf("/")+1);
+    return `${environment.teamCollectionUri}${environment.projectId}/_versionControl/changeset/${workItemId}`;
+};
+
+const getCommitUrl = (environment: VstsEnvironmentVariables, change: bi.Change) => {
+    let commitId = change.id;
+    const segments = change.location.split("/");
+    const repositoryId = segments[segments.length - 3];
+    return `${environment.teamCollectionUri}${environment.projectId}/_git/${repositoryId}/commit/${commitId}`;
+}
+
+export const createVstsConnection = (environment: SystemEnvironmentVariables) => {
+    var vstsAuthorization = tasks.getEndpointAuthorization("SystemVssConnection", true);
+    var token = vstsAuthorization.parameters["AccessToken"];
+    let authHandler = vsts.getPersonalAccessTokenHandler(token);
+    return new vsts.WebApi(environment.teamCollectionUri, authHandler);
+}
