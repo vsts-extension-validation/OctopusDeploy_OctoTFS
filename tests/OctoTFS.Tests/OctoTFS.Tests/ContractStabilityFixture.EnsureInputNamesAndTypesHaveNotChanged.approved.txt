@@ -1,4 +1,4 @@
-﻿OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.CreateOctopusRelease.task.json
+﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'ProjectName': pickList
 	'ReleaseNumber': string
@@ -11,7 +11,7 @@
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.task.json
+OctoTFS.Tests.resources.tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Project': pickList
 	'ReleaseNumber': string
@@ -20,7 +20,13 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Deploy.
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.task.json
+OctoTFS.Tests.resources.tasks.OctoCli.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'command': string
+	'args': string
+OctoTFS.Tests.resources.tasks.OctoInstaller.task.json
+	'version': string
+OctoTFS.Tests.resources.tasks.Pack.task.json
 	'PackageId': string
 	'PackageFormat': pickList
 	'PackageVersion': string
@@ -34,7 +40,7 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Pack.ta
 	'Include': multiLine
 	'Overwrite': boolean
 	'ListFiles': boolean
-OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote.task.json
+OctoTFS.Tests.resources.tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Project': pickList
 	'From': pickList
@@ -43,7 +49,7 @@ OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Promote
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.VSTSExtensions.OctopusBuildAndReleaseTasks.Tasks.Push.task.json
+OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Package': multiLine
 	'Replace': boolean
