@@ -15,7 +15,7 @@ gulp.task("build:widgets", [], () => {
 })
 
 gulp.task("build:copy", [], () => {
-    return gulp.src("source/*.*")
+    return gulp.src(["source/*.*", "source/img/**/*.*"], { base: "./source/"})
     .pipe(gulp.dest("dist"));
 });
 
