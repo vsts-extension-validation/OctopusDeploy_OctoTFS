@@ -11,9 +11,9 @@ import {
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetails();
+        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
-        .then(x => x.right());
+        .then(x => x.value);
 
         const from = tasks.getInput("From", true);
         const to = utils.getRequiredCsvInput("To");
@@ -36,9 +36,9 @@ async function run() {
             includeArguments(additionalArguments)
         ]);
 
-        const code:number = await configure(octo).exec();
+        const code: number = await configure(octo).exec();
 
-        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded promoting release.");
+        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded promoting release with code " + code);
     }catch(err){
         tasks.error(err);
         tasks.setResult(tasks.TaskResult.Failed, "Failed to promote release. " + err.message);

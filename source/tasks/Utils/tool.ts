@@ -41,4 +41,5 @@ export const argumentIf = curry((predicate: () => boolean, name: string, value: 
     if(predicate()){
         return argument(name, value(), tool);
     }
+    return tool;
 });

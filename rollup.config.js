@@ -1,9 +1,10 @@
 import glob from "glob";
 import resolve from 'rollup-plugin-node-resolve';
 import path from "path";
-import typescriptPlugin from 'rollup-plugin-typescript';
+import typescriptPlugin from 'rollup-plugin-typescript2';
 import typescript from "typescript";
 import copy from 'rollup-plugin-copy-glob';
+import commonjs from "rollup-plugin-commonjs";
 
 const resolveTasks = () => {
     return new Promise((resolve, reject) => {
@@ -25,13 +26,12 @@ const createTaskConfig = (filePath) => {
             format: 'cjs'
         },
         plugins: [
-            resolve({
-                jsnext: true,
-                extensions: [ ".ts", ".js", ".json" ]
-            }),
+            resolve({ browser:false, extensions: [".js", ".mjs"]  }),
             typescriptPlugin({
                 typescript
             }),
+            commonjs(),
+
             copy([
                 { files: `${path.dirname(filePath)}/**/*.{json,png,svg}`, dest: outFolder  }
             ])

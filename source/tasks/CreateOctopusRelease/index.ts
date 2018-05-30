@@ -6,17 +6,17 @@ import {
     connectionArguments,
     includeArguments,
     configureTool,
-    flag,
-    argumentIf
+    flag
 } from 'tasks/Utils/tool';
 
 async function run() {
     try {
         const environmentVariables = utils.getVstsEnvironmentVariables();
         const vstsConnection = utils.createVstsConnection(environmentVariables);
-        const octoConnection = utils.getDefaultOctopusConnectionDetails();
+        const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+
         const project = await utils.resolveProjectName(octoConnection, tasks.getInput("Project", true))
-        .then(x => x.right());
+        .then(x => x.value);
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
         const channel = tasks.getInput("Channel");
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
@@ -56,7 +56,7 @@ async function run() {
 
         const code:number = await configure(octo).exec();
 
-        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
+        tasks.setResult(tasks.TaskResult.Succeeded, "Create octopus release succeeded with code " + code);
     }catch(err){
         tasks.error(err);
         tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);

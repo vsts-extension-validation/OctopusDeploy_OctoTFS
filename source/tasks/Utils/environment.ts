@@ -1,10 +1,10 @@
 import { isNullOrWhitespace } from "./inputs";
 import * as tasks from "vsts-task-lib";
-import * as uuidv1  from "uuid/v1";
 import * as path from "path";
 import * as vsts from "vso-node-api/WebApi";
 import * as wit from "vso-node-api/interfaces/WorkItemTrackingInterfaces"
 import * as bi from "vso-node-api/interfaces/BuildInterfaces";
+const uuidv1 = require("uuid/v1");
 
 export interface ReleaseEnvironmentVariables {
     releaseName: string;
@@ -109,12 +109,12 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
         if(environment.buildRepositoryProvider === "TfsVersionControl"){
             console.log("Adding changeset comments to release notes");
             releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](ChangesetUrl ${current.location}): ${current.message}${newLine}`;
+                return prev + `* [${current.id} - ${current.author.displayName}](${getChangesetUrl(environment,current.location)}: ${current.message}${newLine}`;
             }, `**Changeset Comments:**${newLine}`)
         }else{
             console.log("Adding commit message to release notes");
             releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](CommitUrl ${current.location}): ${current.message}${newLine}`;
+                return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}: ${current.message}${newLine}`;
             },`**Commit Messages:${newLine}`);
         }
     }

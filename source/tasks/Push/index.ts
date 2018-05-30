@@ -1,7 +1,6 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as utils from "tasks/Utils";
 import {
-    argument,
     multiArgument,
     connectionArguments,
     includeArguments,
@@ -11,7 +10,7 @@ import {
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetails();
+        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");

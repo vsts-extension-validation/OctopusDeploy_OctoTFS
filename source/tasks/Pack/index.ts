@@ -44,7 +44,7 @@ async function run() {
         }
 
         const code: number = await octo.exec();
-        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
+        tasks.setResult(tasks.TaskResult.Succeeded, "Pack succeeded with code " + code);
     }catch(err){
         tasks.error(err);
         tasks.setResult(tasks.TaskResult.Failed, "Failed to execute octo pack command. " + err.message);

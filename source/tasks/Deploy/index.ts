@@ -11,7 +11,7 @@ import {
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetails();
+        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
         const environments = utils.getRequiredCsvInput("Environments");
@@ -20,7 +20,7 @@ async function run() {
         const deployForTenantTags = utils.getOptionalCsvInput("DeplyForTentantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
-            .then(x => x.right());
+            .then(x => x.value);
 
         const octo = utils.getOctoCommandRunner("deploy-release");
 
@@ -37,7 +37,7 @@ async function run() {
 
         const code:number = await configure(octo).exec();
 
-        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
+        tasks.setResult(tasks.TaskResult.Succeeded, "Deploy succeeded with code " + code);
     }catch(err){
         tasks.error(err);
         tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);

@@ -1,5 +1,5 @@
 import * as tasks from "vsts-task-lib/task";
-import { Maybe } from "monet";
+import { option } from "fp-ts";
 
 export const DefaultOctoConnectionInputName = "OctoConnectedServiceName";
 
@@ -16,21 +16,21 @@ export function getLineSeparatedItems(value: string): Array<string>{
 }
 
 const getRequiredInput = (name: string) => {
-    return Maybe.fromNull(tasks.getInput(name, true));
+    return option.fromNullable(tasks.getInput(name, true));
 }
 
 const splitComma = (x: string) => x.split(",").map(x => x.trim());
 
 const getOptionalInput = (name: string) => {
-    return Maybe.fromNull(tasks.getInput(name, false));
+    return option.fromNullable(tasks.getInput(name, false));
 }
 
 export const getOptionalCsvInput = (name: string) => {
-    return getOptionalInput(name).map(splitComma).orJust([]);
+    return getOptionalInput(name).map(splitComma).getOrElse([]);
 }
 
 export const getRequiredCsvInput = (name: string) => {
-    return getRequiredInput(name).map(splitComma).orJust([]);
+    return getRequiredInput(name).map(splitComma).getOrElse([]);
 }
 
 export { getRequiredInput, getOptionalInput }

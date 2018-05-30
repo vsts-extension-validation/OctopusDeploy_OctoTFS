@@ -12,6 +12,7 @@
     "@types/gulp": "^4.0.5",
     "@types/node": "^6.0.111",
     "@types/ramda": "^0.25.29",
+    "@types/uuid": "^3.4.3",
     "ava": "^0.22.0",
     "glob": "^7.1.2",
     "gulp": "^3.9.1",
@@ -25,10 +26,12 @@
     "rollup-plugin-copy-glob": "^0.1.1",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-typescript": "^0.8.1",
+    "rollup-plugin-typescript2": "^0.14.0",
     "run-sequence": "^2.2.1",
     "typescript": "^2.8.3"
   },
   "dependencies": {
+    "fp-ts": "^1.6.0",
     "monet": "^0.8.10",
     "ramda": "^0.25.0",
     "typed-rest-client": "^1.0.7",
