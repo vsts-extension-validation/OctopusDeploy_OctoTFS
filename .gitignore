@@ -112,6 +112,9 @@ Backup*/
 UpgradeLog*.XML
 
 dist/
+build/Artifacts/
+build/Temp/
+.rpt2_cache/
 
 *.received.*
 *.DS_Store
