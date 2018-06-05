@@ -25,7 +25,7 @@ export const multiArgument = curry((name: string, values: string[], tool: ToolRu
     return tool;
 });
 
-export const argument = curry((name: string, value: string | null, tool: ToolRunner) => {
+export const argument = curry((name: string, value: string | null | undefined, tool: ToolRunner) => {
     return tool.arg(`--${name}`).arg(value || "");
 });
 
@@ -42,7 +42,7 @@ export const flag = curry((name: string, value: boolean, tool: ToolRunner) => {
     return value ? tool.arg(`--${name}`) : tool;
 });
 
-export const argumentIf = curry((predicate: (value: string | null) => boolean, name: string, value: string | null, tool: ToolRunner) : ToolRunner => {
+export const argumentIf = curry((predicate: (value: string | null | undefined) => boolean, name: string, value: string | null | undefined, tool: ToolRunner) : ToolRunner => {
     if(predicate(value)){
         return argument(name, value, tool);
     }

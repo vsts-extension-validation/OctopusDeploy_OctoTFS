@@ -3,49 +3,76 @@ import * as fs from "fs";
 import * as utils from "../Utils";
 import { configureTool, argument, argumentIfSet, flag, multiArgument } from '../Utils';
 
+export interface PackageRequiredInputs {
+    packageId : string;
+    packageFormat : string;
+}
+export interface PackageOptionalInputs{
+    packageVersion? : string;
+    outputPath? : string;
+    sourcePath?  : string;
+    nuGetAuthor? : string;
+    nuGetTitle? : string;
+    nuGetDescription?  : string;
+    nuGetReleaseNotes? : string;
+    nuGetReleaseNotesFile? : string;
+    include? : string[];
+    listFiles : boolean;
+    overwrite : boolean;
+}
+
+export type PackageInputs = PackageRequiredInputs & PackageOptionalInputs;
+
+export const configure = (inputs: PackageInputs) => {
+    return configureTool([
+        argument("id", inputs.packageId),
+        argument("format", inputs.packageFormat),
+        argumentIfSet("version", inputs.packageVersion),
+        argumentIfSet("outFolder", inputs.outputPath),
+        argumentIfSet("basePath", inputs.sourcePath),
+        argumentIfSet("author", inputs.nuGetAuthor),
+        argumentIfSet("title", inputs.nuGetTitle),
+        argumentIfSet("description",inputs.nuGetDescription),
+        argumentIfSet("releaseNotes", inputs.nuGetReleaseNotes),
+        argument("overwrite", inputs.overwrite.toString()),
+        (tool) => {
+            if(!utils.isNullOrWhitespace(inputs.nuGetReleaseNotesFile) && fs.existsSync(inputs.nuGetReleaseNotesFile) && fs.lstatSync(inputs.nuGetReleaseNotesFile).isFile()){
+                console.log(`Release notes file: ${inputs.nuGetReleaseNotesFile}`);
+                argument("releaseNotesFile", inputs.nuGetReleaseNotesFile, tool);
+            }else{
+                console.log("No release notes file found");
+            }
+            return tool;
+        },
+        multiArgument("include", inputs.include || []),
+        flag("verbose", inputs.listFiles)
+    ]);
+}
+
+export const getInputs = (): PackageInputs => {
+    return {
+        packageId : tasks.getInput("PackageId", true ),
+        packageFormat : tasks.getInput("PackageFormat", true),
+        packageVersion : tasks.getInput("PackageVersion"),
+        outputPath  : utils.safeTrim(tasks.getInput("OutputPath")) || undefined,
+        sourcePath  : utils.safeTrim(tasks.getInput("SourcePath")) || undefined,
+        nuGetAuthor : tasks.getInput("NuGetAuthor"),
+        nuGetTitle : tasks.getInput("NuGetTitle"),
+        nuGetDescription : tasks.getInput("NuGetDescription"),
+        nuGetReleaseNotes : tasks.getInput("NuGetReleaseNotes"),
+        nuGetReleaseNotesFile : tasks.getInput("NuGetReleaseNotesFile", false),
+        overwrite : tasks.getBoolInput("Overwrite"),
+        include : utils.getLineSeparatedItems(tasks.getInput("Include")),
+        listFiles : tasks.getBoolInput("ListFiles")
+    }
+}
+
 async function run() {
     try {
-        const packageId = tasks.getInput("PackageId", true );
-        const packageFormat = tasks.getInput("PackageFormat", true);
-        const packageVersion = tasks.getInput("PackageVersion");
-        const outputPath  = utils.safeTrim(tasks.getInput("OutputPath"));
-        const sourcePath  = utils.safeTrim(tasks.getInput("SourcePath"));
-        const nuGetAuthor = tasks.getInput("NuGetAuthor")
-        const nuGetTitle = tasks.getInput("NuGetTitle");
-        const nuGetDescription = tasks.getInput("NuGetDescription");
-        const nuGetReleaseNotes = tasks.getInput("NuGetReleaseNotes");
-        const nuGetReleaseNotesFile = tasks.getInput("NuGetReleaseNotesFile", false);
-        const overwrite = tasks.getBoolInput("Overwrite");
-        const include = utils.getLineSeparatedItems(tasks.getInput("Include"));
-        const listFiles = tasks.getBoolInput("ListFiles");
-
         const octo = utils.getOctoCommandRunner("pack");
+        const configureTool = configure(getInputs());
+        const code: number = await configureTool(octo).exec();
 
-        const configure = configureTool([
-            argument("id", packageId),
-            argument("format", packageFormat),
-            argument("version", packageVersion),
-            argumentIfSet("outFolder", outputPath),
-            argumentIfSet("basePath", sourcePath),
-            argumentIfSet("author", nuGetAuthor),
-            argumentIfSet("title", nuGetTitle),
-            argumentIfSet("description",nuGetDescription),
-            argumentIfSet("releaseNotes", nuGetReleaseNotes),
-            argument("overwrite", overwrite.toString()),
-            (tool) => {
-                if(!utils.isNullOrWhitespace(nuGetReleaseNotesFile) && fs.existsSync(nuGetReleaseNotesFile) && fs.lstatSync(nuGetReleaseNotes).isFile()){
-                    console.log(`Release notes file: ${nuGetReleaseNotesFile}`);
-                    argument("releaseNotesFile", nuGetReleaseNotesFile, tool);
-                }else{
-                    console.log("No release notes file found");
-                }
-                return tool;
-            },
-            multiArgument("include", include),
-            flag("verbose", listFiles)
-        ]);
-
-        const code: number = configure(octo).execSync().code;
         tasks.setResult(tasks.TaskResult.Succeeded, "Pack succeeded with code " + code);
     }catch(err){
         tasks.error(err);
