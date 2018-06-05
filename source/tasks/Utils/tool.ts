@@ -26,7 +26,7 @@ export const multiArgument = curry((name: string, values: string[], tool: ToolRu
 });
 
 export const argument = curry((name: string, value: string | null, tool: ToolRunner) => {
-    return tool.arg(`--${name}="${value}"`);
+    return tool.arg(`--${name}`).arg(value || "");
 });
 
 export const includeArguments = curry((value: string, tool: ToolRunner) => {
