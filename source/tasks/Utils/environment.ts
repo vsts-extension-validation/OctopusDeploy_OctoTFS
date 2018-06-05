@@ -1,10 +1,10 @@
-import { isNullOrWhitespace } from "./inputs";
-import * as tasks from "vsts-task-lib";
 import * as path from "path";
+const uuidv1 = require("uuid/v1");
 import * as vsts from "vso-node-api/WebApi";
 import * as wit from "vso-node-api/interfaces/WorkItemTrackingInterfaces"
 import * as bi from "vso-node-api/interfaces/BuildInterfaces";
-const uuidv1 = require("uuid/v1");
+import * as tasks from "vsts-task-lib";
+import { isNullOrWhitespace } from "./inputs";
 
 export interface ReleaseEnvironmentVariables {
     releaseName: string;

@@ -3,7 +3,7 @@ import { option } from "fp-ts";
 
 export const DefaultOctoConnectionInputName = "OctoConnectedServiceName";
 
-export function isNullOrWhitespace(value: string){
+export function isNullOrWhitespace(value: string | null){
     return (!value || !/\S/.test(value));
 }
 
