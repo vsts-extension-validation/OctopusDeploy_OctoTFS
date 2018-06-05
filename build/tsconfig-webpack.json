@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "declaration": false,
     "sourceMap": false,
@@ -10,7 +10,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "baseUrl": "./source",
-    "allowSyntheticDefaultImports": true
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "lib":["es5", "es2017"]
   }
 }
