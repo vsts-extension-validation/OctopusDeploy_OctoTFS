@@ -15,7 +15,10 @@
         "Minor": 0,
         "Patch": 0
     },
-    "demands": [],
+    "demands": [
+        "DotNetCore",
+        "Octo"
+    ],
     "minimumAgentVersion": "1.95.0",
     "groups": [
         {
