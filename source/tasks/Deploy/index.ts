@@ -1,5 +1,5 @@
 import * as tasks from 'vsts-task-lib/task';
-import * as utils from "tasks/Utils";
+import * as utils from "../Utils";
 import {
     argument,
     multiArgument,
@@ -7,7 +7,7 @@ import {
     includeArguments,
     configureTool,
     flag
-} from 'tasks/Utils/tool';
+} from '../Utils/tool';
 
 async function run() {
     try {
