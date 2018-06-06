@@ -1,12 +1,12 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as utils from "../Utils";
 import {
-    argument,
     multiArgument,
     connectionArguments,
     includeArguments,
     configureTool,
-    flag
+    flag,
+    argumentEnquote
 } from '../Utils/tool';
 
 async function run() {
@@ -26,12 +26,12 @@ async function run() {
 
         const configure = configureTool([
 
-            argument("project", project),
+            argumentEnquote("project", project),
             connectionArguments(connection),
-            argument("from", from),
-            multiArgument("to", to),
-            multiArgument("tenant", deploymentForTenants),
-            multiArgument("tenanttag", deployForTenantTags),
+            argumentEnquote("from", from),
+            multiArgument(argumentEnquote, "to", to),
+            multiArgument(argumentEnquote, "tenant", deploymentForTenants),
+            multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
             flag("progress", showProgress),
             includeArguments(additionalArguments)
         ]);

@@ -1,11 +1,13 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as utils from "../Utils";
+
 import {
     multiArgument,
     connectionArguments,
     includeArguments,
     configureTool,
-    flag
+    flag,
+    argumentEnquote
 } from '../Utils/tool';
 
 async function run() {
@@ -16,10 +18,11 @@ async function run() {
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const octo = utils.getOctoCommandRunner("push");
+        const matchedPackages = await utils.resolveGlobs(packages)
 
         const configure = configureTool([
             connectionArguments(connection),
-            multiArgument("package", packages),
+            multiArgument(argumentEnquote, "package", matchedPackages),
             flag("replace-existing", replace),
             includeArguments(additionalArguments)
         ]);

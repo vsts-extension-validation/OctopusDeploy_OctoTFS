@@ -6,6 +6,10 @@ import { isNullOrWhitespace } from "./inputs";
 
 export const ToolName = "Octo";
 
+export interface ArgFormatter{
+    (name: string, value: string, tool: ToolRunner): ToolRunner;
+}
+
 export function getOctoCommandRunner(command: string) : ToolRunner {
     const octo = tasks.which(`${ToolName}.dll`, true);
     const tool = tasks.tool(tasks.which("dotnet", false));
@@ -20,13 +24,17 @@ export const connectionArguments = curry(({url, apiKey } : OctoServerConnectionD
                .arg(`--apiKey=${apiKey}`);
 });
 
-export const multiArgument = curry((name: string, values: string[], tool: ToolRunner) => {
-    values.forEach(value =>  argument(name, value, tool))
+export const multiArgument = curry((arg: ArgFormatter, name: string, values: string[], tool: ToolRunner) => {
+    values.forEach(value =>  arg(name, value, tool))
     return tool;
 });
 
 export const argument = curry((name: string, value: string | null | undefined, tool: ToolRunner) => {
-    return tool.arg(`--${name}`).arg(value || "");
+    return tool.line(`--${name}=${value}`);
+});
+
+export const argumentEnquote = curry((name: string, value: string | null | undefined, tool: ToolRunner) => {
+    return argument(name, `"${value}"`, tool);
 });
 
 export const includeArguments = curry((value: string, tool: ToolRunner) => {
@@ -42,9 +50,9 @@ export const flag = curry((name: string, value: boolean, tool: ToolRunner) => {
     return value ? tool.arg(`--${name}`) : tool;
 });
 
-export const argumentIf = curry((predicate: (value: string | null | undefined) => boolean, name: string, value: string | null | undefined, tool: ToolRunner) : ToolRunner => {
+export const argumentIf = curry((predicate: (value: string | null | undefined) => boolean, arg: ArgFormatter, name: string, value: string | null | undefined, tool: ToolRunner) : ToolRunner => {
     if(predicate(value)){
-        return argument(name, value, tool);
+        return arg(name, value || "", tool);
     }
     return tool;
 });

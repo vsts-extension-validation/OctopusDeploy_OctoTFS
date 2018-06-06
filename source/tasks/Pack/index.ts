@@ -1,7 +1,7 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as fs from "fs";
 import * as utils from "../Utils";
-import { configureTool, argument, argumentIfSet, flag, multiArgument } from '../Utils';
+import { configureTool, argument, argumentIfSet, flag, multiArgument, argumentEnquote } from '../Utils';
 
 export interface PackageRequiredInputs {
     packageId : string;
@@ -25,26 +25,26 @@ export type PackageInputs = PackageRequiredInputs & PackageOptionalInputs;
 
 export const configure = (inputs: PackageInputs) => {
     return configureTool([
-        argument("id", inputs.packageId),
+        argumentEnquote("id", inputs.packageId),
         argument("format", inputs.packageFormat),
-        argumentIfSet("version", inputs.packageVersion),
-        argumentIfSet("outFolder", inputs.outputPath),
-        argumentIfSet("basePath", inputs.sourcePath),
-        argumentIfSet("author", inputs.nuGetAuthor),
-        argumentIfSet("title", inputs.nuGetTitle),
-        argumentIfSet("description",inputs.nuGetDescription),
-        argumentIfSet("releaseNotes", inputs.nuGetReleaseNotes),
+        argumentIfSet(argument, "version", inputs.packageVersion),
+        argumentIfSet(argumentEnquote, "outFolder", inputs.outputPath),
+        argumentIfSet(argumentEnquote, "basePath", inputs.sourcePath),
+        argumentIfSet(argumentEnquote, "author", inputs.nuGetAuthor),
+        argumentIfSet(argumentEnquote, "title", inputs.nuGetTitle),
+        argumentIfSet(argumentEnquote, "description",inputs.nuGetDescription),
+        argumentIfSet(argumentEnquote, "releaseNotes", inputs.nuGetReleaseNotes),
         argument("overwrite", inputs.overwrite.toString()),
         (tool) => {
             if(!utils.isNullOrWhitespace(inputs.nuGetReleaseNotesFile) && fs.existsSync(inputs.nuGetReleaseNotesFile) && fs.lstatSync(inputs.nuGetReleaseNotesFile).isFile()){
                 console.log(`Release notes file: ${inputs.nuGetReleaseNotesFile}`);
-                argument("releaseNotesFile", inputs.nuGetReleaseNotesFile, tool);
+                argumentEnquote("releaseNotesFile", inputs.nuGetReleaseNotesFile, tool);
             }else{
                 console.log("No release notes file found");
             }
             return tool;
         },
-        multiArgument("include", inputs.include || []),
+        multiArgument(argumentEnquote, "include", inputs.include || []),
         flag("verbose", inputs.listFiles)
     ]);
 }
@@ -54,8 +54,8 @@ export const getInputs = (): PackageInputs => {
         packageId : tasks.getInput("PackageId", true ),
         packageFormat : tasks.getInput("PackageFormat", true),
         packageVersion : tasks.getInput("PackageVersion"),
-        outputPath  : utils.safeTrim(tasks.getInput("OutputPath")) || undefined,
-        sourcePath  : utils.safeTrim(tasks.getInput("SourcePath")) || undefined,
+        outputPath  : utils.removeTrailingSlashes(utils.safeTrim(tasks.getInput("OutputPath"))) || undefined,
+        sourcePath  : utils.removeTrailingSlashes(utils.safeTrim(tasks.getInput("SourcePath"))) || undefined,
         nuGetAuthor : tasks.getInput("NuGetAuthor"),
         nuGetTitle : tasks.getInput("NuGetTitle"),
         nuGetDescription : tasks.getInput("NuGetDescription"),

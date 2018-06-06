@@ -1,12 +1,13 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as utils from "../Utils";
 import {
-    argument,
     multiArgument,
     connectionArguments,
     includeArguments,
     configureTool,
-    flag
+    flag,
+    argumentEnquote,
+    argumentIfSet
 } from '../Utils/tool';
 
 async function run() {
@@ -15,14 +16,14 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environmentVariables);
         const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        const project = await utils.resolveProjectName(octoConnection, tasks.getInput("Project", true))
+        const project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true))
         .then(x => x.value);
-        const releaseNumber = tasks.getInput("ReleaseNumber", true);
+        const releaseNumber = tasks.getInput("ReleaseNumber");
         const channel = tasks.getInput("Channel");
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
         const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
         const customReleaseNotes = tasks.getInput("CustomReleaseNotes");
-        const deployToEnvironments = utils.getRequiredCsvInput("DeployToEnvironment");
+        const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
         const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
         const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
         const deploymentProgress = tasks.getBoolInput("DeploymentProcess")
@@ -31,15 +32,15 @@ async function run() {
         const octo = utils.getOctoCommandRunner("create-release");
 
         const configure = configureTool([
-            argument("project", project),
-            argument("releaseNumber", releaseNumber),
-            argument("channel", channel),
+            argumentEnquote("project", project),
+            argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
+            argumentIfSet(argumentEnquote, "channel", channel),
             connectionArguments(octoConnection),
             flag("enableServiceMessages", true),
-            multiArgument("deployTo", deployToEnvironments),
+            multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
-            multiArgument("tenant", deployForTenants),
-            multiArgument("tenanttag", deployForTenantTags),
+            multiArgument(argumentEnquote, "tenant", deployForTenants),
+            multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
             includeArguments(additionalArguments)
         ]);
 
@@ -52,7 +53,7 @@ async function run() {
             return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
         },  environmentVariables.defaultWorkingDirectory);
 
-        argument("releaseNotesFile", realseNotesFile)
+        argumentEnquote("releaseNotesFile", realseNotesFile)
 
         const code:number = await configure(octo).exec();
 

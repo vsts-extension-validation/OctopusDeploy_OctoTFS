@@ -1,12 +1,12 @@
 import * as tasks from 'vsts-task-lib/task';
 import * as utils from "../Utils";
 import {
-    argument,
     multiArgument,
     connectionArguments,
     includeArguments,
     configureTool,
-    flag
+    flag,
+    argumentEnquote
 } from '../Utils/tool';
 
 async function run() {
@@ -25,12 +25,12 @@ async function run() {
         const octo = utils.getOctoCommandRunner("deploy-release");
 
         const configure = configureTool([
-            argument("project", project),
-            argument("releaseNumber", releaseNumber),
+            argumentEnquote("project", project),
+            argumentEnquote("releaseNumber", releaseNumber),
             connectionArguments(connection),
-            multiArgument("deployTo", environments),
-            multiArgument("tenant", deploymentForTenants),
-            multiArgument("tenanttag", deployForTenantTags),
+            multiArgument(argumentEnquote, "deployTo", environments),
+            multiArgument(argumentEnquote, "tenant", deploymentForTenants),
+            multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
             flag("progress", showProgress),
             includeArguments(additionalArguments)
         ]);

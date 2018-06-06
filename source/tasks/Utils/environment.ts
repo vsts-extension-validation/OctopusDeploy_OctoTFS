@@ -31,7 +31,7 @@ export type VstsEnvironmentVariables = ReleaseEnvironmentVariables & BuildEnviro
 
 export const getVstsEnvironmentVariables= () : VstsEnvironmentVariables =>{
     return {
-        projectId: Number(process.env("SYSTEM_TEAMPROJECTID")),
+        projectId: Number(process.env["SYSTEM_TEAMPROJECTID"]),
         projectName: process.env["SYSTEM_TEAMPROJECT"],
         buildNumber: Number(process.env["BUILD_BUILDNUMBER"]),
         buildId: process.env["BUILD_BUILDID"],
