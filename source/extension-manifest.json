@@ -90,9 +90,9 @@
             "properties": {
                 "name": "Octopus Deploy Status",
                 "description": "Shows the status of an Octopus Deploy Project for a given Environment",
-                "catalogIconUrl": "OctopusDashboardWidgets/img/catalog-image.jpg",
-                "previewImageUrl": "OctopusDashboardWidgets/img/preview-image.jpg",
-                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/octo-status.html",
+                "catalogIconUrl": "img/catalog-image.jpg",
+                "previewImageUrl": "img/preview-image.jpg",
+                "uri": "widgets/ProjectStatus/octo-status.html",
                 "supportedSizes": [
                     {
                         "rowSpan": 1,
@@ -117,7 +117,7 @@
             "properties": {
                 "name": "Octopus Project and Environment Status Configuration",
                 "description": "Configures Octopus Project and Environment Status Widget",
-                "uri": "OctopusDashboardWidgets/Widgets/OctoProjectEnvironmentStatus/configuration.html"
+                "uri": "widgets/ProjectStatus/configuration.html"
             }
         },
         {

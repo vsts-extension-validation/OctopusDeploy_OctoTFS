@@ -13,6 +13,11 @@ function OctopusStatusWidget() {
 
             var getOctopusStatus = function (widgetSettings) {
                 var settings = JSON.parse(widgetSettings.customSettings.data);
+                if(!settings || !settings.connectionId)
+                {
+                    $projectH2.text("No connection configured");
+                    return WidgetHelpers.WidgetStatusHelper.Success();
+                }
 
                 // clear
                 $projectH2.text('Loading...');
@@ -24,6 +29,7 @@ function OctopusStatusWidget() {
                 $statusDescriptionDiv.text('');
 
                 VSS.getAccessToken().then(function (token) {
+
                     var webContext = VSS.getWebContext();
                     console.debug("Collection URI: " + webContext.collection.uri);
                     console.debug("Project Name: " + webContext.project.name);
