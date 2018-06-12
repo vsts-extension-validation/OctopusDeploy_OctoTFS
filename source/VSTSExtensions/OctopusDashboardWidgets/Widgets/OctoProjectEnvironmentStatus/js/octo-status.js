@@ -13,7 +13,11 @@ function OctopusStatusWidget() {
 
             var getOctopusStatus = function (widgetSettings) {
                 var settings = JSON.parse(widgetSettings.customSettings.data);
-
+                if(!settings || !settings.connectionId)
+                {
+                    $projectH2.text("Not configured");
+                    return WidgetHelpers.WidgetStatusHelper.Success();
+                }
                 // clear
                 $projectH2.text('Loading...');
                 $environmentH3.text('');
@@ -53,6 +57,11 @@ function OctopusStatusWidget() {
                                 headers: { 'Authorization': authToken }
                             })
                                 .done(function (data) {
+                                    if(data.errorMessage){
+                                        console.error(data.errorMessage);
+                                        return;
+                                    }
+
                                     var dashboard = JSON.parse(data.result[0]);    // todo: safely get last
                                     var deploymentElement = null;
                                     dashboard.Items.some(function (element) {
