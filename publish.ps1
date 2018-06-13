@@ -15,7 +15,7 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$buildArtifactsPath = "$PSScriptRoot\build\Artifacts"
+$buildArtifactsPath = "$PSScriptRoot\dist\Artifacts"
 
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."

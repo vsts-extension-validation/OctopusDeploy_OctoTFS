@@ -10,19 +10,12 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$sourcePath = "$PSScriptRoot/source"
 $buildDirectoryPath = "$PSScriptRoot/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."
     & npm up -g tfx-cli
-}
-
-function InstallNodeModules() {
-   Push-Location -Path "$sourcePath"
-   & npm install
-   Pop-Location
 }
 
 function UpdateExtensionManifestOverrideFile($workingDirectory, $environment, $version) {
@@ -144,6 +137,5 @@ function Pack($envName, $environment, $workingDirectory) {
 }
 
 UpdateTfxCli
-InstallNodeModules
 InstallTaskDependencies $buildDirectoryPath
 Pack "VSTSExtensions" $environment $buildDirectoryPath
