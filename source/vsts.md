@@ -110,9 +110,9 @@ Options include:
 
 <hr/>
 
-### <a name="octopus-status-widget"></a>![Octopus Deploy Status Widget](OctopusDashboardWidgets/img/widget-icon.jpg) Octopus Deploy Status Widget
+### <a name="octopus-status-widget"></a>![Octopus Deploy Status Widget](img/widget-icon.jpg) Octopus Deploy Status Widget
 
-![Multiple Widgets on Dashboard](OctopusDashboardWidgets/img/multiple-widget-preview.jpg)
+![Multiple Widgets on Dashboard](img/multiple-widget-preview.jpg)
 
 Configuration settings:
  * **Size**: Either a 1x1 or a 2x1 widget size
