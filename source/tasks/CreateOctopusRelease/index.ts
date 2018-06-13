@@ -31,6 +31,15 @@ async function run() {
 
         const octo = utils.getOctoCommandRunner("create-release");
 
+        let linkedReleaseNotes = "";
+        if(workItemReleaseNotes || changesetCommentReleaseNotes){
+            linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
+        }
+
+        const realseNotesFile = utils.createReleaseNotesFile(() => {
+            return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
+        },  environmentVariables.defaultWorkingDirectory);
+
         const configure = configureTool([
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
@@ -41,19 +50,9 @@ async function run() {
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
+            argumentEnquote("releaseNotesFile", realseNotesFile),
             includeArguments(additionalArguments)
         ]);
-
-        let linkedReleaseNotes = "";
-        if(workItemReleaseNotes || changesetCommentReleaseNotes){
-            linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
-        }
-
-        const realseNotesFile = utils.createReleaseNotesFile(() => {
-            return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
-        },  environmentVariables.defaultWorkingDirectory);
-
-        argumentEnquote("releaseNotesFile", realseNotesFile)
 
         const code:number = await configure(octo).exec();
 
