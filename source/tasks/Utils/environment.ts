@@ -22,7 +22,7 @@ export interface BuildEnvironmentVariables{
 
 export interface SystemEnvironmentVariables{
     projectName: string;
-    projectId: Number;
+    projectId: string;
     teamCollectionUri: string;
     defaultWorkingDirectory: string;
 }
@@ -31,7 +31,7 @@ export type VstsEnvironmentVariables = ReleaseEnvironmentVariables & BuildEnviro
 
 export const getVstsEnvironmentVariables= () : VstsEnvironmentVariables =>{
     return {
-        projectId: Number(process.env["SYSTEM_TEAMPROJECTID"]),
+        projectId: process.env["SYSTEM_TEAMPROJECTID"],
         projectName: process.env["SYSTEM_TEAMPROJECT"],
         buildNumber: Number(process.env["BUILD_BUILDNUMBER"]),
         buildId: process.env["BUILD_BUILDID"],
@@ -56,7 +56,7 @@ export const generateReleaseNotesContent = (environment: VstsEnvironmentVariable
     }
 
     if(environment.buildId){
-        notes += `Build [${environment.buildName} #${environment.buildNumber}](${buildUri} from the ${environment.buildRepositoryName} repository `;
+        notes += `Build [${environment.buildName} #${environment.buildNumber}](${buildUri}) from the ${environment.buildRepositoryName} repository `;
     }
 
     notes += `in Team Project ${environment.projectName}`;
@@ -109,12 +109,12 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
         if(environment.buildRepositoryProvider === "TfsVersionControl"){
             console.log("Adding changeset comments to release notes");
             releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](${getChangesetUrl(environment,current.location)}: ${current.message}${newLine}`;
+                return prev + `* [${current.id} - ${current.author.displayName}](${getChangesetUrl(environment,current.location)}): ${current.message}${newLine}`;
             }, `**Changeset Comments:**${newLine}`)
         }else{
             console.log("Adding commit message to release notes");
             releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}: ${current.message}${newLine}`;
+                return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}): ${current.message}${newLine}`;
             },`**Commit Messages:${newLine}`);
         }
     }
@@ -132,7 +132,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
 
             let workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
             releaseNotes += workItems.reduce((prev, current) => {
-                return prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}: ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`;
+                return prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}): ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`;
             },"");
         }
     }
