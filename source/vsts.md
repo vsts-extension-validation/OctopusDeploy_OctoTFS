@@ -5,6 +5,17 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 <div style="border:1px solid #888;background-color: #ffc;color:#444;padding:5px;">Note: This extension is only compatible with Visual Studio Team Services (VSTS) and Team Foundation Server (TFS) 2017 Update 1 and above.<br/>There is an alternative extension compatible with TFS 2015 Update 2 and above.<br/>See <a href="https://octopus.com/docs/guides/use-the-team-foundation-build-custom-task/extension-compatibility">the Octopus Documentation</a> for extension compatibility details and a download link for the alternative extension.
 </div>
 
+## Requirements
+For build agents being targeted, the dotnet core runtime 2.0 or later with a version of the portable `Octo` command line tools need to be available on the path. Alternatively the corresponding installer tasks may be used to
+satisfy this condition such as the `use specific octo version` task.
+
+### VSTS Build Agents
+Generally the Hosted Linux and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however to ensure the octo tools are available you should use the `Use a specific octo version` task at the start of your build.
+
+### TFS Build Agents / VSTS Custom agents
+You can choose to either use the correpsonding installer tasks or manually installing dependencies. Microsoft also has public repositories for their [hosted images](https://github.com/Microsoft/vsts-image-generation) as well as
+[docker images](https://github.com/Microsoft/vsts-agent-docker) which can be used as starting points.
+
 ## Create an Octopus Deploy Connected Service
 Before adding any Build or Release tasks to your process, configure an "Octopus Deploy" connected service in the administration section for your project.
 
@@ -21,6 +32,7 @@ For example, if your build needs to create a Release for Project A, the user who
 
 This extension adds the following tasks:
 
+- Use a specific octo version
 - Package Application
 - Push Packages to Octopus
 - Create Octopus Release
@@ -33,9 +45,14 @@ And the following widget:
 
 <hr />
 
+### Use a specific octo version
+![Specific Octo Version Step](img/use-octo-version-3.0.png)
+Options include:
+* **Version**: The verion to use or 'latest' to always use the most recent version
+
 ### <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application
 
-*Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus.*
+*Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus when targeting full .NET framework projects.*
 
  ![Configure Package Application Step](img/create-package-options-2.0.png)
  Options include:
