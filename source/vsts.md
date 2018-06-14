@@ -7,10 +7,10 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 
 ## Requirements
 For build agents being targeted, the dotnet core runtime 2.0 or later with a version of the portable `Octo` command line tools need to be available on the path. Alternatively the correpsonding installer tasks may be used to
-satisfy this condition such as the `use specific octo version` task.
+satisfy this condition such as the `Octopus tools installer` task.
 
 ### VSTS Build Agents
-Generally the Hosted Linux and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however to ensure the octo tools are available you should use the `Use a specific octo version` task at the start of your build.
+Generally the Hosted Linux and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however to ensure the octo tools are available you should use the `Octopus tools installer` task at the start of your build.
 
 ### TFS Build Agents / VSTS Custom agents
 You can choose to either use the correpsonding installer tasks or manually installing dependencies. Microsoft also has public repositories for their [hosted images](https://github.com/Microsoft/vsts-image-generation) as well as

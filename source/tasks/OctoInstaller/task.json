@@ -1,9 +1,9 @@
 ﻿{
     "id": "57342b23-3a76-490a-8e78-25d4ade2f2e3",
     "name": "OctoInstaller",
-    "friendlyName": "Use a specific octo version",
-    "description": "Use a specific version of the octopus command line utility",
-    "helpMarkDown": "Use a specific version of the octopus command line utility",
+    "friendlyName": "Octopus tools installer",
+    "description": "Install a specific version of the octopus tools",
+    "helpMarkDown": "Install a specific version of the octopus tools",
     "category": "Tool",
     "runsOn": [
         "Agent",
@@ -33,7 +33,7 @@
         {
             "name": "version",
             "type": "string",
-            "label": "Version",
+            "label": "Octopus Tool Version",
             "defaultValue": "latest",
             "required": true,
             "helpMarkDown": "Specify the exact version of the octo tools to use.<br/>"
