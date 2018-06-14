@@ -6,7 +6,7 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 </div>
 
 ## Requirements
-For build agents being targeted, the dotnet core runtime 2.0 or later with a version of the portable `Octo` command line tools need to be available on the path. Alternatively the corresponding installer tasks may be used to
+For build agents being targeted, the dotnet core runtime 2.0 or later with a version of the portable `Octo` command line tools need to be available on the path. Alternatively the correpsonding installer tasks may be used to
 satisfy this condition such as the `use specific octo version` task.
 
 ### VSTS Build Agents
