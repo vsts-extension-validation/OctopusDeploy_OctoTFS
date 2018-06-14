@@ -15,10 +15,9 @@ function OctopusStatusWidget() {
                 var settings = JSON.parse(widgetSettings.customSettings.data);
                 if(!settings || !settings.connectionId)
                 {
-                    $projectH2.text("No connection configured");
+                    $projectH2.text("Not configured");
                     return WidgetHelpers.WidgetStatusHelper.Success();
                 }
-
                 // clear
                 $projectH2.text('Loading...');
                 $environmentH3.text('');
@@ -29,7 +28,6 @@ function OctopusStatusWidget() {
                 $statusDescriptionDiv.text('');
 
                 VSS.getAccessToken().then(function (token) {
-
                     var webContext = VSS.getWebContext();
                     console.debug("Collection URI: " + webContext.collection.uri);
                     console.debug("Project Name: " + webContext.project.name);
@@ -59,6 +57,11 @@ function OctopusStatusWidget() {
                                 headers: { 'Authorization': authToken }
                             })
                                 .done(function (data) {
+                                    if(data.errorMessage){
+                                        console.error(data.errorMessage);
+                                        return;
+                                    }
+
                                     var dashboard = JSON.parse(data.result[0]);    // todo: safely get last
                                     var deploymentElement = null;
                                     dashboard.Items.some(function (element) {

@@ -27,6 +27,85 @@ function OctopusStatusWidgetConfiguration() {
                 return customSettings;
             }
 
+            var fetchDataSourceContent = function(queryUri, token, name){
+                var query = '{"dataSourceDetails": {"dataSourceName":"' + name + '"}}';
+
+                return $.ajax({
+                    type: "POST",
+                    url: queryUri,
+                    data: query,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: { 'Authorization': token }
+                });
+            }
+
+            var appendDropdownOptions = function($element, resultSelector, idSelector, nameSelector, selection){
+                return function(data){
+                    //A failed data source request will come back as okay but with an associated error message.
+                    if(data.errorMessage){
+                        console.error(data.errorMessage);
+                        return;
+                    }
+                    var selected = selection;
+                    resultSelector(data).forEach(function(result){
+                        if(!selected){
+                            selected = idSelector(result);
+                        }
+
+                        $element.append($('<option value="' + idSelector(result) + '">' + nameSelector(result) + '</option>'));
+                    });
+
+                    $element.val(selected);
+                }
+             }
+
+             var selectId = function(val){
+                 if(!val){
+                     return null;
+                 }
+                 return val.id ? val.id : val.Id;
+             }
+
+             var selectName = function(val){
+                 if(!val){
+                     return null;
+                 }
+
+                 return val.name ? val.name : val.Name;
+             }
+
+             var prop = function(name) {
+                 return function(val){
+                     if(val){
+                        return val[name];
+                     }
+                     return null;
+                 }
+             }
+
+             var parseResult = function(data){
+                return (prop("result")(data) || []).map(JSON.parse);
+             }
+
+             var repopulateDependantDropdowns = function(settings, queryUri, authToken){
+                $projectDropdown.empty();
+                $environmentDropdown.empty();
+
+                var appendProjectData = appendDropdownOptions($projectDropdown, parseResult, selectId, selectName, settings ? settings.projectId : null);
+                fetchDataSourceContent(queryUri, authToken, "OctopusAllProjects").done(appendProjectData);
+
+                var appendEnvironmentData = appendDropdownOptions($environmentDropdown, parseResult, selectId, selectName, settings ? settings.environmentId : null);
+                fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironments").done(appendEnvironmentData);
+            }
+
+            var getConnectionQueryUri = function(baseUri, $element){
+                return function(){
+                    var result = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + $element.val() + '&api-version=3.0-preview.1';
+                    return result;
+                }
+            }
+
             return {
                 load: function (widgetSettings, widgetConfigurationContext) {
                     var settings = JSON.parse(widgetSettings.customSettings.data);
@@ -44,62 +123,32 @@ function OctopusStatusWidgetConfiguration() {
                             headers: { 'Authorization': authToken }
                         })
                             .done(function (data) {
-                                $(data.value).each(function (i, e) {
-                                    console.debug(e);
-                                    $connectionDropdown.append($('<option value="' + e.id + '">' + e.name + '</option>'));
+
+                                appendDropdownOptions($connectionDropdown, prop("value"), selectId, selectName, settings ? settings.connectionId : null)(data);
+                                var queryUri = getConnectionQueryUri(baseUri, $connectionDropdown);
+                                repopulateDependantDropdowns(settings, queryUri(), authToken);
+
+                                $connectionDropdown.on("change", function () {
+                                    saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
+                                    repopulateDependantDropdowns(settings, queryUri(), authToken);
                                 });
-                                if (settings && settings.connectionId) {
-                                    $connectionDropdown.val(settings.connectionId);
-                                }
-
-                                var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + $connectionDropdown.val() + '&api-version=3.0-preview.1';
-                                var projectQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusAllProjects"}}';
-                                $.ajax({
-                                    type: "POST",
-                                    url: queryUri,
-                                    data: projectQueryContent,
-                                    contentType: 'application/json',
-                                    dataType: 'json',
-                                    headers: { 'Authorization': authToken }
-                                })
-                                    .done(function (data) {
-                                        $(data.result).each(function (i, e) {
-                                            var el = JSON.parse(e);
-                                            $projectDropdown.append($('<option value="' + el.Id + '">' + el.Name + '</option>'));
-                                        });
-                                        if (settings && settings.projectId) {
-                                            $projectDropdown.val(settings.projectId);
-                                        }
-                                    });
-
-                                var environmentQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusAllEnvironments"}}';
-                                $.ajax({
-                                    type: "POST",
-                                    url: queryUri,
-                                    data: environmentQueryContent,
-                                    contentType: 'application/json',
-                                    dataType: 'json',
-                                    headers: { 'Authorization': authToken }
-                                })
-                                    .done(function (data) {
-                                        $(data.result).each(function (i, e) {
-                                            var el = JSON.parse(e);
-                                            $environmentDropdown.append($('<option value="' + el.Id + '">' + el.Name + '</option>'));
-                                        });
-                                        if (settings && settings.environmentId) {
-                                            $environmentDropdown.val(settings.environmentId);
-                                        }
-                                    });
 
                                 $connectionDropdown.on("change", function () {
                                     saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
                                 });
+
                                 $projectDropdown.on("change", function () {
                                     saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
                                 });
+
                                 $environmentDropdown.on("change", function () {
                                     saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
                                 });
+
+                                //init the widget with initial settings as these values don't exist yet.
+                                if(!settings){
+                                    saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
+                                }
 
                                 return WidgetHelpers.WidgetStatusHelper.Success();
                             });
