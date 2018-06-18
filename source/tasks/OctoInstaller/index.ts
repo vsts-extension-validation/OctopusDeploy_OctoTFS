@@ -62,7 +62,9 @@ async function download(version: string): Promise<string>{
         try{
             let downloadPath = await tools.downloadTool(resolveDownloadUrl(version));
             let toolPath = await extract(downloadPath);
+
             tools.debug(`Adding ${ToolName} ${version} to cache`);
+            tasks.writeFile(path.join(toolPath, `${ToolName}.cmd`), `dotnet "%~dp0/${ToolName}.dll" %*`);
             cachedToolPath = await tools.cacheDir(toolPath, ToolName, version);
 
         }catch(exception){

@@ -11,6 +11,15 @@ export interface ArgFormatter{
 }
 
 export function getOctoCommandRunner(command: string) : ToolRunner {
+    const isWindows = /windows/i.test(tasks.osType());
+    if(isWindows){
+        return tasks.tool(tasks.which(`${ToolName}`, true)).arg(command);
+    }
+
+    return getPortableOctoCommandRunner(command);
+}
+
+export function getPortableOctoCommandRunner(command: string) : ToolRunner{
     const octo = tasks.which(`${ToolName}.dll`, true);
     const tool = tasks.tool(tasks.which("dotnet", false));
 
