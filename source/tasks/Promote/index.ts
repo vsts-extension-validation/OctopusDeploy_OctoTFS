@@ -22,7 +22,7 @@ async function run() {
         const deployForTenantTags = utils.getOptionalCsvInput("DeplyForTentantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const octo = utils.getOctoCommandRunner("promote-release");
+        const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
 
         const configure = configureTool([
 
@@ -36,7 +36,9 @@ async function run() {
             includeArguments(additionalArguments)
         ]);
 
-        const code: number = await configure(octo).exec();
+        const code:Number = await octo.map(configure)
+            .getOrElseL((x) => { throw new Error(x); })
+            .exec();
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded promoting release with code " + code);
     }catch(err){

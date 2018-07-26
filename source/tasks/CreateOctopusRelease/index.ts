@@ -29,7 +29,7 @@ async function run() {
         const deploymentProgress = tasks.getBoolInput("DeploymentProcess")
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const octo = utils.getOctoCommandRunner("create-release");
+        const octo = await utils.getOrInstallOctoCommandRunner("create-release");
 
         let linkedReleaseNotes = "";
         if(workItemReleaseNotes || changesetCommentReleaseNotes){
@@ -54,7 +54,9 @@ async function run() {
             includeArguments(additionalArguments)
         ]);
 
-        const code:number = await configure(octo).exec();
+        const code:Number = await octo.map(configure)
+            .getOrElseL((x) => { throw new Error(x); })
+            .exec();
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Create octopus release succeeded with code " + code);
     }catch(err){

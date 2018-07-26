@@ -17,7 +17,7 @@ async function run() {
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const octo = utils.getOctoCommandRunner("push");
+        const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages)
 
         const configure = configureTool([
@@ -27,7 +27,9 @@ async function run() {
             includeArguments(additionalArguments)
         ]);
 
-        const code:number = await configure(octo).exec();
+        const code:Number = await octo.map(configure)
+            .getOrElseL((x) => { throw new Error(x); })
+            .exec();
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
     }catch(err){

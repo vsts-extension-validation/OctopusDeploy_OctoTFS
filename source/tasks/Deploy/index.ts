@@ -22,7 +22,7 @@ async function run() {
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
             .then(x => x.value);
 
-        const octo = utils.getOctoCommandRunner("deploy-release");
+        const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 
         const configure = configureTool([
             argumentEnquote("project", project),
@@ -35,7 +35,9 @@ async function run() {
             includeArguments(additionalArguments)
         ]);
 
-        const code:number = await configure(octo).exec();
+        const code:Number = await octo.map(configure)
+            .getOrElseL((x) => { throw new Error(x); })
+            .exec();
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Deploy succeeded with code " + code);
     }catch(err){

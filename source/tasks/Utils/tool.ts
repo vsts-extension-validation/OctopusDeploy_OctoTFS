@@ -3,29 +3,55 @@ import { ToolRunner } from 'vsts-task-lib/toolrunner';
 import { OctoServerConnectionDetails } from "./connection";
 import { curry } from "ramda";
 import { isNullOrWhitespace } from "./inputs";
-
+import { Option, some, none } from "fp-ts/lib/Option"
+import { Either, right, fromOption  } from "fp-ts/lib/Either";
+import { getOrDownloadOcto, addToolToPath, resolvePublishedOctoVersion } from './install';
 export const ToolName = "Octo";
 
 export interface ArgFormatter{
     (name: string, value: string, tool: ToolRunner): ToolRunner;
 }
 
-export function getOctoCommandRunner(command: string) : ToolRunner {
+function stringOption(value?: string): Option<string> {
+    return isNullOrWhitespace(value) ? none : some(value);
+}
+
+export async function getOrInstallOctoCommandRunner(command: string) : Promise<Either<string, ToolRunner>>{
+    //If we can't find octo then it hasn't been added as an installer task
+    //or it hasn't been added to the path.
+    let octo = getOctoCommandRunner(command);
+    if (octo.isSome()){
+        return right(octo.value);
+    }
+
+    return resolvePublishedOctoVersion("latest")
+    .then(getOrDownloadOcto)
+    .then(addToolToPath)
+    .then(() => getOctoCommandRunner(command))
+    .then(fromOption("Unable to find or install octo."));
+}
+
+export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
     const isWindows = /windows/i.test(tasks.osType());
     if(isWindows){
-        return tasks.tool(tasks.which(`${ToolName}`, true)).arg(command);
+        return stringOption(tasks.which(`${ToolName}`, false))
+        .map(tasks.tool)
+        .map(x => x.arg(command));
     }
 
     return getPortableOctoCommandRunner(command);
 }
 
-export function getPortableOctoCommandRunner(command: string) : ToolRunner{
-    const octo = tasks.which(`${ToolName}.dll`, true);
-    const tool = tasks.tool(tasks.which("dotnet", false));
+export function getPortableOctoCommandRunner(command: string) : Option<ToolRunner>{
+    const octo = stringOption(tasks.which(`${ToolName}.dll`, false));
+    const tool = tasks.tool(tasks.which("dotnet", true));
 
-    return tool
-    .arg(`${octo}`)
-    .arg(command);
+    var result =  octo.map(x => tool
+        .arg(`${x}`)
+        .arg(command)
+    );
+
+    return result;
 }
 
 export const connectionArguments = curry(({url, apiKey } : OctoServerConnectionDetails, tool: ToolRunner) => {

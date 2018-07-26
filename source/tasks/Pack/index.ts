@@ -69,9 +69,12 @@ export const getInputs = (): PackageInputs => {
 
 async function run() {
     try {
-        const octo = utils.getOctoCommandRunner("pack");
+        const octo = await utils.getOrInstallOctoCommandRunner("pack");
         const configureTool = configure(getInputs());
-        const code: number = await configureTool(octo).exec();
+
+        const code:Number = await octo.map(configureTool)
+            .getOrElseL((x) => { throw new Error(x); })
+            .exec();
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Pack succeeded with code " + code);
     }catch(err){

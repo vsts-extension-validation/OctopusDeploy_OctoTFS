@@ -16,8 +16,6 @@
         "Patch": 0
     },
     "demands": [
-        "DotNetCore",
-        "Octo"
     ],
     "minimumAgentVersion": "1.95.0",
     "groups": [

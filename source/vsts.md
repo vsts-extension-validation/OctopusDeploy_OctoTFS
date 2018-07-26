@@ -6,15 +6,14 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 </div>
 
 ## Requirements
-For build agents being targeted, the dotnet core runtime 2.0 or later with a version of the portable `Octo` command line tools need to be available on the path. Alternatively the correpsonding installer tasks may be used to
-satisfy this condition such as the `Octopus tools installer` task.
+For build agents being targeted, the dotnet core runtime 2.0 or later is required. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition.
 
 ### VSTS Build Agents
-Generally the Hosted Linux and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however to ensure the octo tools are available you should use the `Octopus tools installer` task at the start of your build.
+Generally the Hosted Linux, Mac and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools.
 
 ### TFS Build Agents / VSTS Custom agents
-You can choose to either use the correpsonding installer tasks or manually installing dependencies. Microsoft also has public repositories for their [hosted images](https://github.com/Microsoft/vsts-image-generation) as well as
-[docker images](https://github.com/Microsoft/vsts-agent-docker) which can be used as starting points.
+All octopus tasks will use the latest version of octo unless the Octopus Installer task is added to the start of your build definition. You are also free to setup your own build agent with the portable version of the Octopus tools in the
+path if you would like to avoid any downloads.
 
 ## Create an Octopus Deploy Connected Service
 Before adding any Build or Release tasks to your process, configure an "Octopus Deploy" connected service in the administration section for your project.
@@ -48,7 +47,7 @@ And the following widget:
 ### Use a specific octo version
 ![Specific Octo Version Step](img/use-octo-version-3.0.png)
 Options include:
-* **Version**: The verion to use or 'latest' to always use the most recent version
+* **Version**: The verion to use or 'latest' to always use the most recent version. Please note that this task is only required if you wish to change the version of octo to be used by subsequent tasks.
 
 ### <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application
 

@@ -1,10 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "test": "jest",
     "build": "gulp build",
-    "build:rollup": "rollup --config rollup.config.js",
     "clean": "rimraf packages/**/lib"
   },
   "devDependencies": {
