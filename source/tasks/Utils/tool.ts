@@ -6,7 +6,9 @@ import { isNullOrWhitespace } from "./inputs";
 import { Option, some, none } from "fp-ts/lib/Option"
 import { Either, right, fromOption  } from "fp-ts/lib/Either";
 import { getOrDownloadOcto, addToolToPath, resolvePublishedOctoVersion } from './install';
+
 export const ToolName = "Octo";
+
 
 export interface ArgFormatter{
     (name: string, value: string, tool: ToolRunner): ToolRunner;
@@ -44,6 +46,12 @@ export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
 
 export function getPortableOctoCommandRunner(command: string) : Option<ToolRunner>{
     const octo = stringOption(tasks.which(`${ToolName}.dll`, false));
+    const dotnet = tasks.which("dotnet", false);
+
+    if (isNullOrWhitespace(dotnet)){
+        tasks.warning("DotNet core 2.0 runtime was not found and this task will most likely fail. Target an agent which has the appropriate capability or add a DotNet core installer task to the start of you build definition to fix this problem.")
+    }
+
     const tool = tasks.tool(tasks.which("dotnet", true));
 
     var result =  octo.map(x => tool
