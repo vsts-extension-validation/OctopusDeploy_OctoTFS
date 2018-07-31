@@ -6,14 +6,15 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 </div>
 
 ## Requirements
-For build agents being targeted, the dotnet core runtime 2.0 or later is required. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition.
+For build agents being targeted, the dotnet core runtime 2.0 or later is required. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition. An internet connection
+is also required for tasks to download the Octopus tools when not available on a build agent.
 
 ### VSTS Build Agents
-Generally the Hosted Linux, Mac and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools.
+Generally the Hosted Linux, Mac and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools. The Octopus tasks
+will automatically download, cache and use the latest version of the Octopus tools unless overridden by an installer task.
 
 ### TFS Build Agents / VSTS Custom agents
-All octopus tasks will use the latest version of octo unless the Octopus Installer task is added to the start of your build definition. You are also free to setup your own build agent with the portable version of the Octopus tools in the
-path if you would like to avoid any downloads.
+Unless your build agent has the portable version of the Octopus tools in the environment path the tasks will attempt to download and cache the Octopus tools. You can avoid subsequent downloads by using a known version in an installer task at the start of your build definition.
 
 ## Create an Octopus Deploy Connected Service
 Before adding any Build or Release tasks to your process, configure an "Octopus Deploy" connected service in the administration section for your project.
