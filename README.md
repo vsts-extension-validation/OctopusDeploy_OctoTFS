@@ -43,3 +43,24 @@ For usage, see the [Build Steps Readme](source/VSTSExtensions).
 - [Octopus Extension in Marketplace](https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test)
 - [Octopus VSTS Environment](https://octopus-deploy-test.visualstudio.com)
 - [Security Tokens](https://octopus-deploy-test.visualstudio.com/_details/security/tokens)
+
+### Prerequisites
+1. Make sure you have [node.js](https://nodejs.org/en/download/) installed
+* Node: 8.11.3 or later (**Note** node installer does not update npm)
+* NPM: 5.6.0+ (run `npm install npm@5.6.0 -g`)
+* TFX (npm install tfx -g)
+
+If you intend to publish the extension either to a local TFS instance or otherwise you will also need powershell core or powershell installed.
+
+### How to build and package
+Run `npm run build` to build which will generate the full extension content required to create the extension VSIX.
+
+In order to package and test the extension on a local TFS instance without publishing to the marketplace you can run `./pack.ps1 -environment localtest -version "x.x.x"`
+
+You can follow the [Microsoft documentation](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs) on how to install to TFS instance.
+
+### Task dependencies
+Although we use webpack to bundle we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
+also previously bundled a version of octo tools, however we no longer bundle in favor of using an octo installer task.
+
+

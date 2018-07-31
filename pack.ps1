@@ -10,75 +10,17 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$sourcePath = "$PSScriptRoot/source" 
-$extensionsDirectoryPath = Join-Path $sourcePath "VSTSExtensions"
-$buildDirectoryPath = "$PSScriptRoot/build"
+$buildDirectoryPath = "$PSScriptRoot/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
-$buildTempPath = "$buildDirectoryPath/Temp"
-$tasksTempPath = Join-Path -Path $buildTempPath -ChildPath "VSTSExtensions" | Join-Path -ChildPath "OctopusBuildAndReleaseTasks" | Join-Path -ChildPath "Tasks"
-$widgetsTempPath = Join-Path -Path $buildTempPath -ChildPath "VSTSExtensions" | Join-Path -ChildPath "OctopusDashboardWidgets" | Join-Path -ChildPath "Widgets"
 
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."
     & npm up -g tfx-cli
 }
 
-function InstallNodeModules() {
-   Push-Location -Path "$sourcePath" 
-   & npm install
-   Pop-Location
-}
-
-function PrepareBuildDirectory() {
-    if (Test-Path $buildDirectoryPath) {
-        $buildDirectory = Get-Item "$buildDirectoryPath"
-        Write-Host "Cleaning $buildDirectory..."
-        Remove-Item $buildDirectory -Force -Recurse
-    }
-    
-    New-Item -Type Directory -Path $buildTempPath | Out-Null
-    Copy-Item $extensionsDirectoryPath -Destination $buildTempPath -Recurse
-}
-
-
-function CopyCommonTaskItems() {
-   Write-Host "Copying common task components into each task"
-   # for each task
-   ForEach($TaskPath in Get-ChildItem -Path $tasksTempPath -Exclude "Common") {
-
-      # Copy VSTS PowerShell Modules from node_modules to each task's ps_modules directory
-      $VstsSdkModuleNpmPath = Join-Path -Path $sourcePath -ChildPath "node_modules" | Join-Path -ChildPath "vsts-task-sdk" | Join-Path -ChildPath "VstsTaskSdk"
-      $PSModulesPath = Join-Path $TaskPath "ps_modules"
-      $VstsSdkModulePath = Join-Path $PSModulesPath "VstsTaskSdk"
-      New-Item -Type Directory -Path $PSModulesPath -Force | Out-Null
-      Copy-Item -Path $VstsSdkModuleNpmPath -Destination $VstsSdkModulePath -Recurse -Force
-
-      #Copy common task items into each task 
-      ForEach($CommonFile in Get-ChildItem -Path (Join-Path $tasksTempPath "Common") -File) {
-         Copy-Item -Path $CommonFile.FullName -Destination $TaskPath | Out-Null 
-      }
-   }
-}
-
-function CopyCommonWidgetItems() {
-    Write-Host "Copying common widget components into widgets"
-    #for each widget
-    ForEach($WidgetPath in Get-ChildItem -Path $widgetsTempPath -Exclude "Common") {
-
-        # Copy VSTS SDK file from node_modules to each task's vss directory
-        $VstsSdkJsNpmPath = Join-Path -Path $sourcePath -ChildPath "node_modules" | Join-Path -ChildPath "vss-web-extension-sdk" | Join-Path -ChildPath "lib"
-        $VssSdkPath = Join-Path $WidgetPath "vss"
-
-        New-Item -Type Directory -Path $VssSdkPath -Force | Out-Null
-        Copy-Item -Path $VstsSdkJsNpmPath -Destination $VssSdkPath -Recurse -Force
-
-        #No common widget items yet
-    }
-}
-
-function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environment, $version) {
+function UpdateExtensionManifestOverrideFile($workingDirectory, $environment, $version) {
     Write-Host "Finding environment-specific manifest overrides..."
-    $overridesSourceFilePath = "$extensionBuildTempPath/extension-manifest.$environment.json"
+    $overridesSourceFilePath = "$workingDirectory/extension-manifest.$environment.json"
     $overridesSourceFile = Get-ChildItem -Path $overridesSourceFilePath
     if ($overridesSourceFile -eq $null) {
         Write-Error "Could not find the extension-manifest override file: $overridesSourceFilePath"
@@ -89,14 +31,14 @@ function UpdateExtensionManifestOverrideFile($extensionBuildTempPath, $environme
     $manifest = ConvertFrom-JSON -InputObject (Get-Content $overridesSourceFile -Raw)
     $manifest.version = $version
 
-    $overridesFilePath = "$extensionBuildTempPath/extension-manifest.$environment.$version.json"
+    $overridesFilePath = "$workingDirectory/extension-manifest.$environment.$version.json"
     ConvertTo-JSON $manifest -Depth 6 | Out-File $overridesFilePath -Encoding ASCII # tfx-cli doesn't support UTF8 with BOM
     Get-Content $overridesFilePath | Write-Host
     return Get-Item $overridesFilePath
 }
 
-function UpdateTaskManifests($extensionBuildTempPath, $version, $envName) {
-    $taskManifestFiles = Get-ChildItem $extensionBuildTempPath -Include "task.json" -Recurse
+function UpdateTaskManifests($workingDirectory, $version, $envName) {
+    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
     foreach ($taskManifestFile in $taskManifestFiles) {
         Write-Host "Updating version to $version in $taskManifestFile..."
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
@@ -104,34 +46,72 @@ function UpdateTaskManifests($extensionBuildTempPath, $version, $envName) {
         $task.version.Major = $netVersion.Major
         $task.version.Minor = $netVersion.Minor
         $task.version.Patch = $netVersion.Build
-        
+
         $task.helpMarkDown = "Version: $version. [More Information](http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task)"
-        
-        # replace the task ID 
+
+        # replace the task ID
         $task.id = Get-TaskId $envName $task.name
 
         ConvertTo-JSON $task -Depth 6 | Out-File $taskManifestFile -Encoding UTF8
     }
 }
 
-function Get-TaskId($envName, $taskName) {
-    $taskIds = ConvertFrom-Json -InputObject (Get-Content "task-ids.json" -Raw)
-    return $taskIds.$envName.$taskName
+function Get-ObjectMembers {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True, ValueFromPipeline=$True)]
+        [PSCustomObject]$obj
+    )
+    $obj | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $key = $_.Name
+        [PSCustomObject]@{Key = $key; Value = $obj."$key"}
+    }
 }
 
-function OverrideExtensionLogo($extensionBuildTempPath, $environment) {
-    $extensionLogoOverrideFile = Get-Item "$extensionBuildTempPath/extension-icon.$environment.png" -ErrorAction SilentlyContinue
+function InstallTaskDependencies($workingDirectory) {
+    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
+    $dependencies = (ConvertFrom-JSON (Get-Content "./package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
+
+    foreach ($manifestFile in $taskManifestFiles){
+        $directory = Split-Path -parent $manifestFile
+        $packageFile = Join-Path $directory "package.json"
+
+        try{
+            "{}" | Out-File -FilePath $packageFile -Encoding utf8
+            Push-Location $directory
+
+            Invoke-Expression "& npm install $dependencies"
+        }finally{
+            Remove-Item $packageFile
+            Pop-Location
+        }
+    }
+}
+
+function Get-TaskId($envName, $taskName) {
+    $taskIds = ConvertFrom-Json -InputObject (Get-Content "task-ids.json" -Raw)
+    $result = $taskIds.$envName.$taskName
+
+    if([String]::IsNullOrEmpty($result))
+    {
+        throw "Could not find task $taskName ID for environment $envName. Failing as this is required and will prevent the extension from installing otherwise."
+    }
+    return $result
+}
+
+function OverrideExtensionLogo($workingDirectory, $environment) {
+    $extensionLogoOverrideFile = Get-Item "$workingDirectory/extension-icon.$environment.png" -ErrorAction SilentlyContinue
     if ($extensionLogoOverrideFile) {
         $directory = Split-Path $extensionLogoOverrideFile
         $target = Join-Path $directory "extension-icon.png"
         Write-Host "Replacing extension logo with $extensionLogoOverrideFile..."
         Move-Item $extensionLogoOverrideFile $target -Force
     }
-    
-    Remove-Item "$extensionBuildTempPath/extension-icon.*.png" -Force
+
+    Remove-Item "$workingDirectory/extension-icon.*.png" -Force
 }
 
-function OverrideTaskLogos($extensionBuildTempPath, $environment) {
+function OverrideTaskLogos($workingDirectory, $environment) {
     $taskLogoOverrideFiles = Get-ChildItem $extensionBuildTempPath -Include "icon.$environment.png" -Recurse
     foreach ($logoOverrideFile in $taskLogoOverrideFiles) {
         $directory = Split-Path $logoOverrideFile
@@ -139,28 +119,23 @@ function OverrideTaskLogos($extensionBuildTempPath, $environment) {
         Write-Host "Replacing task logo $target with $logoOverrideFile..."
         Move-Item $logoOverrideFile $target -Force
     }
-    
-    Get-ChildItem $extensionBuildTempPath -Include "icon.*.png" -Recurse | Remove-Item -Force
+
+    Get-ChildItem $workingDirectory -Include "icon.*.png" -Recurse | Remove-Item -Force
 }
 
-function Pack($extensionName, $envName) {
-    Write-Host "Packing $extensionName..."
-    $extensionBuildTempPath = Get-ChildItem $buildTempPath -Include $extensionName -Recurse
-    Write-Host "Found extension working directory $extensionBuildTempPath"
-    
-    $overridesFile = UpdateExtensionManifestOverrideFile $extensionBuildTempPath $environment $version
-    OverrideExtensionLogo $extensionBuildTempPath $environment
-    
-    UpdateTaskManifests $extensionBuildTempPath $version $envName
-    OverrideTaskLogos $extensionBuildTempPath $environment
-    
+function Pack($envName, $environment, $workingDirectory) {
+    Write-Host "Packing $extensionName at $workingDirectory"
+
+    $overridesFile = UpdateExtensionManifestOverrideFile $workingDirectory $environment $version
+    OverrideExtensionLogo $workingDirectory $environment
+
+    UpdateTaskManifests $workingDirectory $version $environment
+    OverrideTaskLogos $workingDirectory $environment
+
     Write-Host "Creating VSIX using tfx..."
-    & tfx extension create --root $extensionBuildTempPath --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
+    & tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
 UpdateTfxCli
-InstallNodeModules
-PrepareBuildDirectory
-CopyCommonTaskItems
-CopyCommonWidgetItems
-Pack "VSTSExtensions" $environment
+InstallTaskDependencies $buildDirectoryPath
+Pack "VSTSExtensions" $environment $buildDirectoryPath

@@ -1,0 +1,61 @@
+﻿{
+    "id": "25fee290-e578-491b-b1db-dbc3980df1d0",
+    "name": "OctoCli",
+    "friendlyName": "Invoke octo cli command",
+    "description": "Invoke an octo cli command",
+    "helpMarkDown": "set-by-pack.ps1",
+    "category": "Package",
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "author": "Octopus Deploy",
+    "version": {
+        "Major": 0,
+        "Minor": 0,
+        "Patch": 16
+    },
+    "demands": [
+        "DotNetCore"
+    ],
+    "minimumAgentVersion": "1.95.0",
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced Options",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "OctoConnectedServiceName",
+            "type": "connectedService:OctopusEndpoint",
+            "label": "Octopus Deploy Server",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Octopus Deploy server connection"
+        },
+        {
+            "name": "command",
+            "type": "string",
+            "label": "command",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The octo command to execute."
+        },
+        {
+            "name": "args",
+            "type": "string",
+            "label": "arguments",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The arguments to use for the command."
+        }
+    ],
+    "instanceNameFormat": "Invoke an octo cli command",
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}

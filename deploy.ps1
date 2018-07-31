@@ -11,8 +11,8 @@ if ($publish) {
     & "$PSScriptRoot\publish.ps1" -environment $environment -version $version -accessToken $accessToken -shareWith $shareWith
 }
 
-$vsixPackages = Get-ChildItem "$PSScriptRoot\build\Artifacts\$environment\*.vsix"
+$vsixPackages = Get-ChildItem "$PSScriptRoot\dist\Artifacts\$environment\*.vsix"
 
 foreach ($vsix in $vsixPackages) {
-    New-OctopusArtifact -Path $vsix    
+    New-OctopusArtifact -Path $vsix
 }

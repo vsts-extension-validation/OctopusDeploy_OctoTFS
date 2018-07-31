@@ -1,0 +1,48 @@
+﻿{
+    "id": "57342b23-3a76-490a-8e78-25d4ade2f2e3",
+    "name": "OctoInstaller",
+    "friendlyName": "Octopus tools installer",
+    "description": "Install a specific version of the octopus tools",
+    "helpMarkDown": "Install a specific version of the octopus tools",
+    "category": "Tool",
+    "runsOn": [
+        "Agent",
+        "DeploymentGroup"
+    ],
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "author": "Octopus Deploy",
+    "version": {
+        "Major": 0,
+        "Minor": 0,
+        "Patch": 10
+    },
+    "satisfies": ["Octo"],
+    "demands": [],
+    "minimumAgentVersion": "1.95.0",
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced Options",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "version",
+            "type": "string",
+            "label": "Octopus Tool Version",
+            "defaultValue": "latest",
+            "required": true,
+            "helpMarkDown": "Specify the exact version of the octo tools to use.<br/>"
+        }
+    ],
+    "instanceNameFormat": "Use octo tools version $(version)",
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}
