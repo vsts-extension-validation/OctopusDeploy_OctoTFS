@@ -25,7 +25,7 @@ async function run() {
         const customReleaseNotes = tasks.getInput("CustomReleaseNotes");
         const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
         const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
+        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
         const deploymentProgress = tasks.getBoolInput("DeploymentProcess")
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
