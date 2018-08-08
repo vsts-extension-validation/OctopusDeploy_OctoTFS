@@ -15,8 +15,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "demands": [
-    ],
+    "demands": [],
     "minimumAgentVersion": "1.95.0",
     "groups": [
         {
