@@ -33,7 +33,7 @@ gulp.task("build:copy", [], () => {
 });
 
 gulp.task("build:copy:task:content", ["build:tasks"], (cb) => {
-    var stream = gulp.src(`${paths.sourceRoot}tasks/**/*.{json,png,svg}`, { base: paths.sourceRoot}).pipe(gulp.dest(paths.outputPath));
+    var stream = gulp.src(`${paths.sourceRoot}tasks/**/*.{json,png,svg,zip,gz}`, { base: paths.sourceRoot}).pipe(gulp.dest(paths.outputPath));
 });
 
 gulp.task("build:copy:externals", ["build:tasks"], (cb) => {

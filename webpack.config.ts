@@ -20,6 +20,10 @@ const createTaskConfig = (filePath: string): Configuration => {
 
     return {
         target: "node",
+        node:{
+            __dirname: false,
+            __filename: false
+        },
         context: path.resolve(paths.sourceRoot),
         entry: path.resolve(filePath),
         plugins: [],
