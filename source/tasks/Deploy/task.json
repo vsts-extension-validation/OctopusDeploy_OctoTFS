@@ -15,9 +15,7 @@
         "Minor": 0,
         "Patch": 0
     },
-    "demands": [
-        "DotNetCore"
-    ],
+    "demands": [],
     "minimumAgentVersion": "1.95.0",
     "groups": [
          {
