@@ -52,7 +52,7 @@ export const generateReleaseNotesContent = (environment: VstsEnvironmentVariable
     const buildUri = `${environment.teamCollectionUri}${environment.projectName}/_build/index?_a=summary&buildId=${environment.buildId}`;
 
     if(!isNullOrWhitespace(environment.releaseId)){
-        notes += `Release Management Release [${environment.releaseName}] #${environment.releaseId}(${environment.releaseUri}) `;
+        notes += `Release Management Release [${environment.releaseName} #${environment.releaseId}](${environment.releaseUri}) `;
     }
 
     if(environment.buildId){
