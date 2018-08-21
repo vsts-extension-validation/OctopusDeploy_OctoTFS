@@ -164,7 +164,7 @@
             "target": "ProjectName",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllProjects",
-            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployToEnvironment",
