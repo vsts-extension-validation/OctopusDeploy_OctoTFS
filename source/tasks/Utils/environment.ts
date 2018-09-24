@@ -49,7 +49,7 @@ export const getVstsEnvironmentVariables= () : VstsEnvironmentVariables =>{
 
 export const generateReleaseNotesContent = (environment: VstsEnvironmentVariables, linkedItemReleaseNote: string, customReleaseNotes: string) => {
     let notes: string = "Release created by ";
-    const buildUri = `${environment.teamCollectionUri}${environment.projectName}/_build/index?_a=summary&buildId=${environment.buildId}`;
+    const buildUri = `${environment.teamCollectionUri}${encodeURIComponent(environment.projectName)}/_build/index?_a=summary&buildId=${encodeURIComponent(environment.buildId)}`;
 
     if(!isNullOrWhitespace(environment.releaseId)){
         notes += `Release Management Release [${environment.releaseName} #${environment.releaseId}](${environment.releaseUri}) `;
