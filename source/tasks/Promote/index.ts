@@ -19,7 +19,7 @@ async function run() {
         const to = utils.getRequiredCsvInput("To");
         const showProgress = tasks.getBoolInput("ShowProgress");
         const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeplyForTentantTags");
+        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
