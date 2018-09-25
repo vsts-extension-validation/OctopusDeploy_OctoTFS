@@ -38,9 +38,9 @@
     "typed-rest-client": "^1.0.7",
     "uuid": "^3.2.1",
     "vso-node-api": "^6.5.0",
-    "vss-web-extension-sdk": "^5.134.0",
-    "vsts-task-lib": "^2.4.0",
-    "vsts-task-tool-lib": "^0.8.1"
+    "vss-web-extension-sdk": "^5.140.0",
+    "vsts-task-lib": "^2.6.1",
+    "vsts-task-tool-lib": "^0.10.0"
   },
   "jest": {
     "transform": {
