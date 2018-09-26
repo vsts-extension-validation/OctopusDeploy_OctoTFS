@@ -1,8 +1,8 @@
 import * as path from "path";
 const uuidv1 = require("uuid/v1");
-import * as vsts from "vso-node-api/WebApi";
-import * as wit from "vso-node-api/interfaces/WorkItemTrackingInterfaces"
-import * as bi from "vso-node-api/interfaces/BuildInterfaces";
+import * as vsts from "azure-devops-node-api/WebApi";
+import * as wit from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces"
+import * as bi from "azure-devops-node-api/interfaces/BuildInterfaces";
 import * as tasks from "vsts-task-lib";
 import { isNullOrWhitespace } from "./inputs";
 
@@ -99,46 +99,54 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
     console.log(`Environment = ${environment.buildRepositoryProvider}`);
     console.log(`Comments = ${includeComments}, WorkItems = ${ includeWorkItems}`);
 
-    const changes = await client.getBuildApi()
-        .then(x => x.getBuildChanges(environment.projectName, environment.buildId));
+    try {
+        const changes = await client.getBuildApi()
+            .then(x => x.getBuildChanges(environment.projectName, environment.buildId));
 
-    let releaseNotes = "";
-    let newLine = "\r\n\r\n";
+        let releaseNotes = "";
+        let newLine = "\r\n\r\n";
 
-    if(includeComments){
-        if(environment.buildRepositoryProvider === "TfsVersionControl"){
-            console.log("Adding changeset comments to release notes");
-            releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](${getChangesetUrl(environment,current.location)}): ${current.message}${newLine}`;
-            }, `**Changeset Comments:**${newLine}`)
-        }else{
-            console.log("Adding commit message to release notes");
-            releaseNotes += changes.reduce((prev, current) => {
-                return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}): ${current.message}${newLine}`;
-            },`**Commit Messages:${newLine}`);
+        if (includeComments) {
+            if (environment.buildRepositoryProvider === "TfsVersionControl") {
+                console.log("Adding changeset comments to release notes");
+                releaseNotes += changes.reduce((prev, current) => {
+                    return prev + `* [${current.id} - ${current.author.displayName}](${getChangesetUrl(environment, current.location)}): ${current.message}${newLine}`;
+                }, `**Changeset Comments:**${newLine}`)
+            } else {
+                console.log("Adding commit message to release notes");
+                releaseNotes += changes.reduce((prev, current) => {
+                    return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}): ${current.message}${newLine}`;
+                }, `**Commit Messages:${newLine}`);
+            }
         }
-    }
 
-    if(includeWorkItems){
-        console.log("adding work items to release notes");
-        releaseNotes += `**Work Items:**${newLine}`;
+        if (includeWorkItems) {
+            console.log("adding work items to release notes");
+            releaseNotes += `**Work Items:**${newLine}`;
 
-        const workItemRefs = await client.getBuildApi()
-        .then(x => x.getBuildWorkItemsRefs(environment.projectName, environment.buildId));
+            const workItemRefs = await client.getBuildApi()
+                .then(x => x.getBuildWorkItemsRefs(environment.projectName, environment.buildId));
 
-        if(workItemRefs.length > 0){
-            var workItems = await client.getWorkItemTrackingApi()
-                .then(x => x.getWorkItems(workItemRefs.map(x => Number(x.id))));
+            if (workItemRefs.length > 0) {
+                var workItems = await client.getWorkItemTrackingApi()
+                    .then(x => x.getWorkItems(workItemRefs.map(x => Number(x.id))));
 
-            let workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
-            releaseNotes += workItems.reduce((prev, current) => {
-                return prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}): ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`;
-            },"");
+                let workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
+                releaseNotes += workItems.reduce((prev, current) => {
+                    return prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}): ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`;
+                }, "");
+            }
         }
-    }
 
-    console.log(`Release notes:\r\n${releaseNotes}`);
-    return releaseNotes;
+        console.log(`Release notes:\r\n${releaseNotes}`);
+        return releaseNotes;
+    } catch (ex) {
+        console.log("An exception was thrown while building the release notes.");
+        console.log(ex);
+        console.log("See https://github.com/OctopusDeploy/OctoTFS/issues/107 for more details.");
+        console.log("The release notes will be empty.");
+        return "";
+    }
 }
 
 const getChangesetUrl = (environment: VstsEnvironmentVariables, apiUrl: string) => {
