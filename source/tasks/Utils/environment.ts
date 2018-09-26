@@ -1,8 +1,8 @@
 import * as path from "path";
 const uuidv1 = require("uuid/v1");
-import * as vsts from "vso-node-api/WebApi";
-import * as wit from "vso-node-api/interfaces/WorkItemTrackingInterfaces"
-import * as bi from "vso-node-api/interfaces/BuildInterfaces";
+import * as vsts from "azure-devops-node-api/WebApi";
+import * as wit from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces"
+import * as bi from "azure-devops-node-api/interfaces/BuildInterfaces";
 import * as tasks from "vsts-task-lib";
 import { isNullOrWhitespace } from "./inputs";
 
