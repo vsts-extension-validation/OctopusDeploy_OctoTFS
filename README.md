@@ -48,7 +48,8 @@ For usage, see the [Build Steps Readme](source/VSTSExtensions).
 1. Make sure you have [node.js](https://nodejs.org/en/download/) installed
 * Node: 8.11.3 or later (**Note** node installer does not update npm)
 * NPM: 5.6.0+ (run `npm install npm@5.6.0 -g`)
-* TFX (npm install tfx -g)
+* Gulp (`npm install gulp -g`)
+* TFX (`npm install tfx tfx-cli -g`)
 
 If you intend to publish the extension either to a local TFS instance or otherwise you will also need powershell core or powershell installed.
 
