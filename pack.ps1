@@ -47,7 +47,7 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         $task.version.Minor = $netVersion.Minor
         $task.version.Patch = $netVersion.Build
 
-        $task.helpMarkDown = "Version: $version. [More Information](http://docs.octopusdeploy.com/display/OD/Use+the+Team+Foundation+Build+Custom+Task)"
+        $task.helpMarkDown = "Version: $version. [More Information](https://g.octopushq.com/TFS-VSTS)"
 
         # replace the task ID
         $task.id = Get-TaskId $envName $task.name
