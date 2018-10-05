@@ -21,7 +21,7 @@
     },
     "satisfies": ["Octo"],
     "demands": [],
-    "minimumAgentVersion": "1.95.0",
+    "minimumAgentVersion": "2.115.0",
     "groups": [
         {
             "name": "advanced",

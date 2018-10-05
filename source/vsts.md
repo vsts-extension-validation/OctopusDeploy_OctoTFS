@@ -6,7 +6,7 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 </div>
 
 ## Requirements
-For build agents being targeted, the dotnet core runtime 2.0 or later is required. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition. An internet connection
+A minimum build agent version of `2.115.0` with dotnet core runtime 2.0 or later. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition. An internet connection
 is also required for tasks to download the Octopus tools when not available on a build agent.
 
 ### VSTS Build Agents
