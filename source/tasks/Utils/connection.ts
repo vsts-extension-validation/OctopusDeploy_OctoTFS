@@ -7,6 +7,7 @@ import OctoApiKeyHandler from "./OctoApiKeyHandler";
 export interface OctoServerConnectionDetails {
     url: string;
     apiKey: string;
+    ignoreSslErrors: boolean;
 }
 
 export function getDefaultOctopusConnectionDetailsOrThrow(){
@@ -21,12 +22,18 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
     const octoEndpointAuthorization = tasks.getEndpointAuthorization(name, false);
     return {
         url: tasks.getEndpointUrl(name, false),
-        apiKey: octoEndpointAuthorization.parameters["apitoken"]
+        apiKey: octoEndpointAuthorization.parameters["apitoken"],
+        ignoreSslErrors: octoEndpointAuthorization.parameters["ignoreSslErrors"].toLowerCase() === "true"
     }
 }
 
 export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string){
-    const client = new RestClient("OctoTFS", details.url, [new OctoApiKeyHandler(details.apiKey)]);
+    console.log("Ignore SSL: " + (details.ignoreSslErrors ? "yes" : "no"));
+    const client = new RestClient(
+        "OctoTFS",
+        details.url,
+        [new OctoApiKeyHandler(details.apiKey)],
+        {ignoreSslError: details.ignoreSslErrors});
     return client.get<{Name: string}>(`api/projects/${projectId}`)
         .then(x => {
             if(x.result){

@@ -231,7 +231,7 @@
                     {
                         "id": "ignoreSslErrors",
                         "name": "Ignore SSL Errors",
-                        "description": "Enable this option to ignore SSL errors.",
+                        "description": "Enable this option to ignore SSL errors when connecting to the Octopus server from the agent.",
                         "inputMode": "checkbox",
                         "isConfidential": false,
                         "validation": {
@@ -255,16 +255,6 @@
                                     "dataType": "string",
                                     "maxLength": 32
                                 }
-                            },
-                            {
-                              "id": "ignoreSslErrors",
-                              "name": "Ignore SSL Errors",
-                              "description": "Enable this option to ignore SSL errors.",
-                              "inputMode": "checkBox",
-                              "isConfidential": false,
-                              "validation": {
-                                "dataType": "boolean"
-                              }
                             }
                         ],
                         "headers": [
