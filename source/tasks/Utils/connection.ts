@@ -23,7 +23,8 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
     return {
         url: tasks.getEndpointUrl(name, false),
         apiKey: octoEndpointAuthorization.parameters["apitoken"],
-        ignoreSslErrors: octoEndpointAuthorization.parameters["ignoreSslErrors"].toLowerCase() === "true"
+        ignoreSslErrors: !!octoEndpointAuthorization.parameters["ignoreSslErrors"] &&
+            octoEndpointAuthorization.parameters["ignoreSslErrors"].toLowerCase() === "true"
     }
 }
 
