@@ -227,6 +227,19 @@
                         "resultSelector": "jsonpath:$"
                     }
                 ],
+                "inputDescriptors": [
+                    {
+                        "id": "ignoreSslErrors",
+                        "name": "Ignore SSL Errors",
+                        "description": "Enable this option to ignore SSL errors.",
+                        "inputMode": "checkbox",
+                        "isConfidential": false,
+                        "validation": {
+                            "isRequired": false,
+                            "dataType": "boolean"
+                        }
+                    }
+                ],
                 "authenticationSchemes": [
                     {
                         "type": "ms.vss-endpoint.endpoint-auth-scheme-token",
@@ -242,6 +255,16 @@
                                     "dataType": "string",
                                     "maxLength": 32
                                 }
+                            },
+                            {
+                              "id": "ignoreSslErrors",
+                              "name": "Ignore SSL Errors",
+                              "description": "Enable this option to ignore SSL errors.",
+                              "inputMode": "checkBox",
+                              "isConfidential": false,
+                              "validation": {
+                                "dataType": "boolean"
+                              }
                             }
                         ],
                         "headers": [
