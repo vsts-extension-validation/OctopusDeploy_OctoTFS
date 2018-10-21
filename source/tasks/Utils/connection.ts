@@ -29,7 +29,7 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
 }
 
 export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string){
-    console.log("Ignore SSL: " + (details.ignoreSslErrors ? "yes" : "no"));
+    console.log("Ignore SSL: " + details.ignoreSslErrors);
     const client = new RestClient(
         "OctoTFS",
         details.url,
