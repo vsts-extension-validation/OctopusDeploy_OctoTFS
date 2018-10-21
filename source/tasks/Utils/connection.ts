@@ -20,11 +20,11 @@ export function getDefaultOctopusConnectionDetailsOrThrow(){
 
 export function getOctopusConnectionDetails(name: string): OctoServerConnectionDetails {
     const octoEndpointAuthorization = tasks.getEndpointAuthorization(name, false);
+    const ignoreSSL = tasks.getEndpointDataParameter(name, "ignoreSslErrors", true);
     return {
         url: tasks.getEndpointUrl(name, false),
         apiKey: octoEndpointAuthorization.parameters["apitoken"],
-        ignoreSslErrors: !!octoEndpointAuthorization.parameters["ignoreSslErrors"] &&
-            octoEndpointAuthorization.parameters["ignoreSslErrors"].toLowerCase() === "true"
+        ignoreSslErrors: !!ignoreSSL && ignoreSSL.toLowerCase() === "true"
     }
 }
 
