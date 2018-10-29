@@ -16,6 +16,7 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environmentVariables);
         const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
+        const space = tasks.getInput("Space");
         const project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true))
         .then(x => x.value);
         const releaseNumber = tasks.getInput("ReleaseNumber");
@@ -41,6 +42,7 @@ async function run() {
         },  environmentVariables.defaultWorkingDirectory);
 
         const configure = configureTool([
+            argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
             argumentIfSet(argumentEnquote, "channel", channel),

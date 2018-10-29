@@ -6,13 +6,15 @@ import {
     includeArguments,
     configureTool,
     flag,
-    argumentEnquote
+    argumentEnquote,
+    argumentIfSet
 } from '../Utils/tool';
 
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
+        const space = tasks.getInput("Space");
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
         const environments = utils.getRequiredCsvInput("Environments");
         const showProgress = tasks.getBoolInput("ShowProgress");
@@ -25,6 +27,7 @@ async function run() {
         const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 
         const configure = configureTool([
+            argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             argumentEnquote("releaseNumber", releaseNumber),
             connectionArguments(connection),
