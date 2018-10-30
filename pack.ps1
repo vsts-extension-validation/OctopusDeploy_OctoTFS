@@ -15,6 +15,25 @@ $ErrorActionPreference = "Stop"
 $buildDirectoryPath = "$PSScriptRoot/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
+function CleanNodeModules() {
+    if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
+    {
+        Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
+        Write-Error "go get github.com/tj/node-prune/cmd/node-prune"
+        Exit 1
+    }
+    node-prune $PSScriptRoot\node_modules
+    node-prune $PSScriptRoot\source\node_modules
+    node-prune $PSScriptRoot\dist\tasks\CreateOctopusRelease\node_modules
+    node-prune $PSScriptRoot\dist\tasks\Deploy\node_modules
+    node-prune $PSScriptRoot\dist\tasks\OctoCli\node_modules
+    node-prune $PSScriptRoot\dist\tasks\OctoInstaller\node_modules
+    node-prune $PSScriptRoot\dist\tasks\Pack\node_modules
+    node-prune $PSScriptRoot\dist\tasks\Promote\node_modules
+    node-prune $PSScriptRoot\dist\tasks\Push\node_modules
+
+}
+
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."
     & npm up -g tfx-cli
@@ -141,4 +160,5 @@ function Pack($envName, $environment, $workingDirectory) {
 & "$PSScriptRoot\embed-octo.ps1"-version $embeddedOctoVersion
 UpdateTfxCli
 InstallTaskDependencies $buildDirectoryPath
+CleanNodeModules
 Pack "VSTSExtensions" $environment $buildDirectoryPath
