@@ -29,7 +29,6 @@ function CleanNodeModules() {
         }
     }
 
-    Invoke-Expression "$command $($PSScriptRoot)\node_modules"
     Invoke-Expression "$command $($PSScriptRoot)\source\node_modules"
     Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\CreateOctopusRelease\node_modules"
     Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\Deploy\node_modules"

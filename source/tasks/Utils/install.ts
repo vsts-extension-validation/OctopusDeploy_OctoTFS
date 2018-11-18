@@ -27,8 +27,9 @@ interface Dictionary {
 }
 
 const RestClient = TypedRestClient.RestClient;
+const OctopurlsUrl = "https://g.octopushq.com";
 
-var octopurls = new RestClient("OctoTFS/Tasks",  "https://g.octopushq.com");
+var octopurls = new RestClient("OctoTFS/Tasks",  OctopurlsUrl);
 
 const applyTemplate = (dictionary: Dictionary, template: string) => {
     return Object.keys(dictionary).reduce((result, key) =>
@@ -92,6 +93,8 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 }
 
 async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOption> {
+    console.log(`Attempting to contact ${OctopurlsUrl} to find latest CLI tools`);
+
     const response =  await octopurls.get<LatestResponse>("LatestTools");
 
     if(response.result === null || response.result === undefined){
