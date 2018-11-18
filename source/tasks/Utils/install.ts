@@ -69,6 +69,7 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 
     if(!cachedToolPath){
         try{
+            console.log("Attempting to download octo cli");
             let downloadPath = await (download !== undefined && download != null ? download(option) : tools.downloadTool(option.location));
             let toolPath = await extract(downloadPath);
 
