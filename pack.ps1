@@ -5,9 +5,7 @@ param (
     $environment,
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
-    $version,
-    [string]
-    $embeddedOctoVersion
+    $version
 )
 
 $ErrorActionPreference = "Stop"
@@ -138,7 +136,6 @@ function Pack($envName, $environment, $workingDirectory) {
     & tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
-& "$PSScriptRoot\embed-octo.ps1"-version $embeddedOctoVersion
 UpdateTfxCli
 InstallTaskDependencies $buildDirectoryPath
 Pack "VSTSExtensions" $environment $buildDirectoryPath

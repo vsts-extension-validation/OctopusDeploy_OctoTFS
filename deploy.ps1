@@ -6,8 +6,10 @@ $accessToken = $OctopusParameters["AccessToken"]
 $shareWith = $OctopusParameters["ShareWith"]
 $publish = [System.Convert]::ToBoolean($OctopusParameters["Publish"])
 $embeddedOctoVersion = $OctopusParameters["EmbeddedOctoVersion"]
+$toolsPath =  $OctopusParameters["ToolsPath"]
 
-& "$PSScriptRoot\pack.ps1" -environment $environment -version $version -embeddedOctoVersion $embeddedOctoVersion
+& "$PSScriptRoot\embed-octo.ps1" -version $embeddedOctoVersion -override $toolsPath
+& "$PSScriptRoot\pack.ps1" -environment $environment -version $version
 if ($publish) {
     & "$PSScriptRoot\publish.ps1" -environment $environment -version $version -accessToken $accessToken -shareWith $shareWith
 }
