@@ -3,9 +3,10 @@ import * as tasks from 'vsts-task-lib/task';
 
 async function run(){
     let version = tasks.getInput("version");
+    let forceEmbedded = /embedded/i.test(version);
 
     try{
-        if(version === "embedded"){
+        if(forceEmbedded){
             console.log("Forcing the use of embedded octo.");
             await getEmbeddedOcto(tasks.resolve(__dirname, "embedded")).then(addToolToPath);
         }else{
@@ -17,7 +18,7 @@ async function run(){
 
         tasks.setResult(tasks.TaskResult.Succeeded, "");
     }catch(error){
-        if(version === "embedded"){
+        if(forceEmbedded){
             tasks.setResult(tasks.TaskResult.Failed, error);
             return;
         }
