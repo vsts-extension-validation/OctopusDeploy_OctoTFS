@@ -41,7 +41,7 @@ export function fetchProjectName(details: OctoServerConnectionDetails, projectId
                 return either.right<string, string>(x.result.Name);
             }
 
-            return either.left<string,string>(`Could not resolve project name given id "{projectId}". Server returned status code: ${x.statusCode}`);
+            return either.left<string,string>(`Could not resolve project name given id "${projectId}". Server returned status code: ${x.statusCode}`);
         }
     ).catch(error => either.left<string,string>(error))
 }
