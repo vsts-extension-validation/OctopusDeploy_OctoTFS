@@ -114,7 +114,7 @@ function InstallTaskDependencies($workingDirectory) {
 }
 
 function Get-TaskId($envName, $taskName) {
-    $taskIds = ConvertFrom-Json -InputObject (Get-Content "task-ids.json" -Raw)
+    $taskIds = ConvertFrom-Json -InputObject (Get-Content "$basePath/task-ids.json" -Raw)
     $result = $taskIds.$envName.$taskName
 
     if([String]::IsNullOrEmpty($result))
