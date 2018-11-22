@@ -95,7 +95,7 @@ function Get-ObjectMembers {
 
 function InstallTaskDependencies($workingDirectory) {
     $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
-    $dependencies = (ConvertFrom-JSON (Get-Content "$($basePath)/package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
+    $dependencies = (ConvertFrom-JSON (Get-Content "$basePath/package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
 
     foreach ($manifestFile in $taskManifestFiles){
         $directory = Split-Path -parent $manifestFile
