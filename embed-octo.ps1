@@ -7,10 +7,12 @@ param (
     [string]
     $latestOctoUrl = "https://g.octopushq.com/LatestTools",
     [string]
-    $override
+    $override,
+    [string]
+    $basePath = $PSScriptRoot
 )
 
-$buildDirectoryPath = "$PSScriptRoot/dist"
+$buildDirectoryPath = "$basePath/dist"
 
 function Copy-Object($object){
     $result = New-Object PsObject
