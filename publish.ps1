@@ -10,12 +10,14 @@ param (
     [string]
     $accessToken,
     [string]
-    $shareWith="octopus-deploy-test"
+    $shareWith="octopus-deploy-test",
+    [string]
+    $basePath= $PSScriptRoot
 )
 
 $ErrorActionPreference = "Stop"
 
-$buildArtifactsPath = "$PSScriptRoot\dist\Artifacts"
+$buildArtifactsPath = "$basePath\dist\Artifacts"
 
 function UpdateTfxCli() {
     Write-Host "Updating tfx-cli..."
