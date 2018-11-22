@@ -1,5 +1,6 @@
 ﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': string
 	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': pickList
@@ -13,6 +14,7 @@
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': string
 	'Project': pickList
 	'ReleaseNumber': string
 	'Environments': pickList
@@ -42,6 +44,7 @@ OctoTFS.Tests.resources.tasks.Pack.task.json
 	'ListFiles': boolean
 OctoTFS.Tests.resources.tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': string
 	'Project': pickList
 	'From': pickList
 	'To': pickList
@@ -51,6 +54,7 @@ OctoTFS.Tests.resources.tasks.Promote.task.json
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': string
 	'Package': multiLine
 	'Replace': boolean
 	'AdditionalArguments': string

@@ -5,7 +5,9 @@ param (
     [string]
     $extension=".zip",
     [string]
-    $latestOctoUrl = "https://g.octopushq.com/LatestTools"
+    $latestOctoUrl = "https://g.octopushq.com/LatestTools",
+    [string]
+    $override
 )
 
 $buildDirectoryPath = "$PSScriptRoot/dist"
@@ -61,8 +63,13 @@ if(!(Test-Path $destinationFolder)){
     New-Item -ItemType Directory -Path $destinationFolder | Out-Null
 }
 
-Write-Host "Downloading Octo $($option.version) from $($option.location) and saving to $($destination)"
+if($override){
+    Write-Host "Using octo override $($override) for embedded octo"
+    Copy-Item -Path $override -Destination $destination
+}else{
+   Write-Host "Downloading Octo $($option.version) from $($option.location) and saving to $($destination)"
+   (New-Object System.Net.WebClient).DownloadFile($option.location, $destination)
+}
 
-(New-Object System.Net.WebClient).DownloadFile($option.location, $destination)
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines( (Join-Path $destinationFolder "version.json"), (ConvertTo-Json $option -Compress -Depth 100), $Utf8NoBomEncoding)

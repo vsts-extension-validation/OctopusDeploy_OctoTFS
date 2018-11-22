@@ -6,12 +6,15 @@ import {
     includeArguments,
     configureTool,
     flag,
-    argumentEnquote
+    argumentEnquote,
+    argumentIfSet
 } from '../Utils/tool';
 
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+
+        const space = tasks.getInput("Space");
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
         .then(x => x.value);
 
@@ -25,7 +28,7 @@ async function run() {
         const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
 
         const configure = configureTool([
-
+            argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             connectionArguments(connection),
             argumentEnquote("from", from),

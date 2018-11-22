@@ -7,12 +7,15 @@ import {
     includeArguments,
     configureTool,
     flag,
-    argumentEnquote
+    argumentEnquote,
+    argumentIfSet
 } from '../Utils/tool';
 
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        
+        const space = tasks.getInput("Space");
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
@@ -22,6 +25,7 @@ async function run() {
 
         const configure = configureTool([
             connectionArguments(connection),
+            argumentIfSet(argumentEnquote, "space", space),
             multiArgument(argumentEnquote, "package", matchedPackages),
             flag("replace-existing", replace),
             includeArguments(additionalArguments)
