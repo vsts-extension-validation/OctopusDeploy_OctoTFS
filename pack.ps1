@@ -5,12 +5,14 @@ param (
     $environment,
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
-    $version
+    $version,
+    [string]
+    $basePath = $PSScriptRoot
 )
 
 $ErrorActionPreference = "Stop"
 
-$buildDirectoryPath = "$PSScriptRoot/dist"
+$buildDirectoryPath = "$basePath/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
 function CleanNodeModules() {
@@ -27,14 +29,13 @@ function CleanNodeModules() {
         }
     }
 
-    Invoke-Expression "$command $($PSScriptRoot)\source\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\CreateOctopusRelease\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\Deploy\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\OctoCli\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\OctoInstaller\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\Pack\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\Promote\node_modules"
-    Invoke-Expression "$command $($PSScriptRoot)\dist\tasks\Push\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusRelease\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\Deploy\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\OctoCli\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\OctoInstaller\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\Pack\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\Promote\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\Push\node_modules"
 }
 
 function UpdateTfxCli() {
@@ -94,7 +95,7 @@ function Get-ObjectMembers {
 
 function InstallTaskDependencies($workingDirectory) {
     $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
-    $dependencies = (ConvertFrom-JSON (Get-Content "./package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
+    $dependencies = (ConvertFrom-JSON (Get-Content "$($basePath)/package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
 
     foreach ($manifestFile in $taskManifestFiles){
         $directory = Split-Path -parent $manifestFile
