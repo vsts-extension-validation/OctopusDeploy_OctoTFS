@@ -4,7 +4,6 @@ import {
     multiArgument,
     connectionArguments,
     includeArguments,
-    configureTool,
     flag,
     argumentEnquote,
     argumentIfSet
@@ -26,7 +25,7 @@ async function run() {
 
         const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 
-        const configure = configureTool([
+        const configure = [
             argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             argumentEnquote("releaseNumber", releaseNumber),
@@ -36,11 +35,10 @@ async function run() {
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
             flag("progress", showProgress),
             includeArguments(additionalArguments)
-        ]);
+        ];
 
-        const code:Number = await octo.map(configure)
-            .getOrElseL((x) => { throw new Error(x); })
-            .exec();
+        const code:Number = await octo.map(x => x.launchOcto(configure))
+            .getOrElseL((x) => { throw new Error(x); });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Deploy succeeded with code " + code);
     }catch(err){
