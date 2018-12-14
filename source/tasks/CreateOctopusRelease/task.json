@@ -49,14 +49,6 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "Space",
-            "type": "string",
-            "label": "Space",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
-        },
-        {
             "name": "ProjectName",
             "type": "pickList",
             "label": "Project Name",
