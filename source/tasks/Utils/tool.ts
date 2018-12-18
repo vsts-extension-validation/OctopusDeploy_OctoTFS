@@ -20,17 +20,17 @@ function stringOption(value?: string): Option<string> {
 
 export class OctoLauncher {
     runner: ToolRunner;
-    
+
     constructor (runner: ToolRunner) {
         this.runner = runner;
     }
-    
+
     public launchOcto(configurations: Array<(tool: ToolRunner) => ToolRunner>) {
-        const options: any = { env: {"OCTOEXTENSION": process.env.EXTENSION_VERSION}};
+        const options: any = { env: {"OCTOEXTENSION": process.env.EXTENSION_VERSION, ...process.env }};
 
         const configure = configureTool(configurations);
         configure(this.runner);
-        
+
         return this.runner.exec(options);
     }
 }

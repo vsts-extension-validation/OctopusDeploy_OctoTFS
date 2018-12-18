@@ -28,10 +28,8 @@ const createTaskConfig = (filePath: string): Configuration => {
         entry: path.resolve(filePath),
         plugins: [
             new DefinePlugin({
-                'process.env': {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-                    EXTENSION_VERSION: JSON.stringify(process.env.EXTENSION_VERSION)
-                }
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+                'process.env.EXTENSION_VERSION': JSON.stringify(process.env.EXTENSION_VERSION)
             }),
         ],
         module: {
