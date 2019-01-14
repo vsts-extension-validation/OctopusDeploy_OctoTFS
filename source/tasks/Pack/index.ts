@@ -22,6 +22,7 @@ export interface PackageOptionalInputs{
     listFiles : boolean;
     overwrite : boolean;
     additionalArguments: string;
+    compressionLevel: string;
 }
 
 export type PackageInputs = PackageRequiredInputs & PackageOptionalInputs;
@@ -31,6 +32,7 @@ export const configure = (inputs: PackageInputs) => {
         argumentEnquote("id", inputs.packageId),
         argument("format", inputs.packageFormat),
         argumentIfSet(argument, "version", inputs.packageVersion),
+        argumentIfSet(argument, "compressionlevel", inputs.compressionLevel),
         argumentIfSet(argumentEnquote, "outFolder", inputs.outputPath),
         argumentIfSet(argumentEnquote, "basePath", inputs.sourcePath),
         argumentIfSet(argumentEnquote, "author", inputs.nuGetAuthor),
@@ -68,7 +70,8 @@ export const getInputs = (): PackageInputs => {
         overwrite : tasks.getBoolInput("Overwrite"),
         include : utils.getLineSeparatedItems(tasks.getInput("Include")),
         listFiles : tasks.getBoolInput("ListFiles"),
-        additionalArguments: tasks.getInput("AdditionalArguments")
+        additionalArguments: tasks.getInput("AdditionalArguments"),
+        compressionLevel: tasks.getInput("CompressionLevel")
     }
 }
 

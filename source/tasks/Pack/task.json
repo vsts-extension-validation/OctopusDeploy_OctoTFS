@@ -154,6 +154,20 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](https://octopus.com/docs/api-and-integration/octo.exe-command-line/pack) for available parameters.",
             "groupName": "advanced"
+        },
+        {
+            "name": "CompressionLevel",
+            "type": "picklist",
+            "label": "Compression Level",
+            "defaultValue": "optimal",
+            "required": false,
+            "helpMarkDown": "Set the compression level.",
+            "groupName": "advanced",
+            "options": {
+                "None": "none",
+                "Fast": "fast",
+                "Optimal": "optimal"
+            }
         }
     ],
     "instanceNameFormat": "Package $(PackageId)",
