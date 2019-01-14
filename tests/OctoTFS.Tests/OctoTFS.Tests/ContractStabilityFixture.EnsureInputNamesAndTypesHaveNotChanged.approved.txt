@@ -40,6 +40,8 @@ OctoTFS.Tests.resources.tasks.Pack.task.json
 	'Include': multiLine
 	'Overwrite': boolean
 	'ListFiles': boolean
+	'CompressionLevel': pickList
+	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Project': pickList
