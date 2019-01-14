@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as utils from "../Utils";
 import { argument, argumentIfSet, flag, multiArgument, argumentEnquote } from '../Utils';
 import {ToolRunner} from "vsts-task-lib/toolrunner";
+import {includeArguments} from "../Utils";
 
 export interface PackageRequiredInputs {
     packageId : string;
@@ -20,6 +21,7 @@ export interface PackageOptionalInputs{
     include? : string[];
     listFiles : boolean;
     overwrite : boolean;
+    additionalArguments: string;
 }
 
 export type PackageInputs = PackageRequiredInputs & PackageOptionalInputs;
@@ -36,6 +38,7 @@ export const configure = (inputs: PackageInputs) => {
         argumentIfSet(argumentEnquote, "description",inputs.nuGetDescription),
         argumentIfSet(argumentEnquote, "releaseNotes", inputs.nuGetReleaseNotes),
         argument("overwrite", inputs.overwrite.toString()),
+        includeArguments(inputs.additionalArguments),
         (tool: ToolRunner) => {
             if(!utils.isNullOrWhitespace(inputs.nuGetReleaseNotesFile) && fs.existsSync(inputs.nuGetReleaseNotesFile) && fs.lstatSync(inputs.nuGetReleaseNotesFile).isFile()){
                 console.log(`Release notes file: ${inputs.nuGetReleaseNotesFile}`);
@@ -64,7 +67,8 @@ export const getInputs = (): PackageInputs => {
         nuGetReleaseNotesFile : tasks.getInput("NuGetReleaseNotesFile", false),
         overwrite : tasks.getBoolInput("Overwrite"),
         include : utils.getLineSeparatedItems(tasks.getInput("Include")),
-        listFiles : tasks.getBoolInput("ListFiles")
+        listFiles : tasks.getBoolInput("ListFiles"),
+        additionalArguments: tasks.getInput("AdditionalArguments")
     }
 }
 
