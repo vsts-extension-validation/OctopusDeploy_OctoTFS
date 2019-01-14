@@ -47,9 +47,11 @@ For usage, see the [Build Steps Readme](source/VSTSExtensions).
 ### Prerequisites
 1. Make sure you have [node.js](https://nodejs.org/en/download/) installed
 * Node: 8.11.3 or later (**Note** node installer does not update npm)
-* NPM: 5.6.0+ (run `npm install npm@5.6.0 -g`)
+* NPM: 5.6.0+ (run `npm install npm@latest -g`)
 * Gulp (`npm install gulp -g`)
 * TFX (`npm install tfx tfx-cli -g`)
+* Install go and then install node-prune (https://github.com/tj/node-prune)
+* May also need to install natives - https://github.com/gulpjs/gulp/issues/2246 (`npm install natives@1.1.6`)
 
 If you intend to publish the extension either to a local TFS instance or otherwise you will also need powershell core or powershell installed.
 
