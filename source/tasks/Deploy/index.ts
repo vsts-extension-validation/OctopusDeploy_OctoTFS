@@ -12,7 +12,10 @@ import {
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const timeout = tasks.getInput("Timeout", false);
+        const timeout2 = tasks.getInput("TimeoutMinutes", false);
 
+        console.log(`Timeouts: timeout 1: "${timeout}" and timeout 2:"${timeout2}"`)
         const space = tasks.getInput("Space");
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
         const environments = utils.getRequiredCsvInput("Environments");

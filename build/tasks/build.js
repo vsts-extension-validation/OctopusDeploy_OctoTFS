@@ -3,13 +3,16 @@ var path = require("path");
 var clean = require("gulp-clean");
 var paths = require("../paths");
 var glob = require("glob");
-var cp = require('child_process');
+var exec = require('child_process').exec;
+var debug = require('gulp-debug');
 const argv = require('yargs').argv
 
-
+console.log(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`));
+const sourceRoot =  path.resolve(paths.sourceRoot);
+const outputPath = path.resolve(paths.outputPath);
 
 gulp.task("build:tasks", () => {
-    return cp.exec("./node_modules/.bin/webpack --mode=development --require ts-node/register --require tsconfig-paths/register",
+    return exec(`${path.resolve("./node_modules/.bin/webpack")} --mode=development --require ts-node/register --require tsconfig-paths/register`,
     {
         env: {
             TS_NODE_PROJECT: "build/tsconfig-webpack.json",
@@ -19,8 +22,8 @@ gulp.task("build:tasks", () => {
 });
 
 gulp.task("build:widget:source", () => {
-    return gulp.src(`${paths.sourceRoot}widgets/**/*`, {base: `${paths.sourceRoot}widgets`})
-    .pipe(gulp.dest(`${paths.outputPath}widgets`));
+    return gulp.src(path.join(sourceRoot, `widgets/**/*`), {base: path.join(paths.sourceRoot, `widgets`) })
+    .pipe(gulp.dest(path.join(paths.outputPath, `widgets`)));
 });
 
 gulp.task("build:widgets", gulp.series(["build:widget:source"]), () =>
@@ -30,13 +33,20 @@ gulp.task("build:widgets", gulp.series(["build:widget:source"]), () =>
 });
 
 gulp.task("build:copy", () => {
-    return gulp.src([`${paths.sourceRoot}*.*`, `${paths.sourceRoot}img/**/*.*`], { base: `${paths.sourceRoot}`})
-    .pipe(gulp.dest("dist"));
+    return gulp.src([ path.join(sourceRoot, `*.*`), path.join(sourceRoot, `img/**/*.*`)], { base: sourceRoot })
+    .pipe(gulp.dest(outputPath));
 });
 
-gulp.task("build:copy:task:content", gulp.series(["build:tasks"]), (cb) => {
-    var stream = gulp.src(`${paths.sourceRoot}tasks/**/*.{json,png,svg,zip,gz}`, { base: paths.sourceRoot}).pipe(gulp.dest(paths.outputPath));
-    return stream;
+gulp.task("build:copy:task:content", gulp.series(["build:tasks"]), () => {
+    return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
+    .pipe(debug({title: "Copy Task Content"})).pipe(gulp.dest(paths.outputPath));
+});
+
+
+gulp.task("build:copy:task:content2", gulp.parallel(["build:copy"]), () => {
+    return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
+    .pipe(debug({title: "Copy Task Content"}))
+    .pipe(gulp.dest(paths.outputPath));
 });
 
 gulp.task("build:copy:externals", gulp.series(["build:tasks"]), (cb) => {
@@ -69,11 +79,9 @@ gulp.task("clean", () => {
 gulp.task("build",
     gulp.series(
         "clean",
-        gulp.parallel(
-            "build:tasks",
-            "build:widgets",
-            "build:copy",
-            "build:copy:task:content"
-        )
+        "build:tasks",
+        "build:widgets",
+        "build:copy",
+        "build:copy:task:content"
     )
 );
