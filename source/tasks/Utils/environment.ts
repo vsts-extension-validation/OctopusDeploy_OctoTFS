@@ -13,7 +13,7 @@ export interface ReleaseEnvironmentVariables {
 }
 
 export interface BuildEnvironmentVariables{
-    buildNumber: number;
+    buildNumber: string;
     buildId: number;
     buildName: string;
     buildRepositoryName: string;
