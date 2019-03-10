@@ -19,6 +19,16 @@
     "minimumAgentVersion": "2.115.0",
     "groups": [
         {
+            "name": "releasedetails",
+            "displayName": "Release Details",
+            "isExpanded": true
+        },
+        {
+            "name": "releasedetailsspaces",
+            "displayName": "Release Details (Spaces)",
+            "isExpanded": true
+        },
+        {
             "name": "releasenotes",
             "displayName": "Release Notes",
             "isExpanded": true
@@ -49,13 +59,14 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "Space",
-            "type": "string",
-            "label": "Space",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "name": "HasSpaces",
+            "type": "bool",
+            "label": "Octopus Server has Spaces?",
+            "defaultValue": "false",
+            "required": true,
+            "helpMarkDown": "Octopus Server 2019.1+ supports spaces"
         },
+
         {
             "name": "ProjectName",
             "type": "pickList",
@@ -65,7 +76,8 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Octopus Deploy Project Name"
+            "helpMarkDown": "Octopus Deploy Project Name",
+            "groupName": "releasedetails"
         },
         {
             "name": "ReleaseNumber",
@@ -73,7 +85,8 @@
             "label": "Release Number",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus."
+            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus.",
+            "groupName": "releasedetails"
         },
         {
             "name": "Channel",
@@ -84,8 +97,57 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release."
+            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
+            "groupName": "releasedetails"
         },
+
+
+
+        {
+            "name": "SpaceName",
+            "type": "pickList",
+            "label": "Space Name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "groupName": "releasedetailsspaces"
+        },
+        {
+            "name": "ProjectNameInSpace",
+            "type": "pickList",
+            "label": "Project Name",
+            "defaultValue": "",
+            "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Octopus Deploy Project Name",
+            "groupName": "releasedetailsspaces"
+        },
+        {
+            "name": "ReleaseNumberInSpace",
+            "type": "string",
+            "label": "Release Number",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus.",
+            "groupName": "releasedetailsspaces"
+        },
+        {
+            "name": "ChannelInSpace",
+            "type": "pickList",
+            "label": "Channel",
+            "defaultValue": "",
+            "required": false,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
+            "groupName": "releasedetailsspaces"
+        },
+
+        
+
         {
             "name": "ChangesetCommentReleaseNotes",
             "type": "boolean",
@@ -113,6 +175,7 @@
             "helpMarkDown": "Custom notes appended to Octopus Release notes. This field supports markdown. To include newlines, you can use HTML linebreaks.",
             "groupName": "releasenotes"
         },
+
         {
             "name": "DeployToEnvironment",
             "type": "pickList",
@@ -137,6 +200,32 @@
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
             "groupName": "tenant"
         },
+
+        {
+            "name": "DeployToEnvironmentInSpace",
+            "type": "pickList",
+            "label": "To Environment",
+            "defaultValue": "",
+            "required": false,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Deploy the release to this environment after creating it.",
+            "groupName": "deployment"
+        },
+        {
+            "name": "DeployForTenantsInSpace",
+            "type": "pickList",
+            "label": "Tenant(s)",
+            "defaultValue": "",
+            "required": false,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "groupName": "tenant"
+        },
+
         {
             "name": "DeployForTenantTags",
             "type": "string",
@@ -191,6 +280,40 @@
             "target": "DeployForTenants",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllTenants",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+
+        {
+            "target": "SpaceName",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllSpaces",
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "ProjectNameForSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjectsInSpace",
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "DeployToEnvironmentInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "ChannelInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusProjectChannelsInSpace",
+            "parameters": {
+                "ProjectName": "$(ProjectName)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "DeployForTenantsInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllTenantsInSpace",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
