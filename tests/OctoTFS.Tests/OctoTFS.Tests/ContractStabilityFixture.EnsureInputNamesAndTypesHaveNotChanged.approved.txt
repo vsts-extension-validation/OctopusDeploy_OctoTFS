@@ -1,14 +1,20 @@
 ﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'Space': string
+	'HasSpaces': boolean
 	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': pickList
+	'SpaceNameSelected': string
+	'ProjectNameInSpace': pickList
+	'ReleaseNumberInSpace': string
+	'ChannelInSpace': pickList
 	'ChangesetCommentReleaseNotes': boolean
 	'WorkItemReleaseNotes': boolean
 	'CustomReleaseNotes': string
 	'DeployToEnvironment': pickList
 	'DeployForTenants': pickList
+	'DeployToEnvironmentInSpace': pickList
+	'DeployForTenantsInSpace': pickList
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
 	'AdditionalArguments': string
