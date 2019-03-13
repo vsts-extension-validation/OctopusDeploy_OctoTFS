@@ -1,8 +1,53 @@
 # OctoTFS
 
-OctoTFS is a repository containing components for integration with Team Foundation Server and Visual Studio Team Services (VSTS).
+OctoTFS is a repository containing components for integration with Team Foundation Server and Azure DevOps pipelines.
 
-> Visual Studio Team Services (VSTS) was formerly known as Visual Studio Online (VSO)
+> Azure DevOps (ADO) was previously Visual Studio Team Services (VSTS) and previously Visual Studio Online (VSO)
+
+---
+
+# New 
+
+
+## What the heck is this thing? 
+
+https://docs.microsoft.com/en-us/azure/devops/extend/?view=azure-devops
+
+Azure DevOps (aka VSTS aka VSO) Extension. This is a build or release task available in the Azure DevOps marketplace that allows teams to do more than the baked in tasks. 
+
+https://docs.microsoft.com/en-us/azure/devops/extend/develop/integrate-build-task?view=azure-devops
+
+https://github.com/Microsoft/azure-pipelines-task-lib
+
+## How the heck to do I change it? 
+
+Dev and test cycle:
+
+If you're making small chanage or bug fixes, it's probably best to do them locally on a branch, push to GitHub, ensure it builds and then deploy it as a test extension and test on our Octopus Deploy Test organisation. 
+
+If you're doing large changes, it's probably best to install TFS locally (see link below) and make your changes and deploy locally as the feedback cycle is shorter. 
+ 
+
+Unit Tests: 
+
+OctoTFS has approval tests to ensure we maintain the contract and reduce the risk of customers losing data. 
+ 
+
+Build: 
+
+OctoTFS is built using 
+
+
+Deploy to test:
+
+Deploy to prod:
+
+
+
+--- 
+
+# Old 
+
 
 ## Manual Building and Testing
 
