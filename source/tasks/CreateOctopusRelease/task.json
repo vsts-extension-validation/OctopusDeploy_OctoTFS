@@ -101,7 +101,7 @@
         },
         {
             "name": "SpaceNameSelected",
-            "type": "string",
+            "type": "pickList",
             "label": "Space Name",
             "defaultValue": "",
             "required": true,
