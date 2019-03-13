@@ -100,11 +100,14 @@
             "groupName": "releasedetails"
         },
         {
-            "name": "SpaceNameSelected",
+            "name": "SpaceId",
             "type": "pickList",
             "label": "Space Name",
             "defaultValue": "",
             "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
             "groupName": "releasedetailsspaces"
         },
@@ -274,21 +277,27 @@
         },
 
         {
-            "target": "SpaceNameSelected",
+            "target": "SpaceId",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
-            "target": "ProjectNameForSpace",
+            "target": "ProjectNameInSpace",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllProjectsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployToEnvironmentInSpace",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
@@ -296,6 +305,7 @@
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusProjectChannelsInSpace",
             "parameters": {
+                "SpaceId": "$(SpaceId)",
                 "ProjectName": "$(ProjectName)"
             },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
@@ -304,6 +314,9 @@
             "target": "DeployForTenantsInSpace",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllTenantsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
