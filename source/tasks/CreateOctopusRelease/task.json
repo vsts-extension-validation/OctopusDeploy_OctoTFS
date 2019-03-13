@@ -21,12 +21,14 @@
         {
             "name": "releasedetails",
             "displayName": "Release Details",
-            "isExpanded": true
+            "isExpanded": true,
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "releasedetailsspaces",
             "displayName": "Release Details (Spaces)",
-            "isExpanded": true
+            "isExpanded": true,
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "releasenotes",
@@ -181,7 +183,8 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release to this environment after creating it.",
-            "groupName": "deployment"
+            "groupName": "deployment",
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "DeployForTenants",
@@ -193,7 +196,8 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
-            "groupName": "tenant"
+            "groupName": "tenant",
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "DeployToEnvironmentInSpace",
@@ -205,7 +209,8 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release to this environment after creating it.",
-            "groupName": "deployment"
+            "groupName": "deployment",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "DeployForTenantsInSpace",
@@ -217,7 +222,8 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
-            "groupName": "tenant"
+            "groupName": "tenant",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "DeployForTenantTags",
