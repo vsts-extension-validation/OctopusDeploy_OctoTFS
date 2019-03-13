@@ -4,7 +4,7 @@
 	'ProjectName': pickList
 	'ReleaseNumber': string
 	'Channel': pickList
-	'SpaceNameSelected': pickList
+	'SpaceId': pickList
 	'ProjectNameInSpace': pickList
 	'ReleaseNumberInSpace': string
 	'ChannelInSpace': pickList
