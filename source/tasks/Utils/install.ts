@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as tasks from 'azure-pipelines-task-lib/task';
-import * as tools from 'vsts-task-tool-lib/tool';
+import * as tools from 'azure-pipelines-tool-lib/tool';
 import * as TypedRestClient from "typed-rest-client/RestClient";
 import { ToolName } from "../Utils";
 import { head, filter } from "ramda";
