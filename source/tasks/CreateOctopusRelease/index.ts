@@ -15,19 +15,47 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environmentVariables);
         const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
+        const hasSpaces = tasks.getInput("HasSpaces");
         const space = tasks.getInput("Space");
-        const project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true))
-        .then(x => x.value);
-        const releaseNumber = tasks.getInput("ReleaseNumber");
-        const channel = tasks.getInput("Channel");
-        const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
-        const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
-        const customReleaseNotes = tasks.getInput("CustomReleaseNotes");
-        const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
-        const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
-        const deploymentProgress = tasks.getBoolInput("DeploymentProgress")
-        const additionalArguments = tasks.getInput("AdditionalArguments");
+
+        let project;
+        let releaseNumber;
+        let channel;
+        let changesetCommentReleaseNotes;
+        let workItemReleaseNotes;
+        let customReleaseNotes = "";
+        let deployToEnvironments;
+        let deployForTenants;
+        let deployForTenantTags;
+        let deploymentProgress;
+        let additionalArguments;
+
+        if (hasSpaces) {
+            project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
+            releaseNumber = tasks.getInput("ReleaseNumber");
+            channel = tasks.getInput("ChannelInSpace");
+            changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
+            workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
+            customReleaseNotes = tasks.getInput("CustomReleaseNotes");
+            deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironmentInSpace");
+            deployForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+            deploymentProgress = tasks.getBoolInput("DeploymentProgress");
+            additionalArguments = tasks.getInput("AdditionalArguments");
+        }
+        else {
+            project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true)).then(x => x.value);
+            releaseNumber = tasks.getInput("ReleaseNumber");
+            channel = tasks.getInput("Channel");
+            changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
+            workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
+            customReleaseNotes = tasks.getInput("CustomReleaseNotes");
+            deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
+            deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+            deploymentProgress = tasks.getBoolInput("DeploymentProgress");
+            additionalArguments = tasks.getInput("AdditionalArguments")
+        }
 
         const octo = await utils.getOrInstallOctoCommandRunner("create-release");
 
@@ -36,12 +64,11 @@ async function run() {
             linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
         }
 
-        const realseNotesFile = utils.createReleaseNotesFile(() => {
+        const releaseNotesFile = utils.createReleaseNotesFile(() => {
             return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
         },  environmentVariables.defaultWorkingDirectory);
 
-        const configure = [
-            argumentIfSet(argumentEnquote, "space", space),
+        const configure = [         argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
             argumentIfSet(argumentEnquote, "channel", channel),
@@ -51,7 +78,7 @@ async function run() {
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
-            argumentEnquote("releaseNotesFile", realseNotesFile),
+            argumentEnquote("releaseNotesFile", releaseNotesFile),
             includeArguments(additionalArguments)
         ];
 
