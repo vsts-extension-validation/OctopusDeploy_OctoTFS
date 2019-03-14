@@ -13,10 +13,12 @@
 	'CustomReleaseNotes': string
 	'DeployToEnvironment': pickList
 	'DeployForTenants': pickList
-	'DeployToEnvironmentInSpace': pickList
-	'DeployForTenantsInSpace': pickList
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
+	'DeployToEnvironmentInSpace': pickList
+	'DeployForTenantsInSpace': pickList
+	'DeployForTenantTagsInSpace': string
+	'DeploymentProgressInSpace': boolean
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
