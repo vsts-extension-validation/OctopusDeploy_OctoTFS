@@ -25,7 +25,7 @@
             "visibleRule": "HasSpaces = true"
         },
         {
-            "name": "releasedetailsspaces",
+            "name": "releasedetailsinspace",
             "displayName": "Release Details (Spaces)",
             "isExpanded": true,
             "visibleRule": "HasSpaces = false"
@@ -38,12 +38,26 @@
         {
             "name": "deployment",
             "displayName": "Deployment",
-            "isExpanded": false
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = false"
+        },
+        {
+            "name": "deploymentinspace",
+            "displayName": "Deployment",
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "tenant",
             "displayName": "Tenants",
-            "isExpanded": false
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = false"
+        },
+        {
+            "name": "tenantinspace",
+            "displayName": "Tenants",
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "additional",
@@ -183,8 +197,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release to this environment after creating it.",
-            "groupName": "deployment",
-            "visibleRule": "HasSpaces = false"
+            "groupName": "deployment"
         },
         {
             "name": "DeployForTenants",
@@ -196,8 +209,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
-            "groupName": "tenant",
-            "visibleRule": "HasSpaces = false"
+            "groupName": "tenant"
         },
         {
             "name": "DeployToEnvironmentInSpace",
@@ -209,8 +221,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release to this environment after creating it.",
-            "groupName": "deployment",
-            "visibleRule": "HasSpaces = true"
+            "groupName": "deploymentinspace"
         },
         {
             "name": "DeployForTenantsInSpace",
@@ -222,8 +233,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
-            "groupName": "tenant",
-            "visibleRule": "HasSpaces = true"
+            "groupName": "tenantinspace"
         },
         {
             "name": "DeployForTenantTags",
