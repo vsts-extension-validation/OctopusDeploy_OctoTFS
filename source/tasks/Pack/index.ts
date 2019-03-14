@@ -1,8 +1,8 @@
-import * as tasks from 'vsts-task-lib/task';
+import * as tasks from 'azure-pipelines-task-lib/task';
 import * as fs from "fs";
 import * as utils from "../Utils";
 import { argument, argumentIfSet, flag, multiArgument, argumentEnquote } from '../Utils';
-import {ToolRunner} from "vsts-task-lib/toolrunner";
+import {ToolRunner} from "azure-pipelines-task-lib/toolrunner";
 import {includeArguments} from "../Utils";
 
 export interface PackageRequiredInputs {

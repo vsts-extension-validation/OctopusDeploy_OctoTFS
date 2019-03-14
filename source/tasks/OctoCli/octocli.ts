@@ -1,4 +1,4 @@
-import * as tasks from 'vsts-task-lib/task';
+import * as tasks from 'azure-pipelines-task-lib/task';
 import * as utils from "../Utils";
 import {
     connectionArguments,

@@ -1,5 +1,5 @@
-import * as tasks from 'vsts-task-lib/task';
-import { ToolRunner } from 'vsts-task-lib/toolrunner';
+import * as tasks from 'azure-pipelines-task-lib/task';
+import { ToolRunner } from 'azure-pipelines-task-lib/toolrunner';
 import { OctoServerConnectionDetails } from "./connection";
 import { curry } from "ramda";
 import { isNullOrWhitespace } from "./inputs";

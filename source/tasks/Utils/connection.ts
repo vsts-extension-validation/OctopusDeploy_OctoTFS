@@ -1,4 +1,4 @@
-import * as tasks from 'vsts-task-lib/task';
+import * as tasks from 'azure-pipelines-task-lib/task';
 import {RestClient} from "typed-rest-client/RestClient";
 import { getDefaultOctoConnectionInputValue } from "./inputs";
 import { either } from "fp-ts";

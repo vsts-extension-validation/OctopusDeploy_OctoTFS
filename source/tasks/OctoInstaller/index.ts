@@ -1,5 +1,5 @@
 import { getOrDownloadOcto, resolvePublishedOctoVersion, addToolToPath, getEmbeddedOcto } from "../Utils/install";
-import * as tasks from 'vsts-task-lib/task';
+import * as tasks from 'azure-pipelines-task-lib/task';
 
 async function run(){
     let version = tasks.getInput("version");
