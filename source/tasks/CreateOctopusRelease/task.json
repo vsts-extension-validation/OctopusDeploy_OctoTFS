@@ -125,7 +125,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
-            "groupName": "releasedetailsspaces"
+            "groupName": "releasedetailsinspace"
         },
         {
             "name": "ProjectNameInSpace",
@@ -137,7 +137,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Octopus Deploy Project Name",
-            "groupName": "releasedetailsspaces"
+            "groupName": "releasedetailsinspace"
         },
         {
             "name": "ReleaseNumberInSpace",
@@ -146,7 +146,7 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus.",
-            "groupName": "releasedetailsspaces"
+            "groupName": "releasedetailsinspace"
         },
         {
             "name": "ChannelInSpace",
@@ -158,7 +158,7 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
-            "groupName": "releasedetailsspaces"
+            "groupName": "releasedetailsinspace"
         },
         {
             "name": "ChangesetCommentReleaseNotes",
@@ -212,6 +212,24 @@
             "groupName": "tenant"
         },
         {
+            "name": "DeployForTenantTags",
+            "type": "string",
+            "label": "Tenant tag(s)",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
+            "groupName": "tenant"
+        },
+        {
+            "name": "DeploymentProgress",
+            "type": "boolean",
+            "label": "Show Deployment Progress",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Output from the deployment will appear in the log. If checked, the task will only succeed if the deployment is successful.",
+            "groupName": "deployment"
+        },
+        {
             "name": "DeployToEnvironmentInSpace",
             "type": "pickList",
             "label": "To Environment",
@@ -236,22 +254,22 @@
             "groupName": "tenantinspace"
         },
         {
-            "name": "DeployForTenantTags",
+            "name": "DeployForTenantTagsInSpace",
             "type": "string",
             "label": "Tenant tag(s)",
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
-            "groupName": "tenant"
+            "groupName": "tenantinspace"
         },
         {
-            "name": "DeploymentProgress",
+            "name": "DeploymentProgressInSpace",
             "type": "boolean",
             "label": "Show Deployment Progress",
             "defaultValue": "false",
             "required": false,
             "helpMarkDown": "Output from the deployment will appear in the log. If checked, the task will only succeed if the deployment is successful.",
-            "groupName": "deployment"
+            "groupName": "deploymentinspace"
         },
         {
             "name": "AdditionalArguments",
