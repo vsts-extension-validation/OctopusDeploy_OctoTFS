@@ -78,7 +78,7 @@
     ],
     "dataSourceBindings": [
         {
-            "target": "SpaceId",
+            "target": "SpaceName",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
