@@ -48,7 +48,6 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
-            "groupName" : "spaces",
             "visibleRule": "HasSpaces = true"
         },
         {
