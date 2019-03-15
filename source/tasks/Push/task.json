@@ -22,12 +22,6 @@
             "name": "advanced",
             "displayName": "Advanced Options",
             "isExpanded": false
-        },
-        {
-            "name": "spaces",
-            "displayName": "",
-            "isExpanded": true,
-            "visibleRule": "HasSpaces = true"
         }
     ],
     "inputs": [
@@ -48,13 +42,14 @@
             "helpMarkDown": "Octopus Server 2019.1+ supports spaces"
         },
         {
-            "name": "SpaceId",
+            "name": "SpaceName",
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
-            "groupName" : "spaces"
+            "groupName" : "spaces",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "Package",
@@ -87,7 +82,7 @@
             "target": "SpaceId",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
-            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Push Packages to Octopus",
