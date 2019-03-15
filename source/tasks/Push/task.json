@@ -22,6 +22,12 @@
             "name": "advanced",
             "displayName": "Advanced Options",
             "isExpanded": false
+        },
+        {
+            "name": "spaces",
+            "displayName": "",
+            "isExpanded": true,
+            "visibleRule": "HasSpaces = true"
         }
     ],
     "inputs": [
@@ -34,12 +40,21 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "Space",
-            "type": "string",
+            "name": "HasSpaces",
+            "type": "boolean",
+            "label": "Octopus Server has Spaces?",
+            "defaultValue": "false",
+            "required": true,
+            "helpMarkDown": "Octopus Server 2019.1+ supports spaces"
+        },
+        {
+            "name": "SpaceId",
+            "type": "pickList",
             "label": "Space",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "groupName" : "spaces"
         },
         {
             "name": "Package",
@@ -65,6 +80,14 @@
             "required": false,
             "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Pushing+packages) for available parameters.",
             "groupName": "advanced"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "SpaceId",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllSpaces",
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Push Packages to Octopus",
