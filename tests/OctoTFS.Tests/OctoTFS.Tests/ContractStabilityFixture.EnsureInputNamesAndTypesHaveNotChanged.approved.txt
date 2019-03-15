@@ -65,7 +65,7 @@ OctoTFS.Tests.resources.tasks.Promote.task.json
 OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'HasSpaces': boolean
-	'SpaceName': string
+	'SpaceName': pickList
 	'Package': multiLine
 	'Replace': boolean
 	'AdditionalArguments': string
