@@ -14,8 +14,8 @@ async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        // TODO: Do I need to check the previous usage of Space to see if it's set and SpaceId isn't?
-        const spaceId = tasks.getInput("SpaceId");
+        // TODO: Do I need to check the previous usage of Space to set here if SpaceName isn't set?!?
+        const spaceName = tasks.getInput("SpaceName");
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
@@ -25,7 +25,7 @@ async function run() {
 
         const configure = [
             connectionArguments(connection),
-            argumentIfSet(argumentEnquote, "space", spaceId),
+            argumentIfSet(argumentEnquote, "space", spaceName),
             multiArgument(argumentEnquote, "package", matchedPackages),
             flag("replace-existing", replace),
             includeArguments(additionalArguments)
