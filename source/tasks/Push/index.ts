@@ -17,18 +17,11 @@ async function run() {
         // TODO: Do I need to check the previous usage of Space to set here if SpaceName isn't set?!?
         const spaceName = tasks.getInput("SpaceName");
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
-
-        console.log("Packages raw:");
-        console.log(packages);
-
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages);
-
-        console.log("Matched packages:");
-        console.log(matchedPackages);
 
         const configure = [
             connectionArguments(connection),
