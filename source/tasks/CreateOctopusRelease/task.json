@@ -22,13 +22,13 @@
             "name": "releasedetails",
             "displayName": "Release Details",
             "isExpanded": true,
-            "visibleRule": "HasSpaces = true"
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "releasedetailsinspace",
             "displayName": "Release Details (Spaces)",
             "isExpanded": true,
-            "visibleRule": "HasSpaces = false"
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "releasenotes",
