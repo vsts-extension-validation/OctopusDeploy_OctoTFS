@@ -18,8 +18,8 @@ async function run() {
         let project;
         let from;
         let to;
-        let deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
+        let deploymentForTenants;
+        let deployForTenantTags;
         const showProgress = tasks.getBoolInput("ShowProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
@@ -29,6 +29,7 @@ async function run() {
             from = tasks.getInput("FromEnvironmentInSpace", true);
             to = utils.getRequiredCsvInput("ToEnvironmentsInSpace");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTagsInSpace");
         }
         else {
             space = null;
@@ -36,6 +37,7 @@ async function run() {
             from = tasks.getInput("From", true);
             to = utils.getRequiredCsvInput("To");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
+            deployForTenantTags= utils.getOptionalCsvInput("DeployForTentantTags");
         }
 
         const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
