@@ -69,8 +69,8 @@ OctoTFS.Tests.resources.tasks.Promote.task.json
 	'ToEnvironmentsInSpace': pickList
 	'ShowProgress': boolean
 	'DeployForTenants': pickList
-	'DeployForTenantsInSpace': pickList
 	'DeployForTenantTags': string
+	'DeployForTenantsInSpace': pickList
 	'DeployForTenantTagsInSpace': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Push.task.json
