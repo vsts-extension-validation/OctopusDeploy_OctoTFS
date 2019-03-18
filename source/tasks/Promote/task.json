@@ -71,7 +71,8 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Octopus Deploy Project Name"
+            "helpMarkDown": "Octopus Deploy Project Name",
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "ProjectNameInSpace",
@@ -94,7 +95,8 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'"
+            "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'",
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "FromEnvironmentInSpace",
@@ -117,7 +119,8 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Comma separated list of environments to deploy to"
+            "helpMarkDown": "Comma separated list of environments to deploy to",
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "ToEnvironmentsInSpace",
