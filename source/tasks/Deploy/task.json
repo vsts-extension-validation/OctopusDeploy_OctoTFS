@@ -28,7 +28,7 @@
             "name": "tenantinspace",
             "displayName": "Tenants",
             "isExpanded": false,
-            "visibleRule": "HasSpaces = false"
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "advanced",
