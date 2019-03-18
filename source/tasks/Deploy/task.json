@@ -21,7 +21,14 @@
          {
             "name": "tenant",
             "displayName": "Tenants",
-            "isExpanded": false
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = false"
+        },
+        {
+            "name": "tenantinspace",
+            "displayName": "Tenants",
+            "isExpanded": false,
+            "visibleRule": "HasSpaces = false"
         },
         {
             "name": "advanced",
@@ -148,8 +155,16 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Deploy the release for this comma-delimited list of tenants after creating it. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
-            "groupName": "tenant",
-            "visibleRule": "HasSpaces = true"
+            "groupName": "tenantinspace"
+        },
+        {
+            "name": "DeployForTenantTagsInSpace",
+            "type": "string",
+            "label": "Tenant tag(s)",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
+            "groupName": "tenantinspace"
         },
         {
             "name": "AdditionalArguments",

@@ -71,6 +71,7 @@ OctoTFS.Tests.resources.tasks.Promote.task.json
 	'DeployForTenants': pickList
 	'DeployForTenantsInSpace': pickList
 	'DeployForTenantTags': string
+	'DeployForTenantTagsInSpace': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
