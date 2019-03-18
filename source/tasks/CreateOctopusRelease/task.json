@@ -19,18 +19,6 @@
     "minimumAgentVersion": "2.115.0",
     "groups": [
         {
-            "name": "releasedetails",
-            "displayName": "Release Details",
-            "isExpanded": true,
-            "visibleRule": "HasSpaces = false"
-        },
-        {
-            "name": "releasedetailsinspace",
-            "displayName": "Release Details (Spaces)",
-            "isExpanded": true,
-            "visibleRule": "HasSpaces = true"
-        },
-        {
             "name": "releasenotes",
             "displayName": "Release Notes",
             "isExpanded": true
@@ -83,6 +71,18 @@
             "helpMarkDown": "Octopus Server 2019.1+ supports spaces"
         },
         {
+          "name": "SpaceId",
+          "type": "pickList",
+          "label": "Space",
+          "defaultValue": "",
+          "required": true,
+          "properties": {
+            "EditableOptions": "True"
+          },
+          "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+          "visibleRule": "HasSpaces = true"
+        },
+        {
             "name": "ProjectName",
             "type": "pickList",
             "label": "Project Name",
@@ -92,7 +92,19 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Octopus Deploy Project Name",
-            "groupName": "releasedetails"
+            "visibleRule": "HasSpaces = false"
+        },
+        {
+          "name": "ProjectNameInSpace",
+          "type": "pickList",
+          "label": "Project Name",
+          "defaultValue": "",
+          "required": true,
+          "properties": {
+            "EditableOptions": "True"
+          },
+          "helpMarkDown": "Octopus Deploy Project Name",
+          "visibleRule": "HasSpaces = true"
         },
         {
             "name": "ReleaseNumber",
@@ -100,8 +112,7 @@
             "label": "Release Number",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus.",
-            "groupName": "releasedetails"
+            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus."
         },
         {
             "name": "Channel",
@@ -113,52 +124,19 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
-            "groupName": "releasedetails"
+            "visibleRule": "HasSpaces = false"
         },
         {
-            "name": "SpaceId",
-            "type": "pickList",
-            "label": "Space",
-            "defaultValue": "",
-            "required": true,
-            "properties": {
-                "EditableOptions": "True"
-            },
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
-            "groupName": "releasedetailsinspace"
-        },
-        {
-            "name": "ProjectNameInSpace",
-            "type": "pickList",
-            "label": "Project Name",
-            "defaultValue": "",
-            "required": true,
-            "properties": {
-                "EditableOptions": "True"
-            },
-            "helpMarkDown": "Octopus Deploy Project Name",
-            "groupName": "releasedetailsinspace"
-        },
-        {
-            "name": "ReleaseNumberInSpace",
-            "type": "string",
-            "label": "Release Number",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "The number to use for this release. You can leave this blank if the release number is calculated by Octopus.",
-            "groupName": "releasedetailsinspace"
-        },
-        {
-            "name": "ChannelInSpace",
-            "type": "pickList",
-            "label": "Channel",
-            "defaultValue": "",
-            "required": false,
-            "properties": {
-                "EditableOptions": "True"
-            },
-            "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
-            "groupName": "releasedetailsinspace"
+          "name": "ChannelInSpace",
+          "type": "pickList",
+          "label": "Channel",
+          "defaultValue": "",
+          "required": false,
+          "properties": {
+            "EditableOptions": "True"
+          },
+          "helpMarkDown": "The [channel](http://docs.octopusdeploy.com/display/OD/Channels) to use for the release.",
+          "visibleRule": "HasSpaces = true"
         },
         {
             "name": "ChangesetCommentReleaseNotes",
@@ -200,6 +178,18 @@
             "groupName": "deployment"
         },
         {
+          "name": "DeployToEnvironmentInSpace",
+          "type": "pickList",
+          "label": "To Environment",
+          "defaultValue": "",
+          "required": false,
+          "properties": {
+            "EditableOptions": "True"
+          },
+          "helpMarkDown": "Deploy the release to this environment after creating it.",
+          "groupName": "deploymentinspace"
+        },
+        {
             "name": "DeployForTenants",
             "type": "pickList",
             "label": "Tenant(s)",
@@ -228,18 +218,6 @@
             "required": false,
             "helpMarkDown": "Output from the deployment will appear in the log. If checked, the task will only succeed if the deployment is successful.",
             "groupName": "deployment"
-        },
-        {
-            "name": "DeployToEnvironmentInSpace",
-            "type": "pickList",
-            "label": "To Environment",
-            "defaultValue": "",
-            "required": false,
-            "properties": {
-                "EditableOptions": "True"
-            },
-            "helpMarkDown": "Deploy the release to this environment after creating it.",
-            "groupName": "deploymentinspace"
         },
         {
             "name": "DeployForTenantsInSpace",

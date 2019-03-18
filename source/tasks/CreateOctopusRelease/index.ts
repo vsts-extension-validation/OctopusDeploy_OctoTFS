@@ -19,7 +19,7 @@ async function run() {
         const space = tasks.getInput("Space");
 
         let project;
-        let releaseNumber;
+        let releaseNumber = tasks.getInput("ReleaseNumberInSpace");
         let channel;
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
         const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
@@ -32,7 +32,6 @@ async function run() {
 
         if (hasSpaces) {
             project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
-            releaseNumber = tasks.getInput("ReleaseNumberInSpace");
             channel = tasks.getInput("ChannelInSpace");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironmentInSpace");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
@@ -41,7 +40,6 @@ async function run() {
         }
         else {
             project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true)).then(x => x.value);
-            releaseNumber = tasks.getInput("ReleaseNumber");
             channel = tasks.getInput("Channel");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
