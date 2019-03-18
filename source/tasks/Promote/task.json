@@ -67,13 +67,16 @@
             "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
-            "target": "ProjectNameInSpace",
-            "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllProjectsInSpace",
-            "parameters": {
-                "SpaceId": "$(SpaceId)"
+            "name": "ProjectNameInSpace",
+            "type": "pickList",
+            "label": "Project Name",
+            "defaultValue": "",
+            "required": true,
+            "properties": {
+                "EditableOptions": "True"
             },
-            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "helpMarkDown": "Octopus Deploy Project Name",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "From",
