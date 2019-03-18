@@ -39,12 +39,21 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "Space",
-            "type": "string",
+            "name": "HasSpaces",
+            "type": "boolean",
+            "label": "Octopus Server has Spaces?",
+            "defaultValue": "false",
+            "required": true,
+            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
+        },
+        {
+            "name": "SpaceId",
+            "type": "pickList",
             "label": "Space",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "Project",
@@ -58,6 +67,15 @@
             "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
+            "target": "ProjectNameInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjectsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
             "name": "From",
             "type": "pickList",
             "label": "Promote From",
@@ -69,6 +87,18 @@
             "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'"
         },
         {
+            "name": "FromEnvironmentInSpace",
+            "type": "pickList",
+            "label": "Promote From",
+            "defaultValue": "",
+            "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'",
+            "visibleRule": "HasSpaces = true"
+        },
+        {
             "name": "To",
             "type": "pickList",
             "label": "Promote To",
@@ -78,6 +108,18 @@
                 "EditableOptions": "True"
             },
             "helpMarkDown": "Comma separated list of environments to deploy to"
+        },
+        {
+            "name": "ToEnvironmentsInSpace",
+            "type": "pickList",
+            "label": "Promote To",
+            "defaultValue": "",
+            "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Comma separated list of environments to deploy to",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "ShowProgress",
@@ -98,6 +140,18 @@
             },
             "helpMarkDown": "Promote the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
             "groupName": "tenant"
+        },
+        {
+            "name": "DeployForTenantsInSpace",
+            "type": "pickList",
+            "label": "Tenant(s)",
+            "defaultValue": "",
+            "required": false,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Promote the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "DeployForTenantTags",
@@ -141,6 +195,48 @@
             "target": "DeployForTenants",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllTenants",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "SpaceId",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllSpaces",
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "ProjectNameInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllProjectsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "FromEnvironmentInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "ToEnvironmentInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "DeployForTenantsInSpace",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllTenantsInSpace",
+            "parameters": {
+                "SpaceId": "$(SpaceId)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],

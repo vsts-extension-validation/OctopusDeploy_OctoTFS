@@ -22,13 +22,17 @@
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'Space': string
+	'HasSpaces': boolean
+	'SpaceId': pickList
 	'Project': pickList
 	'ReleaseNumber': string
 	'Environments': pickList
-	'ShowProgress': boolean
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
+	'ShowProgress': boolean
+	'ProjectInSpace': pickList
+	'EnvironmentsInSpace': pickList
+	'DeployForTenantsInSpace': pickList
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.OctoCli.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
@@ -54,13 +58,18 @@ OctoTFS.Tests.resources.tasks.Pack.task.json
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'Space': string
+	'HasSpaces': boolean
+	'SpaceId': string
 	'Project': pickList
 	'From': pickList
 	'To': pickList
 	'ShowProgress': boolean
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
+	'ProjectInSpace': pickList
+	'FromEnvironmentsInSpace': pickList
+	'ToEnvironmentsInSpace': pickList
+	'DeployForTenantsInSpace': pickList
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint

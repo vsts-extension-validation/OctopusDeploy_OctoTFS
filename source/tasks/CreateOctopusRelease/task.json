@@ -118,7 +118,7 @@
         {
             "name": "SpaceId",
             "type": "pickList",
-            "label": "Space Name",
+            "label": "Space",
             "defaultValue": "",
             "required": true,
             "properties": {
@@ -309,7 +309,6 @@
             "dataSourceName": "OctopusAllTenants",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
-
         {
             "target": "SpaceId",
             "endpointId": "$(OctoConnectedServiceName)",

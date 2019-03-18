@@ -12,16 +12,29 @@ import {
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const hasSpaces = tasks.getBoolInput("HasSpaces");
 
-        const space = tasks.getInput("Space");
+        let space;
+        let project;
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
-        const environments = utils.getRequiredCsvInput("Environments");
-        const showProgress = tasks.getBoolInput("ShowProgress");
-        const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
+        let environments;
+        let deploymentForTenants;
         const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+        const showProgress = tasks.getBoolInput("ShowProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
-        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
-            .then(x => x.value);
+
+        if (hasSpaces) {
+            space = await utils.resolveSpaceName(connection, tasks.getInput("SpaceId", true)).then(x => x.value);
+            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectInSpace", true)).then(x => x.value);
+            environments = utils.getRequiredCsvInput("EnvironmentsInSpace");
+            deploymentForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
+        }
+        else {
+            space = null;
+            project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
+            environments = utils.getRequiredCsvInput("Environments");
+            deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
+        }
 
         const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 

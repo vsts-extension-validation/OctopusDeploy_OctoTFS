@@ -55,3 +55,31 @@ export function resolveProjectName(connection: OctoServerConnectionDetails, proj
 
     return Promise.resolve(either.right<string, string>(projectNameOrId));
 }
+
+export function fetchSpaceName(details: OctoServerConnectionDetails, spaceId: string){
+    console.log("Ignore SSL: " + details.ignoreSslErrors);
+    const client = new RestClient(
+        "OctoTFS",
+        details.url,
+        [new OctoApiKeyHandler(details.apiKey)],
+        {ignoreSslError: details.ignoreSslErrors});
+    return client.get<{Name: string}>(`api/spaces/${spaceId}`)
+        .then(x => {
+                if(x.result){
+                    return either.right<string, string>(x.result.Name);
+                }
+
+                return either.left<string,string>(`Could not resolve space name given id "${spaceId}". Server returned status code: ${x.statusCode}`);
+            }
+        ).catch(error => either.left<string,string>(error))
+}
+
+export const isSpaceId = (spaceNameOrId: string) => /Spaces-\d*/.test(spaceNameOrId);
+
+export function resolveSpaceName(connection: OctoServerConnectionDetails, spaceNameOrId: string){
+    if(isSpaceId(spaceNameOrId)) {
+        return fetchSpaceName(connection, spaceNameOrId);
+    }
+
+    return Promise.resolve(either.right<string, string>(spaceNameOrId));
+}
