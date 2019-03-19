@@ -15,10 +15,7 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environmentVariables);
         const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        const hasSpaces = tasks.getInput("HasSpaces");
-
-        console.log("Has spaces value.");
-        console.log(hasSpaces);
+        const hasSpaces = tasks.getBoolInput("HasSpaces");
 
         const space = tasks.getInput("Space");
 
@@ -34,7 +31,7 @@ async function run() {
         let deploymentProgress;
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        if (hasSpaces == "true") {
+        if (hasSpaces) {
             project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             channel = tasks.getInput("ChannelInSpace");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironmentInSpace");
