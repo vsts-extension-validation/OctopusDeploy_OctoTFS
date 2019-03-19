@@ -16,6 +16,10 @@ async function run() {
         const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const hasSpaces = tasks.getInput("HasSpaces");
+
+        console.log("Has spaces value.");
+        console.log(hasSpaces);
+
         const space = tasks.getInput("Space");
 
         let project;
