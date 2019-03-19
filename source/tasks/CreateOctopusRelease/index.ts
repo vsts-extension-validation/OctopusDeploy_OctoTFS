@@ -34,7 +34,7 @@ async function run() {
         let deploymentProgress;
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        if (hasSpaces) {
+        if (hasSpaces == "true") {
             project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             channel = tasks.getInput("ChannelInSpace");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironmentInSpace");
