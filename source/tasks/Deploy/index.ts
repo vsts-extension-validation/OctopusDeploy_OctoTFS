@@ -25,7 +25,7 @@ async function run() {
 
         if (hasSpaces) {
             space = await utils.resolveSpaceName(connection, tasks.getInput("SpaceId", true)).then(x => x.value);
-            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectInSpace", true)).then(x => x.value);
+            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             environments = utils.getRequiredCsvInput("EnvironmentsInSpace");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
         }
