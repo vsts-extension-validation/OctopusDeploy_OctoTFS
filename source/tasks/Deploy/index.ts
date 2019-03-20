@@ -26,7 +26,7 @@ async function run() {
         if (hasSpaces) {
             const spaceId = tasks.getInput("SpaceId", true);
             space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
-            project = await utils.resolveProjectNameInSpace(connection, tasks.getInput("ProjectNameInSpace", true), spaceId).then(x => x.value);
+            project = await utils.resolveProjectNameInSpace(connection, spaceId, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             environments = utils.getRequiredCsvInput("EnvironmentsInSpace");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
         }
