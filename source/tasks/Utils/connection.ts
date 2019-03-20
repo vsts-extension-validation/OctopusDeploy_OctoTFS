@@ -46,7 +46,7 @@ export function fetchProjectName(details: OctoServerConnectionDetails, projectId
     ).catch(error => either.left<string,string>(error))
 }
 
-export const isProjectId = (projectNameOrId: string) => /Projects-\d*/.test(projectNameOrId);
+export const isProjectId = (projectNameOrId: string) => /\w*Projects-\d*/.test(projectNameOrId);
 
 export function resolveProjectName(connection: OctoServerConnectionDetails, projectNameOrId: string){
     if(isProjectId(projectNameOrId)) {
