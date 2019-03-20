@@ -85,7 +85,7 @@
         {
             "name": "ProjectName",
             "type": "pickList",
-            "label": "Project Name",
+            "label": "Project",
             "defaultValue": "",
             "required": true,
             "properties": {
@@ -97,7 +97,7 @@
         {
           "name": "ProjectNameInSpace",
           "type": "pickList",
-          "label": "Project Name",
+          "label": "Project",
           "defaultValue": "",
           "required": true,
           "properties": {
