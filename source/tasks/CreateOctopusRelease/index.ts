@@ -20,7 +20,7 @@ async function run() {
         const space = tasks.getInput("Space");
 
         let project;
-        let releaseNumber = tasks.getInput("ReleaseNumber");
+        const releaseNumber = tasks.getInput("ReleaseNumber");
         let channel;
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
         const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
