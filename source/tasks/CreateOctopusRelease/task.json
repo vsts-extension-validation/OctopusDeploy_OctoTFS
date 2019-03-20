@@ -65,10 +65,10 @@
         {
             "name": "HasSpaces",
             "type": "boolean",
-            "label": "Octopus Server has Spaces?",
+            "label": "Create Release in Space (Octopus Server 2019.1+)",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "Octopus Server 2019.1+ supports spaces"
+            "helpMarkDown": "Octopus Server 2019.1+ supports Spaces"
         },
         {
           "name": "SpaceId",

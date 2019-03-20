@@ -48,7 +48,7 @@
         {
             "name": "HasSpaces",
             "type": "boolean",
-            "label": "Octopus Server has Spaces?",
+            "label": "Promote Release in a Space (Octopus Server 2019.1+)",
             "defaultValue": "false",
             "required": true,
             "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
