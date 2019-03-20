@@ -28,14 +28,14 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
     }
 }
 
-export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string){
+export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string, projectUrlFragment: string){
     console.log("Ignore SSL: " + details.ignoreSslErrors);
     const client = new RestClient(
         "OctoTFS",
         details.url,
         [new OctoApiKeyHandler(details.apiKey)],
         {ignoreSslError: details.ignoreSslErrors});
-    return client.get<{Name: string}>(`api/projects/${projectId}`)
+    return client.get<{Name: string}>(projectUrlFragment)
         .then(x => {
             if(x.result){
                 return either.right<string, string>(x.result.Name);
@@ -50,7 +50,17 @@ export const isProjectId = (projectNameOrId: string) => /Projects-\d*/.test(proj
 
 export function resolveProjectName(connection: OctoServerConnectionDetails, projectNameOrId: string){
     if(isProjectId(projectNameOrId)) {
-        return fetchProjectName(connection, projectNameOrId);
+        const projectUrlFragment = `api/projects/${projectNameOrId}`;
+        return fetchProjectName(connection, projectNameOrId, projectUrlFragment);
+    }
+
+    return Promise.resolve(either.right<string, string>(projectNameOrId));
+}
+
+export function resolveProjectNameInSpace(connection: OctoServerConnectionDetails, spaceId: string, projectNameOrId: string){
+    if(isProjectId(projectNameOrId)) {
+        const projectUrlFragment = `api/${spaceId}/projects/${projectNameOrId}`;
+        return fetchProjectName(connection, projectNameOrId, projectUrlFragment);
     }
 
     return Promise.resolve(either.right<string, string>(projectNameOrId));

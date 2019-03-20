@@ -13,12 +13,11 @@ async function run() {
     try {
         const environmentVariables = utils.getVstsEnvironmentVariables();
         const vstsConnection = utils.createVstsConnection(environmentVariables);
-        const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const hasSpaces = tasks.getBoolInput("HasSpaces");
 
-        const space = tasks.getInput("Space");
-
+        let space;
         let project;
         const releaseNumber = tasks.getInput("ReleaseNumber");
         let channel;
@@ -32,7 +31,9 @@ async function run() {
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         if (hasSpaces) {
-            project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
+            const spaceId = tasks.getInput("SpaceId", true);
+            space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
+            project = await utils.resolveProjectNameInSpace(connection, tasks.getInput("ProjectNameInSpace", true), spaceId).then(x => x.value);
             channel = tasks.getInput("ChannelInSpace");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironmentInSpace");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
@@ -40,7 +41,8 @@ async function run() {
             deploymentProgress = tasks.getBoolInput("DeploymentProgressInSpace");
         }
         else {
-            project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true)).then(x => x.value);
+            space = null;
+            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
             channel = tasks.getInput("Channel");
             deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
@@ -64,7 +66,7 @@ async function run() {
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
             argumentIfSet(argumentEnquote, "channel", channel),
-            connectionArguments(octoConnection),
+            connectionArguments(connection),
             flag("enableServiceMessages", true),
             multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
