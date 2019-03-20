@@ -19,7 +19,7 @@ async function run() {
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
         let environments;
         let deploymentForTenants;
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+        let deployForTenantTags;
         const showProgress = tasks.getBoolInput("ShowProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
@@ -29,12 +29,14 @@ async function run() {
             project = await utils.resolveProjectNameInSpace(connection, spaceId, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             environments = utils.getRequiredCsvInput("EnvironmentsInSpace");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTagsInSpace");
         }
         else {
             space = null;
             project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
             environments = utils.getRequiredCsvInput("Environments");
             deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
+            deployForTenantTags =  utils.getOptionalCsvInput("DeployForTenantTags");
         }
 
         const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
