@@ -79,7 +79,7 @@
           "properties": {
             "EditableOptions": "True"
           },
-          "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+          "helpMarkDown": "The Space name within Octopus.",
           "visibleRule": "HasSpaces = true"
         },
         {
