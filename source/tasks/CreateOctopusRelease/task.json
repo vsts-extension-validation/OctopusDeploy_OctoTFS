@@ -317,7 +317,7 @@
             "dataSourceName": "OctopusProjectChannelsInSpace",
             "parameters": {
                 "SpaceId": "$(SpaceId)",
-                "ProjectName": "$(ProjectName)"
+                "ProjectName": "$(ProjectNameInSpace)"
             },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
