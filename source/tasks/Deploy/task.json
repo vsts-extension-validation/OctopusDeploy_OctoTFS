@@ -48,10 +48,10 @@
         {
             "name": "HasSpaces",
             "type": "boolean",
-            "label": "Deploy Release in a Space (Octopus Server 2019.1+)",
+            "label": "Deploy Release in a Space (Octopus Deploy 2019.1+)",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "Octopus Server 2019.1+ supports Spaces"
+            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
         },
         {
             "name": "SpaceId",

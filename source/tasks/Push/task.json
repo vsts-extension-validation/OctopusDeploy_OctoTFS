@@ -36,10 +36,10 @@
         {
             "name": "HasSpaces",
             "type": "boolean",
-            "label": "Push Package to Space (Octopus Server 2019.1+)",
+            "label": "Push Package to Space (Octopus Deploy 2019.1+)",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "Octopus Server 2019.1+ supports Spaces"
+            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
         },
         {
             "name": "SpaceName",
