@@ -16,7 +16,7 @@ $buildDirectoryPath = "$basePath/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
 function CleanNodeModules() {
-    $command = "node-prune.exe";
+    $command = "node-prune";
 
     if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
     {
