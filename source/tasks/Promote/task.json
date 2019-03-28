@@ -46,6 +46,15 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
+            "name": "Space",
+            "type": "string",
+            "label": "Space",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "visibleRule": "false"
+        },
+        {
             "name": "HasSpaces",
             "type": "boolean",
             "label": "Promote Release in a Space (Octopus Deploy 2019.1+)",

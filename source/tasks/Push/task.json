@@ -42,6 +42,15 @@
             "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
         },
         {
+            "name": "Space",
+            "type": "string",
+            "label": "Space",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "visibleRule": "false"
+        },
+        {
             "name": "SpaceName",
             "type": "pickList",
             "label": "Space",
