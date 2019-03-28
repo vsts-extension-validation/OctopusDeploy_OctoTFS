@@ -16,6 +16,7 @@ async function run() {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const hasSpaces = tasks.getBoolInput("HasSpaces");
+        const legacySpaceString = tasks.getInput("Space");
 
         let space;
         let project;
@@ -30,8 +31,22 @@ async function run() {
         let deploymentProgress;
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        if (hasSpaces) {
-            const spaceId = tasks.getInput("SpaceId", true);
+        let spaceId = tasks.getInput("SpaceId", true);
+        const hasLegacySpace = !legacySpaceString && legacySpaceString.length > 0;
+        const hasModernSpace = hasSpaces && (!spaceId && spaceId.length > 0);
+
+        if (legacySpaceString && !hasModernSpace) {
+            // Use legacy value - Override space and use non-space related project, channel etc
+            space = legacySpaceString;
+            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
+            channel = tasks.getInput("Channel");
+            deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
+            deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+            deploymentProgress = tasks.getBoolInput("DeploymentProgress");
+        }
+        else if ((hasLegacySpace && hasModernSpace) || (!legacySpaceString && hasModernSpace)) {
+            // Ignore legacy value and new modern values
             space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
             project = await utils.resolveProjectNameInSpace(connection, spaceId, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
             channel = tasks.getInput("ChannelInSpace");
@@ -41,6 +56,7 @@ async function run() {
             deploymentProgress = tasks.getBoolInput("DeploymentProgressInSpace");
         }
         else {
+            // No Space or Default Space
             space = null;
             project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
             channel = tasks.getInput("Channel");

@@ -340,7 +340,7 @@
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Create Octopus Release: $(ProjectName)",
+    "instanceNameFormat": "Create Octopus Release: $(ProjectName)$(ProjectInSpace)",
     "execution": {
         "Node": {
             "target": "index.js"
