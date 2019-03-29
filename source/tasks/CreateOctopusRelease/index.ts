@@ -16,7 +16,6 @@ async function run() {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const hasSpaces = tasks.getBoolInput("HasSpaces");
-        const legacySpaceString = tasks.getInput("Space");
 
         let space;
         let project;
@@ -31,6 +30,7 @@ async function run() {
         let deploymentProgress;
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
+        const legacySpaceString = tasks.getInput("Space");
         let spaceId = tasks.getInput("SpaceId", true);
         const hasLegacySpace = !legacySpaceString && legacySpaceString.length > 0;
         const hasModernSpace = hasSpaces && (!spaceId && spaceId.length > 0);

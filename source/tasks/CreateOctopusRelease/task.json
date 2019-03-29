@@ -69,7 +69,7 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
-            "visibleRule": "false"
+            "visibleRule": "OctoConnectedServiceName = asdf"
         },
         {
             "name": "HasSpaces",
@@ -83,7 +83,7 @@
           "name": "SpaceId",
           "type": "pickList",
           "label": "Space",
-          "defaultValue": "",
+          "defaultValue": "Space-1",
           "required": true,
           "properties": {
             "EditableOptions": "True"
