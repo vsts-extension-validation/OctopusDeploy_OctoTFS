@@ -34,14 +34,6 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "HasSpaces",
-            "type": "boolean",
-            "label": "Push Package to Space (Octopus Deploy 2019.1+)",
-            "defaultValue": "false",
-            "required": true,
-            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
-        },
-        {
             "name": "Space",
             "type": "string",
             "label": "Space",
@@ -49,6 +41,14 @@
             "required": false,
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
             "visibleRule": "false"
+        },
+        {
+            "name": "HasSpaces",
+            "type": "boolean",
+            "label": "Push Package to Space (Octopus Deploy 2019.1+)",
+            "defaultValue": "false",
+            "required": true,
+            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
         },
         {
             "name": "SpaceName",
