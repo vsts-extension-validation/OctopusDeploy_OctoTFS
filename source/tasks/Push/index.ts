@@ -25,8 +25,8 @@ async function run() {
         const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages);
 
-        const hasLegacySpace = !legacySpaceString && legacySpaceString.length > 0;
-        const hasModernSpace = hasSpaces && (!spaceName && spaceName.length > 0);
+        const hasLegacySpace = legacySpaceString && legacySpaceString.length > 0;
+        const hasModernSpace = hasSpaces && (spaceName && spaceName.length > 0);
 
         if (legacySpaceString && !hasModernSpace) {
             // Use legacy value - Override space and use non-space related project, channel etc

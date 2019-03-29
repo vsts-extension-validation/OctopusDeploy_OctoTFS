@@ -83,7 +83,7 @@
           "name": "SpaceId",
           "type": "pickList",
           "label": "Space",
-          "defaultValue": "Space-1",
+          "defaultValue": "",
           "required": true,
           "properties": {
             "EditableOptions": "True"

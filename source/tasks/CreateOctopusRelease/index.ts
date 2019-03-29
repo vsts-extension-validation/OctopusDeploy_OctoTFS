@@ -31,9 +31,9 @@ async function run() {
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const legacySpaceString = tasks.getInput("Space");
-        let spaceId = tasks.getInput("SpaceId", true);
-        const hasLegacySpace = !legacySpaceString && legacySpaceString.length > 0;
-        const hasModernSpace = hasSpaces && (!spaceId && spaceId.length > 0);
+        let spaceId = tasks.getInput("SpaceId");
+        const hasLegacySpace = legacySpaceString && legacySpaceString.length > 0;
+        const hasModernSpace = hasSpaces && (spaceId && spaceId.length > 0);
 
         if (legacySpaceString && !hasModernSpace) {
             // Use legacy value - Override space and use non-space related project, channel etc
