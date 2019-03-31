@@ -47,7 +47,7 @@ async function run() {
         else {
             // No Space or Default Space
             space = null;
-            project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
+            project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
             deployToEnvironments = utils.getRequiredCsvInput("Environments");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
             deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
