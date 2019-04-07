@@ -274,7 +274,7 @@
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Promote $(Project) from $(From) to $(To)",
+    "instanceNameFormat": "Promote $(Project)$(ProjectNameInSpace) from $(From)$(FromEnvironmentInSpace) to $(To)$(ToEnvironmentsInSpace)",
     "execution": {
         "Node": {
             "target": "index.js"
