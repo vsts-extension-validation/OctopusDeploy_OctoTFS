@@ -4,11 +4,11 @@ OctoTFS is a repository containing the Octopus Build and Release tasks for integ
 
 > Azure DevOps (ADO) was previously Visual Studio Team Services (VSTS) and previously Visual Studio Online (VSO)
 
-OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as an web extension that can be installed w/ TFS or ADO. The tasks include: 
+OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as an web extension that can be installed with TFS or ADO. 
 
-## TFS / Azure DevOps Web Extension Custom 
+## TFS / Azure DevOps Web Extension Custom Tasks 
 
-For usage, see the [Build Steps Readme](source/vsts.md).
+To learn more about how to use the extension and custom tasks, read the [VSTS README](source/vsts.md).
 
 * [Package Application](source/tasks/Pack)
 * [Push Package(s) to Octopus](source/tasks/Push)
@@ -22,7 +22,7 @@ This extension provides a friendly interface to the [Octopus CLI](https://github
 
 ### Prerequisites
 
-* Node.js 8.11.3 or later (**NOTE:** node installer does not update npm)
+* Node.js 8.11.3+ (`choco install nodejs` or `brew install nodejs` or [web](https://nodejs.org)) 
 * NPM: 5.6.0+ (run `npm install npm@latest -g`)
 * Gulp (`npm install gulp -g`)
 * Natives (`npm install natives@1.1.6`)
