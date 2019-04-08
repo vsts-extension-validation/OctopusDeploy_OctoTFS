@@ -22,7 +22,7 @@ This extension provides a friendly interface to the [Octopus CLI](https://github
 
 ### Prerequisites
 
-* Node.js 8.11.3+ (`choco install nodejs` or `brew install nodejs` or [web](https://nodejs.org)) 
+* Node.js 8.11.3+ (`choco install nodejs` or `brew install node` or [web](https://nodejs.org)) 
 * NPM: 5.6.0+ (run `npm install npm@latest -g`)
 * Gulp (`npm install gulp -g`)
 * Natives (`npm install natives@1.1.6`)
