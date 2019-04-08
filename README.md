@@ -1,114 +1,103 @@
 # OctoTFS
 
-OctoTFS is a repository containing components for integration with Team Foundation Server and Azure DevOps pipelines.
+OctoTFS is a repository containing the Octopus Build and Release tasks for integration with Microsoft Team Foundation Server (TFS) and Azure DevOps (ADO) pipelines.  
 
 > Azure DevOps (ADO) was previously Visual Studio Team Services (VSTS) and previously Visual Studio Online (VSO)
 
----
+OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as an web extension that can be installed w/ TFS or ADO. The tasks include: 
 
-# New 
+## TFS / Azure DevOps Web Extension Custom 
 
+For usage, see the [Build Steps Readme](source/vsts.md).
 
-## What the heck is this thing? 
+* [Package Application](source/tasks/Pack)
+* [Push Package(s) to Octopus](source/tasks/Push)
+* [Create Octopus Release](source/tasks/CreateOctopusRelease)
+* [Deploy Octopus Release](source/tasks/Deploy)
+* [Promote Octopus Release](source/tasks/Promote)
 
-https://docs.microsoft.com/en-us/azure/devops/extend/?view=azure-devops
+This extension provides a friendly interface to the [Octopus CLI](https://github.com/octopusdeploy/octopusclients) which does the heavy lifting to integrate.
 
-Azure DevOps (aka VSTS aka VSO) Extension. This is a build or release task available in the Azure DevOps marketplace that allows teams to do more than the baked in tasks. 
+## Building  
 
-https://docs.microsoft.com/en-us/azure/devops/extend/develop/integrate-build-task?view=azure-devops
+### Prerequisites
 
-https://github.com/Microsoft/azure-pipelines-task-lib
+* Node.js 8.11.3 or later (**NOTE:** node installer does not update npm)
+* NPM: 5.6.0+ (run `npm install npm@latest -g`)
+* Gulp (`npm install gulp -g`)
+* Natives (`npm install natives@1.1.6`)
+* TFX (`npm install tfx tfx-cli -g`)
+* Install golang (`choco install golang` or `brew install go` or [web](https://golang.org))
+* Node-Prune (`go get github.com/tj/node-prune/cmd/node-prune`)
 
-## How the heck to do I change it? 
+NOTE: If you intend to publish the extension either to a local TFS instance or otherwise you will also need PowerShell Core or PowerShell installed.
 
-Dev and test cycle:
+### How to build and package the extension
 
-If you're making small chanage or bug fixes, it's probably best to do them locally on a branch, push to GitHub, ensure it builds and then deploy it as a test extension and test on our Octopus Deploy Test organisation. 
+Microsoft's web extension tooling is cross platform so you can run this on Windows or macOS.
 
-If you're doing large changes, it's probably best to install TFS locally (see link below) and make your changes and deploy locally as the feedback cycle is shorter. 
+**Build** 
+
+Run the following at a commandline.
+
+* `npm install --nosave`
+* `npm run build`
+
+This will generate the full extension content required to create the extension VSIX.
+
+**Packaging**
+
+In order to package and test the extension on a local TFS instance without publishing to the marketplace you can run the following at a PowerShell command prompt.
  
+`./pack.ps1 -environment localtest -version "x.x.x"`
 
-Unit Tests: 
+**Task dependencies**
 
-OctoTFS has approval tests to ensure we maintain the contract and reduce the risk of customers losing data. 
- 
+Although we use webpack to bundle we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
+also previously bundled a version of octo tools, however we no longer bundle in favor of using an octo installer task.
 
-Build: 
+### How to testing the extension
 
-OctoTFS is built using 
+If you're doing updates/enhancements or bug fixes, the fastest development flow is to code locally, build, package and deploy it locally. Once your changes are stable, then it's a good idea to deploy to Test for further testing and finally Production.
 
+### Local
 
-Deploy to test:
+It's highly recommended to setup two Virtual Machines running Windows Server.   
 
-Deploy to prod:
+1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions so it's a very good for regression testing.  
+2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally and continually publishing to the Azure DevOps Marketplace. 
 
+To install locally, build and package the application as per the instructions above. Then install the extension 
 
+You can follow the [Microsoft documentation](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs) on how to install to TFS instance.
 
---- 
+**Testing Gotchas**
 
-# Old 
+* If you design a build pipeline with the current live extension, you can't upgrade it. You need to install the `localtest` extension first and use it in your builds. Then you can upgrade it and you will get your latest updates/fixes etc.
+* Pay special attention to [this approval test](tests/OctoTFS.Tests/OctoTFS.Tests/ContractStabilityFixture.EnsureInputNamesAndTypesHaveNotChanged.approved.txt). It ensures we do not break our contract and we have to explicitly update it when updating the extension.
+* We need to maintain backwards compatibility and we need to ensure any existing buidls will not break after we publish an updated. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
+* Building on the previous point, there is no way to rollback an extension so testing is difficul as well. The recommended approach to this is to snapshot your local test VMs when you have a working builds so you can update the extension and revert back to the snapshot as needed.        
 
+### Test
 
-## Manual Building and Testing
-
-Note: Use the project in Octopus to deploy. These steps are only for manual releases, which should be avoided.
-
-```
-sudo npm install -g tfx-cli
-# Increment version number from the one shown at https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test&targetId=7b703d9c-2348-4d6d-b8fb-df60fdec5ec4&utm_source=vstsproduct&utm_medium=ExtHubManageList
-./pack.ps1 Test 2.0.96
-# Get access token from https://octopus-deploy.visualstudio.com/_details/security/tokens. Remember to select "All accessible accounts".
-./publish.ps1 Test 2.0.96 wieufvliuwefliquwefliqwevfliqwevfliqweuvfliqwevf
-```
-
-## Team Build Preview Custom Steps
-
-Custom Build Steps for [Team Build vNext](http://aka.ms/tfbuild)
-
-For usage, see the [Build Steps Readme](source/VSTSExtensions).
-
-* [Create Octopus Package](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Pack)
-* [Push Packages to Octopus](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Push)
-* [Create Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/CreateOctopusRelease)
-* [Deploy Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Deploy)
-* [Promote Octopus Release](source/VSTSExtensions/OctopusBuildAndReleaseTasks/Tasks/Promote)
-
-## Common Links
-
-- [Marketplace Publishing Portal (octopusdeploy)](https://marketplace.visualstudio.com/manage/publishers/octopusdeploy)
-
-## Production Environment
-
-- [Octopus Extension in Marketplace](https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks)
-- [Octopus VSTS Environment](https://octopus-deploy.visualstudio.com)
-- [Security Tokens](https://octopus-deploy.visualstudio.com/_details/security/tokens)
-
-## Test Environment
+Octopus staff can publish an extension for testing which is wired up to a test Azure DevOps organisation. This is a great area for further live testing against the latest and greatest release of Azure DevOps.
 
 - [Octopus Extension in Marketplace](https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test)
 - [Octopus VSTS Environment](https://octopus-deploy-test.visualstudio.com)
 - [Security Tokens](https://octopus-deploy-test.visualstudio.com/_details/security/tokens)
 
-### Prerequisites
-1. Make sure you have [node.js](https://nodejs.org/en/download/) installed
-* Node: 8.11.3 or later (**Note** node installer does not update npm)
-* NPM: 5.6.0+ (run `npm install npm@latest -g`)
-* Gulp (`npm install gulp -g`)
-* TFX (`npm install tfx tfx-cli -g`)
-* Install go and then install node-prune (https://github.com/tj/node-prune)
-* May also need to install natives - https://github.com/gulpjs/gulp/issues/2246 (`npm install natives@1.1.6`)
+NOTE: See the OctopusHQ Confluence server for further details on gaining access to the Azure DevOps (aka VSTS) test environment.  
 
-If you intend to publish the extension either to a local TFS instance or otherwise you will also need powershell core or powershell installed.
+### Production
 
-### How to build and package
-Run `npm run build` to build which will generate the full extension content required to create the extension VSIX.
+Octopus staff can publish an extension for production use. 
 
-In order to package and test the extension on a local TFS instance without publishing to the marketplace you can run `./pack.ps1 -environment localtest -version "x.x.x"`
+- [Octopus Extension in Marketplace](https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks)
+- [Octopus VSTS Environment](https://octopus-deploy.visualstudio.com)
+- [Security Tokens](https://octopus-deploy.visualstudio.com/_details/security/tokens)
 
-You can follow the [Microsoft documentation](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs) on how to install to TFS instance.
+NOTE: See the OctopusHQ Confluence server for further details on gaining access to the Azure DevOps (aka VSTS) production/live environment.
 
-### Task dependencies
-Although we use webpack to bundle we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
-also previously bundled a version of octo tools, however we no longer bundle in favor of using an octo installer task.
+## Other Useful Links
 
-
+- [Marketplace Publishing Portal (octopusdeploy)](https://marketplace.visualstudio.com/manage/publishers/octopusdeploy) 
