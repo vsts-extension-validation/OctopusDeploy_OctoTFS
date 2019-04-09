@@ -71,9 +71,13 @@ It's highly recommended to setup two Virtual Machines running Windows Server. Th
 1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions so it's a very good for regression testing.  
 2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally and continually publishing to the Azure DevOps Marketplace. 
 
-To install locally, build and package the application as per the instructions above. Then install the extension 
+To install locally, build and package the application as per the instructions above. Then install the extension by uploading it. Instructions to do this are available in Microsoft's [TFS/ADO docs](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs). 
 
-You can follow the [Microsoft documentation](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs) on how to install to TFS instance.
+Additional tips: 
+
+* TFS/ADO is accessible on port 8080 by default at something like the following: `http://<server name/ip>:8080/tfs/`
+* The TFS/ADO manage extensions page where you upload test extensions is available at `http://<server name/ip>:8080/tfs/_gallery/manage`
+* You may need to tweak your VM firewall settings to access it from outside of your VM in the host OS. Assuming it's local, turning it off is pretty quick and safe. 
 
 **Testing Gotchas**
 
