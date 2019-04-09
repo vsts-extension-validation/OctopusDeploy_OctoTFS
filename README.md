@@ -18,6 +18,10 @@ To learn more about how to use the extension and custom tasks, read the [VSTS RE
 
 This extension provides a friendly interface to the [Octopus CLI](https://github.com/octopusdeploy/octopusclients) which does the heavy lifting to integrate.
 
+## Dev
+
+Microsoft TFS/ADO web extensions are powered by Node.js under the hood. Simply open the repo with your favourite text editor like [Jetbrains WebStorm](https://jetbrains.com/webstorm) or [Visual Studio Code](https://code.visualstudio.com/) and you're good to go.
+
 ## Building  
 
 ### Prerequisites
