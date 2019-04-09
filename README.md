@@ -82,7 +82,7 @@ You can follow the [Microsoft documentation](https://docs.microsoft.com/en-us/vs
 * We need to maintain backwards compatibility and we need to ensure any existing buidls will not break after we publish an updated. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
 * Building on the previous point, there is no way to rollback an extension so testing is difficul as well. The recommended approach to this is to snapshot your local test VMs when you have a working builds so you can update the extension and revert back to the snapshot as needed.        
 
-### Test
+### Test environment
 
 Octopus staff can publish an extension for testing which is wired up to a test Azure DevOps organisation. This is a great area for further live testing against the latest and greatest release of Azure DevOps.
 
@@ -92,7 +92,7 @@ Octopus staff can publish an extension for testing which is wired up to a test A
 
 NOTE: See the OctopusHQ Confluence server for further details on gaining access to the Azure DevOps (aka VSTS) test environment.  
 
-### Production
+### Production environment
 
 Octopus staff can publish an extension for production use. 
 
