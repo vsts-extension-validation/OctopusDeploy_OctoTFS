@@ -13,6 +13,7 @@
     "@types/ramda": "^0.25.29",
     "@types/uuid": "^3.4.3",
     "@types/webpack": "^4.4.0",
+    "extend": "^3.0.2",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "gulp-copy": "^1.1.0",
