@@ -62,7 +62,7 @@ If you're doing updates/enhancements or bug fixes, the fastest development flow 
 
 ### Local
 
-It's highly recommended to setup two Virtual Machines running Windows Server.   
+It's highly recommended to setup two Virtual Machines running Windows Server. This is generally done locally and it's best to give your VM at least 8 gigs of memory and 4 CPU cores otherwise, the TFS/ADO installation can fail or take hours.    
 
 1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions so it's a very good for regression testing.  
 2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally and continually publishing to the Azure DevOps Marketplace. 
