@@ -73,9 +73,9 @@ It's highly recommended to setup two Virtual Machines running Windows Server. Th
 
 To install locally, build and package the application as per the instructions above. Then install the extension by uploading it. Instructions to do this are available in Microsoft's [TFS/ADO docs](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs). 
 
-Additional tips: 
+**Additional tips:** 
 
-* TFS/ADO is accessible on port 8080 by default at something like the following: `http://<server name/ip>:8080/tfs/`
+* TFS/ADO is accessible on port 8080 by default (this can be changed if desired) at something like the following: `http://<server name/ip>:8080/tfs/`
 * The TFS/ADO manage extensions page where you upload test extensions is available at `http://<server name/ip>:8080/tfs/_gallery/manage`
 * You may need to tweak your VM firewall settings to access it from outside of your VM in the host OS. Assuming it's local, turning it off is pretty quick and safe. 
 
