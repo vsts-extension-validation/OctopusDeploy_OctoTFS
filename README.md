@@ -29,7 +29,6 @@ Microsoft TFS/ADO web extensions are powered by Node.js under the hood. Simply o
 * Node.js 8.11.3+ (`choco install nodejs` or `brew install node` or [web](https://nodejs.org)) 
 * NPM: 5.6.0+ (run `npm install npm@latest -g`)
 * Gulp (`npm install gulp -g`)
-* Natives (`npm install natives@1.1.6`)
 * TFX (`npm install tfx tfx-cli -g`)
 * Install golang (`choco install golang` or `brew install go` or [web](https://golang.org))
 * Node-Prune (`go get github.com/tj/node-prune/cmd/node-prune`)
