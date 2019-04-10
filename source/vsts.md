@@ -32,7 +32,7 @@ For example, if your build needs to create a Release for Project A, the user who
 
 This extension adds the following tasks:
 
-- Use a specific octo version
+- Octopus tools installer
 - Package Application
 - Push Packages to Octopus
 - Create Octopus Release
@@ -45,7 +45,7 @@ And the following widget:
 
 <hr />
 
-### Use a specific octo version
+### Octopus tools installer
 ![Specific Octo Version Step](img/use-octo-version-3.0.png)
 Options include:
 * **Version**: The verion to use or 'latest' to always use the most recent version. Please note that this task is only required if you wish to change the version of octo to be used by subsequent tasks.
