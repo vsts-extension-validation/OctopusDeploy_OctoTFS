@@ -9,7 +9,7 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 A minimum build agent version of `2.115.0` with dotnet core runtime 2.0 or later. When targeting build agents which do not have this capability, you can opt to use the dotnet installer task to satisfy this condition. An internet connection
 is also required for tasks to download the Octopus tools when not available on a build agent.
 
-### VSTS Build Agents
+### Azure DevOps (VSTS) Build Agents
 Generally the Hosted Linux, Mac and Hosted VS2017 agent queues would satisfy the dotnet core requirements, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools. The Octopus tasks
 will automatically download, cache and use the latest version of the Octopus tools unless overridden by an installer task.
 
@@ -69,6 +69,8 @@ Options include:
  ![Configure Push Application Step](img/push-packages-options-2.0.png)
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
+ * **Push Package to Space**: Toggle to push your package to a [space](https://octopus.com/spaces). This is available in Octopus 2019.1 and newer.
+ * **Space**: The name of the Octopus space to push a package to.
  * **Package**: Package file to push. To push multiple packages, enter on multiple lines.
  * **Replace Existing**: If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to 'True' to overwrite the existing package.
  * **Additional Arguments**: Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Pushing+packages) to include
@@ -79,6 +81,8 @@ Options include:
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
+ * **Create Release in a Space**: Toggle to create a release in a [space](https://octopus.com/spaces). This is available in Octopus Deploy 2019.1 and newer.
+ * **Space Name**: The name of the Octopus space to create a release for.
  * **Project Name**: The name of the Octopus project to create a release for.
  * **Release Number**: Release number for the new release (leave blank to let Octopus decide).
  * **Channel**: Channel to use for the new release.
@@ -103,6 +107,8 @@ The *Release Notes* options, if selected, will result in nicely formatted releas
 
  Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Add or Manage to [create](#create-connected-service)).
+ * **Deploy Release in a Space**: Toggle to deploy a release in a [space](https://octopus.com/spaces). This is available in Octopus Deploy 2019.1 and newer.
+ * **Space**: The name of the Octopus space.
  * **Project**: The name of the Octopus project.
  * **Release Number**: Release number for the new release (defaults to latest).
  * **Deploy to Environments**: Comma-separated list of Environments to deploy to.
@@ -117,6 +123,8 @@ The *Release Notes* options, if selected, will result in nicely formatted releas
 
 Options include:
  * **Octopus Deploy Server**: Dropdown for selecting your Octopus Server (click Manage to [create](#create-connected-service)).
+ * **Promote Release in a Space**: Toggle to promote a release in a [space](https://octopus.com/spaces). This is available in Octopus Deploy 2019.1 and newer.
+ * **Space**: The name of the Octopus space.
  * **Project**: The name of the Octopus project.
  * **Promote From**: Environment to promote a deployment from.
  * **Promote To**: Environment to promote a deployment to.
