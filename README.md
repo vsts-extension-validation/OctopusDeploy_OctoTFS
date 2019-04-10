@@ -94,7 +94,7 @@ Octopus staff can publish an extension for testing which is wired up to a test A
 - [Octopus VSTS Environment](https://octopus-deploy-test.visualstudio.com)
 - [Security Tokens](https://octopus-deploy-test.visualstudio.com/_details/security/tokens)
 
-NOTE: See the OctopusHQ Confluence server for further details on gaining access to the Azure DevOps (aka VSTS) test environment.  
+NOTE: See the [OctopusHQ Confluence](https://octopushq.atlassian.net/wiki/spaces/IN/pages/60063746/VSTS+Test+Environment) for further details on gaining access to the Azure DevOps (aka VSTS) test environment.  
 
 ### Production environment
 
@@ -104,7 +104,7 @@ Octopus staff can publish an extension for production use.
 - [Octopus VSTS Environment](https://octopus-deploy.visualstudio.com)
 - [Security Tokens](https://octopus-deploy.visualstudio.com/_details/security/tokens)
 
-NOTE: See the OctopusHQ Confluence server for further details on gaining access to the Azure DevOps (aka VSTS) production/live environment.
+NOTE: See the [OctopusHQ Confluence](https://octopushq.atlassian.net/wiki/spaces/IN/pages/60063746/VSTS+Test+Environment) for further details on gaining access to the Azure DevOps (aka VSTS) production/live environment.
 
 ## Other Useful Links
 
