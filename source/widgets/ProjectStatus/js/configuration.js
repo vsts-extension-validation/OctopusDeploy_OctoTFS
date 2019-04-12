@@ -104,106 +104,39 @@ function OctopusStatusWidgetConfiguration() {
             var refreshSpacesProjectsAndEnvironmentsDropdowns = function (settings, queryUri, authToken) {
 
                 $spaceDropdown.empty();
+                $spaceDropdown.prop("disabled", true);
                 $projectDropdown.empty();
                 $environmentDropdown.empty();
 
-                $.ajax({
-                    type: "POST",
-                    url: queryUri,
-                    data: '{"dataSourceDetails": {"dataSourceName":"OctopusAllSpaces"}}',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    headers: {'Authorization': authToken}
-                }).done(function (data) {
-                    var hasSpaces = !data.errorMessage;
+                const appendSpaceData = appendDropdownOptions($spaceDropdown, parseResult, selectId, selectName, settings ? settings.spaceId : null);
+                const appendProjectData = appendDropdownOptions($projectDropdown, parseResult, selectId, selectName, settings ? settings.projectId : null);
+                const appendEnvironmentData = appendDropdownOptions($environmentDropdown, parseResult, selectId, selectName, settings ? settings.environmentId : null);
 
-                    if (hasSpaces) {
-                        // Spaces
-                        var selectedSpaceId = settings ? settings.spaceId : null;
+                fetchDataSourceContent(queryUri, authToken, "OctopusAllSpaces", null)
+                    .done(function(data) {
+                        const hasSpaces = !data.errorMessage;
+                        if (hasSpaces) {
+                            // Spaces
+                            $spaceDropdown.prop("disabled", false);
+                            appendSpaceData(data);
+                            const selectedSpaceId = $spaceDropdown.val();
 
-                        parseResult(data).forEach(function (result) {
-                            if (!selectedSpaceId) {
-                                selectedSpaceId = selectId(result);
-                            }
-                            $spaceDropdown.append($('<option value="' + selectId(result) + '">' + selectName(result) + '</option>'));
-                        });
+                            // Projects
+                            fetchDataSourceContent(queryUri, authToken, "OctopusAllProjectsInSpace", selectedSpaceId).done(appendProjectData);
 
-                        $spaceDropdown.val(selectedSpaceId);
-                        console.log("Space ID: " + selectedSpaceId);
+                            // Environments
+                            fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironmentsInSpace", selectedSpaceId).done(appendEnvironmentData);
 
-                        // $.ajax({
-                        //     type: "POST",
-                        //     url: queryUri,
-                        //     data: '{"dataSourceDetails": {"dataSourceName":"OctopusAllProjectsInSpace", "parameters":{"SpaceId": "' + selectedSpaceId + '"}}}',
-                        //     contentType: 'application/json',
-                        //     dataType: 'json',
-                        //     headers: {'Authorization': authToken}
-                        // }).done( function(projectData) {
-                        //
-                        //     var selectedProjectId = settings ? settings.projectId : null;
-                        //
-                        //     if (projectData.errorMessage) {
-                        //         console.error(projectData.errorMessage);
-                        //     }
-                        //
-                        //     parseResult(projectData).forEach(function (projectDataItem) {
-                        //         if (!selectedProjectId) {
-                        //             selectedProjectId = selectId(projectDataItem);
-                        //         }
-                        //         $projectDropdown.append($('<option value="' + selectId(projectDataItem) + '">' + selectName(projectDataItem) + '</option>'));
-                        //     });
-                        //
-                        //     $projectDropdown.val(selectedProjectId);
-                        //     console.log("Project ID: " + selectedProjectId);
-                        // });
-                        //
-                        // $.ajax({
-                        //     type: "POST",
-                        //     url: queryUri,
-                        //     data: '{"dataSourceDetails": {"dataSourceName":"OctopusAllEnvironmentsInSpace", "parameters":{"SpaceId": "' + selectedSpaceId + '"}}}',
-                        //     contentType: 'application/json',
-                        //     dataType: 'json',
-                        //     headers: {'Authorization': authToken}
-                        // }).done( function(environmentData) {
-                        //
-                        //     var selectedEnvironmentId = settings ? settings.environmentId : null;
-                        //
-                        //     if (environmentData.errorMessage) {
-                        //         console.error(environmentData.errorMessage);
-                        //     }
-                        //
-                        //     parseResult(environmentData).forEach(function (environmentDataItem) {
-                        //         if (!selectedEnvironmentId) {
-                        //             selectedEnvironmentId = selectId(environmentDataItem);
-                        //         }
-                        //         $environmentDropdown.append($('<option value="' + selectId(environmentDataItem) + '">' + selectName(environmentDataItem) + '</option>'));
-                        //     });
-                        //
-                        //     $environmentDropdown.val(selectedEnvironmentId);
-                        //     console.log("Environment ID: " + selectedEnvironmentId);
-                        // });
+                        } else {
+                            // No Spaces
 
-                        // Projects
-                        var appendProjectData = appendDropdownOptions($projectDropdown, parseResult, selectId, selectName, settings ? settings.projectId : null);
-                        fetchDataSourceContent(queryUri, authToken, "OctopusAllProjectsInSpace", selectedSpaceId).done(appendProjectData);
+                            // Projects
+                            fetchDataSourceContent(queryUri, authToken, "OctopusAllProjects", null).done(appendProjectData);
 
-                        // Environments
-                        var appendEnvironmentData = appendDropdownOptions($environmentDropdown, parseResult, selectId, selectName, settings ? settings.environmentId : null);
-                        fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironmentsInSpace", selectedSpaceId).done(appendEnvironmentData);
-
-                    } else {
-                        // No Spaces
-
-                        // Projects
-                        var appendProjectData = appendDropdownOptions($projectDropdown, parseResult, selectId, selectName, settings ? settings.projectId : null);
-                        fetchDataSourceContent(queryUri, authToken, "OctopusAllProjects", null).done(appendProjectData);
-
-                        // Environments
-                        var appendEnvironmentData = appendDropdownOptions($environmentDropdown, parseResult, selectId, selectName, settings ? settings.environmentId : null);
-                        fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironments", null).done(appendEnvironmentData);
-                    }
-
-                });
+                            // Environments
+                            fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironments", null).done(appendEnvironmentData);
+                        }
+                    });
             };
 
             var refreshProjectsAndEnvironmentsInSpaceDropdowns = function (settings, queryUri, authToken, spaceId) {
