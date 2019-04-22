@@ -20,11 +20,6 @@ $ErrorActionPreference = "Stop"
 $buildArtifactsPath = "$basePath\dist\Artifacts"
 $buildDirectoryPath = "$basePath\dist"
 
-function UpdateTfxCli() {
-    Write-Host "Updating tfx-cli..."
-    & npm up -g tfx-cli
-}
-
 function IsPublishRequired($extensionManifest){
     $manifest = Get-Content $extensionManifest | ConvertFrom-Json
 	Write-Host "Checking whether publish is required for '$($manifest.publisher)' extension id '$($manifest.id)' version '$version'"
@@ -49,7 +44,7 @@ function PublishVSIX($vsixFile, $environment) {
         & tfx extension publish --vsix $vsixFile --token $accessToken --no-prompt
     } elseif ($environment -eq "Test") {
         Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith using access token $accessToken"
-        & tfx extension publish --vsix $vsixFile --token $accessToken --share-with $shareWith --no-prompt
+        & npx tfx extension publish --vsix $vsixFile --token $accessToken --share-with $shareWith --no-prompt
     }
 }
 
@@ -68,5 +63,4 @@ function PublishAllExtensions($environment) {
 }
 
 
-UpdateTfxCli
 PublishAllExtensions $environment
