@@ -6,10 +6,10 @@ import { Promise } from "ts-promise";
 
 export const DefaultOctoConnectionInputName = "OctoConnectedServiceName";
 
-export const pglob = (pattern: string): Promise<string[]> => {
+export const pGlobNoNull = (pattern: string): Promise<string[]> => {
     return new Promise((resolve, reject) => {
-        glob(pattern, (err, matches) => {
-            if(err){
+        glob(pattern, { nonull: true }, (err, matches) => {
+            if (err) {
                 reject(err);
                 return;
             }
@@ -60,5 +60,5 @@ export function getDefaultOctoConnectionInputValue() {
 
 
 export const resolveGlobs = (globs: string[]) : Promise<string[]> => {
-    return Promise.all(globs.map(pglob)).then(x=> flatten<string>(x));
+    return Promise.all(globs.map(pGlobNoNull)).then(x=> flatten<string>(x));
 };
