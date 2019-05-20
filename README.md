@@ -32,8 +32,9 @@ Microsoft TFS/ADO web extensions are powered by Node.js under the hood. Simply o
 * TFX (`npm install tfx tfx-cli -g`)
 * Install golang (`choco install golang` or `brew install go` or [web](https://golang.org))
 * Node-Prune (`go get github.com/tj/node-prune/cmd/node-prune`)
+* PowerShell (`choco install powershell-core` or `brew cask install powershell` or web (google it...))
 
-NOTE: If you intend to publish the extension either to a local TFS instance or otherwise you will also need PowerShell Core or PowerShell installed.
+NOTE: PowerShell is required to if you intend to publish the extension either to a local TFS instance or otherwise.
 
 ### How to build and package the extension
 
