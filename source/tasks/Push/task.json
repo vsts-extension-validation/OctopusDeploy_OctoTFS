@@ -39,10 +39,28 @@
             "label": "Space",
             "defaultValue": "",
             "required": false,
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space.",
+            "visibleRule": "OctoConnectedServiceName = asdf"
+        },
+        {
+            "name": "HasSpaces",
+            "type": "boolean",
+            "label": "Push Package to Space (Octopus Deploy 2019.1+)",
+            "defaultValue": "false",
+            "required": true,
+            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
+        },
+        {
+            "name": "SpaceName",
+            "type": "pickList",
+            "label": "Space",
+            "defaultValue": "",
+            "required": true,
             "properties": {
-              "EditableOptions": "True"
+                "EditableOptions": "True"
             },
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "helpMarkDown": "The Space name within Octopus.",
+            "visibleRule": "HasSpaces = true"
         },
         {
             "name": "Package",
@@ -72,7 +90,7 @@
     ],
     "dataSourceBindings": [
         {
-            "target": "Space",
+            "target": "SpaceName",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
