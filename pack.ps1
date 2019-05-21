@@ -20,7 +20,7 @@ function CleanNodeModules() {
 
     if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
     {
-        $command = "$($env:GOPATH)\bin\node-prune.exe"
+        $command = "$($env:GOPATH)\bin\node-prune"
 
         if(-Not (Test-Path $command)){
             Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
