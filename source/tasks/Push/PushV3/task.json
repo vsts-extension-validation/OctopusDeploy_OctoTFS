@@ -39,6 +39,9 @@
             "label": "Space",
             "defaultValue": "",
             "required": false,
+            "properties": {
+                "EditableOptions": "False"
+            },
             "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
         },
         {
