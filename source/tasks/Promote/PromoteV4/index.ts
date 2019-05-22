@@ -7,54 +7,21 @@ import {
     flag,
     argumentEnquote,
     argumentIfSet
-} from '../../Utils/tool';
+} from '../../Utils';
 
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
-        const hasSpaces = tasks.getBoolInput("HasSpaces");
 
-        let space;
-        let project;
-        let from;
-        let to;
-        let deployForTenants;
-        let deployForTenantTags;
+        const spaceId = tasks.getInput("SpaceId");
+        const space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
+        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
+        const from = tasks.getInput("From", true);
+        const to = utils.getRequiredCsvInput("To");
+        const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
+        const deployForTenantTags= utils.getOptionalCsvInput("DeployForTenantTags");
         const showProgress = tasks.getBoolInput("ShowProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
-
-        const legacySpaceString = tasks.getInput("Space");
-        let spaceId = tasks.getInput("SpaceId");
-        const hasLegacySpace = legacySpaceString && legacySpaceString.length > 0;
-        const hasModernSpace = hasSpaces && (spaceId && spaceId.length > 0);
-
-        if (legacySpaceString && !hasModernSpace) {
-            // Use legacy value - Override space and use non-space related project, channel etc
-            space = legacySpaceString;
-            project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
-            from = tasks.getInput("From", true);
-            to = utils.getRequiredCsvInput("To");
-            deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-            deployForTenantTags= utils.getOptionalCsvInput("DeployForTenantTags");
-        }
-        else if ((hasLegacySpace && hasModernSpace) || (!legacySpaceString && hasModernSpace)) {
-            // Ignore legacy value and new modern values
-            space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
-            project = await utils.resolveProjectNameInSpace(connection, spaceId, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
-            from = tasks.getInput("FromEnvironmentInSpace", true);
-            to = utils.getRequiredCsvInput("ToEnvironmentsInSpace");
-            deployForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
-            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTagsInSpace");
-        }
-        else {
-            // No Space or Default Space
-            space = null;
-            project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
-            from = tasks.getInput("From", true);
-            to = utils.getRequiredCsvInput("To");
-            deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-            deployForTenantTags= utils.getOptionalCsvInput("DeployForTenantTags");
-        }
 
         const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
 
