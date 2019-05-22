@@ -1,5 +1,5 @@
 import * as tasks from 'azure-pipelines-task-lib/task';
-import * as utils from "../Utils";
+import * as utils from "../../Utils";
 import {
     multiArgument,
     connectionArguments,
@@ -7,7 +7,7 @@ import {
     flag,
     argumentEnquote,
     argumentIfSet
-} from '../Utils/tool';
+} from '../../Utils/tool';
 
 async function run() {
     try {
@@ -16,8 +16,8 @@ async function run() {
 
         let space;
         let project;
-        let from;
-        let to;
+        const releaseNumber = tasks.getInput("ReleaseNumber", true);
+        let deployToEnvironments;
         let deployForTenants;
         let deployForTenantTags;
         const showProgress = tasks.getBoolInput("ShowProgress");
@@ -32,17 +32,15 @@ async function run() {
             // Use legacy value - Override space and use non-space related project, channel etc
             space = legacySpaceString;
             project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
-            from = tasks.getInput("From", true);
-            to = utils.getRequiredCsvInput("To");
+            deployToEnvironments = utils.getRequiredCsvInput("Environments");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-            deployForTenantTags= utils.getOptionalCsvInput("DeployForTenantTags");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
         }
         else if ((hasLegacySpace && hasModernSpace) || (!legacySpaceString && hasModernSpace)) {
             // Ignore legacy value and new modern values
             space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
             project = await utils.resolveProjectNameInSpace(connection, spaceId, tasks.getInput("ProjectNameInSpace", true)).then(x => x.value);
-            from = tasks.getInput("FromEnvironmentInSpace", true);
-            to = utils.getRequiredCsvInput("ToEnvironmentsInSpace");
+            deployToEnvironments  = utils.getOptionalCsvInput("EnvironmentsInSpace");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenantsInSpace");
             deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTagsInSpace");
         }
@@ -50,20 +48,19 @@ async function run() {
             // No Space or Default Space
             space = null;
             project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
-            from = tasks.getInput("From", true);
-            to = utils.getRequiredCsvInput("To");
+            deployToEnvironments = utils.getRequiredCsvInput("Environments");
             deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-            deployForTenantTags= utils.getOptionalCsvInput("DeployForTenantTags");
+            deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
         }
 
-        const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
+        const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 
         const configure = [
             argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
+            argumentEnquote("releaseNumber", releaseNumber),
             connectionArguments(connection),
-            argumentEnquote("from", from),
-            multiArgument(argumentEnquote, "to", to),
+            multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
             flag("progress", showProgress),
@@ -73,10 +70,10 @@ async function run() {
         const code:Number = await octo.map(x => x.launchOcto(configure))
             .getOrElseL((x) => { throw new Error(x); });
 
-        tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded promoting release with code " + code);
+        tasks.setResult(tasks.TaskResult.Succeeded, "Deploy succeeded with code " + code);
     }catch(err){
         tasks.error(err);
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to promote release. " + err.message);
+        tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);
     }
 }
 

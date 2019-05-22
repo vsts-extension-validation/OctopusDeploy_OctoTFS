@@ -68,7 +68,13 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         Write-Host "Updating version to $version in $taskManifestFile..."
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
         $netVersion = [System.Version]::Parse($version)
-        $task.version.Major = $netVersion.Major
+
+#
+#       TODO: Automate setting the major version by looking at the directory name. Default is 3.
+#
+
+#        $task.version.Major = $netVersion.Major
+
         $task.version.Minor = $netVersion.Minor
         $task.version.Patch = $netVersion.Build
 
