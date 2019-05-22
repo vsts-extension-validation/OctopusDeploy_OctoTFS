@@ -8,38 +8,19 @@ import {
     flag,
     argumentEnquote,
     argumentIfSet
-} from '../../Utils/tool';
+} from '../../Utils';
 
 async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        const legacySpaceString = tasks.getInput("Space");
-        const hasSpaces = tasks.getBoolInput("HasSpaces");
-        const spaceName = tasks.getInput("SpaceName");
-        let space;
+        const space = tasks.getInput("Space");
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages);
-
-        const hasLegacySpace = legacySpaceString && legacySpaceString.length > 0;
-        const hasModernSpace = hasSpaces && (spaceName && spaceName.length > 0);
-
-        if (legacySpaceString && !hasModernSpace) {
-            // Use legacy value - Override space and use non-space related project, channel etc
-            space = legacySpaceString;
-        }
-        else if ((hasLegacySpace && hasModernSpace) || (!legacySpaceString && hasModernSpace)) {
-            // Ignore legacy value and new modern values
-            space = spaceName;
-        }
-        else {
-            // No Space or Default Space
-            space = null;
-        }
 
         const configure = [
             connectionArguments(connection),
