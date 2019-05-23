@@ -29,17 +29,19 @@ function CleanNodeModules() {
         }
     }
 
-    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusReleaseV3\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusReleaseV4\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\DeployV3\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\DeployV4\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\OctoCli\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\OctoInstaller\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Pack\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\PromoteV3\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\PromoteV4\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\PushV3\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\PushV4\node_modules"
+    $slash = [IO.Path]::DirectorySeparatorChar;
+
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)CreateOctopusRelease$($slash)CreateOctopusReleaseV3$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)CreateOctopusRelease$($slash)CreateOctopusReleaseV4$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Deploy$($slash)DeployV3$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Deploy$($slash)DeployV4$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)OctoCli$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)OctoInstaller$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Pack$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Promote$($slash)PromoteV3$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Promote$($slash)PromoteV4$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Push$($slash)PushV3$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Push$($slash)PushV4$($slash)node_modules"
 }
 
 function UpdateTfxCli() {

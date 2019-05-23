@@ -5,7 +5,7 @@ var clean = require("gulp-clean");
 var runSequence = require("run-sequence");
 var paths = require("../paths");
 var glob = require("glob");
-const argv = require('yargs').argv
+const argv = require('yargs').argv;
 
 gulp.task("build", (callback) => {
     return runSequence("clean", ["build:tasks", "build:widgets", "build:copy", "build:copy:task:content"], callback);
@@ -21,7 +21,7 @@ gulp.task("build:tasks", [], run("./node_modules/.bin/webpack --mode=development
 gulp.task("build:widgets", ["build:widget:source"], () =>
 {
     return gulp.src("node_modules/vss-web-extension-sdk/lib/**/*.*",{ base: "node_modules/vss-web-extension-sdk" })
-    .pipe(gulp.dest(`${paths.outputPath}widgets/ProjectStatus`));
+    .pipe(gulp.dest(`${paths.outputPath}widgets/ProjectStatus`))
 });
 
 gulp.task("build:widget:source", [], () => {
@@ -52,7 +52,7 @@ gulp.task("build:copy:externals", ["build:tasks"], (cb) => {
             var dir = path.basename(task);
             console.log(dir);
             stream = stream.pipe(gulp.dest(path.dirname(task)));
-        })
+        });
 
         stream.on("end", cb);
     });
