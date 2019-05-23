@@ -29,13 +29,17 @@ function CleanNodeModules() {
         }
     }
 
-    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusRelease\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Deploy\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusReleaseV3\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusReleaseV4\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\DeployV3\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\DeployV4\node_modules"
     Invoke-Expression "$command $($basePath)\dist\tasks\OctoCli\node_modules"
     Invoke-Expression "$command $($basePath)\dist\tasks\OctoInstaller\node_modules"
     Invoke-Expression "$command $($basePath)\dist\tasks\Pack\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Promote\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Push\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\PromoteV3\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\PromoteV4\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\PushV3\node_modules"
+    Invoke-Expression "$command $($basePath)\dist\tasks\PushV4\node_modules"
 }
 
 function UpdateTfxCli() {
