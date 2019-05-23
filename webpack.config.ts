@@ -20,7 +20,8 @@ const createTaskConfig = (filePath: string): Configuration => {
     let taskPath;
 
     if (filePath.includes("V3") || filePath.includes("V4")) {
-        let parts = filePath.split("/tasks/");
+        var tmpPath = path.dirname(filePath);
+        let parts = tmpPath.split("/tasks/");
         taskPath = parts[1];
     } else {
         taskPath = path.basename(path.dirname(filePath));
