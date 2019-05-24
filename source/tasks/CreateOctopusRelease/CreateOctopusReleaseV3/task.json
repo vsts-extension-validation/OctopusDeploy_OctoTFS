@@ -57,7 +57,7 @@
             "properties": {
                 "EditableOptions": "False"
             },
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "helpMarkDown": "Version 3 of this task has limited support for spaces. We recommend using version 4 of this task for a better experience."
         },
         {
             "name": "ProjectName",
