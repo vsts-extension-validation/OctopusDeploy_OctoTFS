@@ -39,7 +39,7 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "SpaceId",
+            "name": "Space",
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
@@ -160,7 +160,7 @@
     ],
     "dataSourceBindings": [
         {
-            "target": "SpaceId",
+            "target": "Space",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
@@ -169,12 +169,18 @@
             "target": "ProjectName",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllProjectsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployToEnvironment",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
@@ -182,6 +188,7 @@
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusProjectChannelsInSpace",
             "parameters": {
+                "SpaceId": "$(Space)",
                 "ProjectName": "$(ProjectName)"
             },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
@@ -190,6 +197,9 @@
             "target": "DeployForTenants",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllTenantsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
