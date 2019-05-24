@@ -51,7 +51,7 @@
         {
             "name": "Space",
             "type": "string",
-            "label": "Space",
+            "label": "Space (Legacy - Use version 4 of this task)",
             "defaultValue": "",
             "required": false,
             "properties": {

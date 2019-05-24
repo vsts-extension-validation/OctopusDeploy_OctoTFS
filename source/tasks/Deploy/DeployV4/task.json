@@ -39,7 +39,7 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "SpaceId",
+            "name": "Space",
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
@@ -47,7 +47,7 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "The Space name within Octopus."
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space. (Octopus Deploy 2019.1+)"
         },
         {
             "name": "Project",
@@ -120,7 +120,7 @@
     ],
     "dataSourceBindings": [
         {
-            "target": "SpaceId",
+            "target": "Space",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
@@ -129,18 +129,27 @@
             "target": "Project",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllProjectsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "Environments",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployForTenants",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllTenantsInSpace",
+            "parameters": {
+                "SpaceId": "$(Space)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],

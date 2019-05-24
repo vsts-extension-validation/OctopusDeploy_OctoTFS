@@ -13,7 +13,7 @@ async function run() {
     try {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        const spaceId = tasks.getInput("SpaceId");
+        const spaceId = tasks.getInput("Space");
         const space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then(x => x.value);
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
