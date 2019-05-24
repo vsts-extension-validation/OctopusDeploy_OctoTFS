@@ -172,7 +172,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployToEnvironment",
