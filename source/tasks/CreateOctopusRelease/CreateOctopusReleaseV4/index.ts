@@ -16,6 +16,7 @@ async function run() {
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const spaceId = tasks.getInput("Space");
+        const space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
         const project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
         const releaseNumber = tasks.getInput("ReleaseNumber");
         const channel = tasks.getInput("Channel");
@@ -40,7 +41,7 @@ async function run() {
         },  environmentVariables.defaultWorkingDirectory);
 
         const configure = [
-            argumentIfSet(argumentEnquote, "space", spaceId),
+            argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
             argumentIfSet(argumentEnquote, "channel", channel),
