@@ -35,7 +35,7 @@
         },
         {
             "name": "Space",
-            "type": "string",
+            "type": "pickList",
             "label": "Space",
             "defaultValue": "",
             "required": false,
