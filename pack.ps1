@@ -75,14 +75,11 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
         $netVersion = [System.Version]::Parse($version)
 
-#
-#       TODO: Automate setting the major version by looking at the directory name. Default is 3.
-#
-
-#        $task.version.Major = $netVersion.Major
-
-        $task.version.Minor = $netVersion.Minor
-        $task.version.Patch = $netVersion.Build
+        if ($task.version.Major -ne 3) {
+            $task.version.Major  = $netVersion.Major
+            $task.version.Minor = $netVersion.Minor
+            $task.version.Patch = $netVersion.Build
+        }
 
         $task.helpMarkDown = "Version: $version. [More Information](https://g.octopushq.com/TFS-VSTS)"
 
