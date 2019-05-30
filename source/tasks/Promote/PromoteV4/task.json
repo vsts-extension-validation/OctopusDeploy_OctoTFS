@@ -165,7 +165,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Promote $(Project) from $(From) to $(To)",
+    "instanceNameFormat": "Promote Project in Octopus",
     "execution": {
         "Node": {
             "target": "index.js"

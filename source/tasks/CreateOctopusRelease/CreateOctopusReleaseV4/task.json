@@ -203,7 +203,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Create Octopus Release: $(ProjectName)",
+    "instanceNameFormat": "Create Octopus Release",
     "execution": {
         "Node": {
             "target": "index.js"
