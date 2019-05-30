@@ -122,7 +122,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
                 console.log("Adding commit message to release notes");
                 releaseNotes += changes.reduce((prev, current) => {
                     return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}): ${current.message}${newLine}`;
-                }, `**Commit Messages:${newLine}`);
+                }, `**Commit Messages:**${newLine}`);
             } else {
                 /*
                     This could be any other git repo like Git, GitHub, SVN etc. We don't know
@@ -131,7 +131,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
                 console.log("Adding commit message to release notes");
                 releaseNotes += changes.reduce((prev, current) => {
                     return prev + `* ${current.id} - ${current.author.displayName}: ${current.message}${newLine}`;
-                }, `**Commit Messages:${newLine}`);
+                }, `**Commit Messages:**${newLine}`);
             }
         }
 
