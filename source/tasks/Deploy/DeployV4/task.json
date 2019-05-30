@@ -132,7 +132,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "Environments",
@@ -141,7 +141,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployForTenants",
@@ -150,7 +150,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Deploy Octopus Release: $(Project) to $(Environments)",

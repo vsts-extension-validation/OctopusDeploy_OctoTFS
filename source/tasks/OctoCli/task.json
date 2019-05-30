@@ -11,9 +11,9 @@
     ],
     "author": "Octopus Deploy",
     "version": {
-        "Major": 3,
+        "Major": 4,
         "Minor": 0,
-        "Patch": 16
+        "Patch": 0
     },
     "demands": [],
     "minimumAgentVersion": "2.115.0",

@@ -15,9 +15,9 @@
     ],
     "author": "Octopus Deploy",
     "version": {
-        "Major": 3,
+        "Major": 4,
         "Minor": 0,
-        "Patch": 10
+        "Patch": 0
     },
     "satisfies": ["Octo"],
     "demands": [],

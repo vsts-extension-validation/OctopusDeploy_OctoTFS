@@ -43,7 +43,7 @@
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "properties": {
                 "EditableOptions": "True"
             },
@@ -172,7 +172,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployToEnvironment",
@@ -181,7 +181,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "Channel",
@@ -191,7 +191,7 @@
                 "SpaceId": "$(Space)",
                 "ProjectName": "$(ProjectName)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "DeployForTenants",
@@ -200,7 +200,7 @@
             "parameters": {
                 "SpaceId": "$(Space)"
             },
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Create Octopus Release: $(ProjectName)",

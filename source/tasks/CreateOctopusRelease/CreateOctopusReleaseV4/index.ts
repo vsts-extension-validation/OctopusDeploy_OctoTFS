@@ -15,9 +15,8 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environmentVariables);
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
-        const spaceId = tasks.getInput("Space");
-        const space = await utils.resolveSpaceName(connection, spaceId).then(x => x.value);
-        const project = await utils.resolveProjectName(connection, tasks.getInput("ProjectName", true)).then(x => x.value);
+        const space = tasks.getInput("Space");
+        const project = tasks.getInput("ProjectName", true);
         const releaseNumber = tasks.getInput("ReleaseNumber");
         const channel = tasks.getInput("Channel");
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");

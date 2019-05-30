@@ -38,7 +38,7 @@
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "properties": {
                 "EditableOptions": "True"
             },
@@ -75,7 +75,7 @@
             "target": "Space",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Push Packages to Octopus",
