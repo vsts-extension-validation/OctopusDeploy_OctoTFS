@@ -20,7 +20,7 @@ function CleanNodeModules() {
 
     if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
     {
-        $command = "$($env:GOPATH)\bin\node-prune"
+        $command = "$($env:GOPATH)/bin/node-prune"
 
         if(-Not (Test-Path $command)){
             Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
@@ -29,19 +29,17 @@ function CleanNodeModules() {
         }
     }
 
-    $slash = [IO.Path]::DirectorySeparatorChar;
-
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)CreateOctopusRelease$($slash)CreateOctopusReleaseV3$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)CreateOctopusRelease$($slash)CreateOctopusReleaseV4$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Deploy$($slash)DeployV3$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Deploy$($slash)DeployV4$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)OctoCli$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)OctoInstaller$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Pack$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Promote$($slash)PromoteV3$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Promote$($slash)PromoteV4$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Push$($slash)PushV3$($slash)node_modules"
-    Invoke-Expression "$command $($basePath)$($slash)dist$($slash)tasks$($slash)Push$($slash)PushV4$($slash)node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoCli/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoInstaller/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Pack/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV4/node_modules"
 }
 
 function UpdateTfxCli() {
