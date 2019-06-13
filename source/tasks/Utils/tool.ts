@@ -43,7 +43,7 @@ export async function getOrInstallOctoCommandRunner(command: string) : Promise<E
         return right(new OctoLauncher(octo.value));
     }
 
-    return resolvePublishedOctoVersion("embedded")
+    return resolvePublishedOctoVersion("latest")
     .then(getOrDownloadOcto)
     .then(addToolToPath)
     .then(() => getOctoCommandRunner(command).map(x => new OctoLauncher(x)))
