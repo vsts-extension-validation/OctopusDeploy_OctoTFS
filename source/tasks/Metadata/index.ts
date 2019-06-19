@@ -10,7 +10,7 @@ import {
     argument,
     argumentEnquote,
     argumentIfSet
-} from '../Utils/tool';
+} from '../Utils';
 
 export interface IOctopusPackageMetadata {
     BuildEnvironment: string;
@@ -33,17 +33,12 @@ async function run() {
         const environment = utils.getVstsEnvironmentVariables();
         const vstsConnection = utils.createVstsConnection(environment);
 
-        const hasSpaces = tasks.getBoolInput("HasSpaces", true);
-        const spaceName = tasks.getInput("SpaceName");
+        const space = tasks.getInput("Space");
         const packageId = tasks.getInput("PackageId", true);
         const packageVersion = tasks.getInput("PackageVersion", true);
         const commentParser = tasks.getInput("CommentParser");
         const replace = tasks.getBoolInput("Replace", true);
         const additionalArguments = tasks.getInput("AdditionalArguments");
-
-        const space = (hasSpaces && spaceName && spaceName.length > 0)
-            ? spaceName
-            : null;
 
         const commits = await utils.getBuildChanges(vstsConnection);
 

@@ -11,7 +11,7 @@
     ],
     "author": "Octopus Deploy",
     "version": {
-        "Major": 0,
+        "Major": 4,
         "Minor": 0,
         "Patch": 0
     },
@@ -34,15 +34,7 @@
             "helpMarkDown": "Octopus Deploy server connection"
         },
         {
-            "name": "HasSpaces",
-            "type": "boolean",
-            "label": "Push Metadata to Space (Octopus Deploy 2019.1+)",
-            "defaultValue": "false",
-            "required": true,
-            "helpMarkDown": "Octopus Deploy 2019.1+ supports Spaces"
-        },
-        {
-            "name": "SpaceName",
+            "name": "Space",
             "type": "pickList",
             "label": "Space",
             "defaultValue": "",
@@ -50,8 +42,7 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "The Space name within Octopus.",
-            "visibleRule": "HasSpaces = true"
+            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space. (Octopus Deploy 2019.1+)"
         },
         {
             "name": "PackageId",
@@ -103,10 +94,10 @@
     ],
     "dataSourceBindings": [
         {
-            "target": "SpaceName",
+            "target": "Space",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllSpaces",
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
     "instanceNameFormat": "Push Package Metadata to Octopus",
