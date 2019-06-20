@@ -33,7 +33,7 @@ For example, if your build needs to create a Release for Project A, the user who
 This extension adds the following tasks:
 
 - Octopus tools installer
-- Package Application
+- Package Application for Octopus
 - Push Packages to Octopus
 - Create Octopus Release
 - Deploy Octopus Release
@@ -50,7 +50,7 @@ And the following widget:
 Options include:
 * **Version**: The verion to use or 'latest' to always use the most recent version. Please note that this task is only required if you wish to change the version of octo to be used by subsequent tasks.
 
-### <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application
+### <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
 
 *Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus when targeting full .NET framework projects.*
 
