@@ -1,4 +1,4 @@
-﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.task.json
+﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.CreateOctopusReleaseV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
 	'ProjectName': pickList
@@ -12,9 +12,33 @@
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.tasks.Deploy.task.json
+OctoTFS.Tests.resources.tasks.CreateOctopusRelease.CreateOctopusReleaseV4.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': pickList
+	'ProjectName': pickList
+	'ReleaseNumber': string
+	'Channel': pickList
+	'ChangesetCommentReleaseNotes': boolean
+	'WorkItemReleaseNotes': boolean
+	'CustomReleaseNotes': string
+	'DeployToEnvironment': pickList
+	'DeployForTenants': pickList
+	'DeployForTenantTags': string
+	'DeploymentProgress': boolean
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.tasks.Deploy.DeployV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
+	'Project': pickList
+	'ReleaseNumber': string
+	'Environments': pickList
+	'ShowProgress': boolean
+	'DeployForTenants': pickList
+	'DeployForTenantTags': string
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.tasks.Deploy.DeployV4.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': pickList
 	'Project': pickList
 	'ReleaseNumber': string
 	'Environments': pickList
@@ -44,7 +68,7 @@ OctoTFS.Tests.resources.tasks.Pack.task.json
 	'ListFiles': boolean
 	'CompressionLevel': pickList
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.tasks.Promote.task.json
+OctoTFS.Tests.resources.tasks.Promote.PromoteV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
 	'Project': pickList
@@ -54,9 +78,25 @@ OctoTFS.Tests.resources.tasks.Promote.task.json
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'AdditionalArguments': string
-OctoTFS.Tests.resources.tasks.Push.task.json
+OctoTFS.Tests.resources.tasks.Promote.PromoteV4.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': pickList
+	'Project': pickList
+	'From': pickList
+	'To': pickList
+	'ShowProgress': boolean
+	'DeployForTenants': pickList
+	'DeployForTenantTags': string
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.tasks.Push.PushV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
+	'Package': multiLine
+	'Replace': boolean
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.tasks.Push.PushV4.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': pickList
 	'Package': multiLine
 	'Replace': boolean
 	'AdditionalArguments': string
