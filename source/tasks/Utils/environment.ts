@@ -13,7 +13,7 @@ export interface ReleaseEnvironmentVariables {
 }
 
 export interface BuildEnvironmentVariables{
-    buildNumber: number;
+    buildNumber: string;
     buildId: number;
     buildName: string;
     buildRepositoryName: string;
@@ -34,7 +34,7 @@ export const getVstsEnvironmentVariables= () : VstsEnvironmentVariables =>{
     return {
         projectId: process.env["SYSTEM_TEAMPROJECTID"],
         projectName: process.env["SYSTEM_TEAMPROJECT"],
-        buildNumber: Number(process.env["BUILD_BUILDNUMBER"]),
+        buildNumber: process.env["BUILD_BUILDNUMBER"],
         buildId: Number(process.env["BUILD_BUILDID"]),
         buildName: process.env["BUILD_DEFINITIONNAME"],
         buildRepositoryName: process.env["BUILD_REPOSITORY_NAME"],
@@ -122,7 +122,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
                 console.log("Adding commit message to release notes");
                 releaseNotes += changes.reduce((prev, current) => {
                     return prev + `* [${current.id} - ${current.author.displayName}](${getCommitUrl(environment, current)}): ${current.message}${newLine}`;
-                }, `**Commit Messages:${newLine}`);
+                }, `**Commit Messages:**${newLine}`);
             } else {
                 /*
                     This could be any other git repo like Git, GitHub, SVN etc. We don't know
@@ -131,7 +131,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
                 console.log("Adding commit message to release notes");
                 releaseNotes += changes.reduce((prev, current) => {
                     return prev + `* ${current.id} - ${current.author.displayName}: ${current.message}${newLine}`;
-                }, `**Commit Messages:${newLine}`);
+                }, `**Commit Messages:**${newLine}`);
             }
         }
 

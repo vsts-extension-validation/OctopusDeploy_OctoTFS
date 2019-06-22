@@ -21,7 +21,7 @@ async function run() {
         const environments = utils.getRequiredCsvInput("Environments");
         const showProgress = tasks.getBoolInput("ShowProgress");
         const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
+        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
         const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true))
             .then(x => x.value);
