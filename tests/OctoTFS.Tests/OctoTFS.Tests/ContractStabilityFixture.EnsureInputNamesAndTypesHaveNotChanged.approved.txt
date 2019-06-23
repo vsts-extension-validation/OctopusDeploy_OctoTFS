@@ -1,40 +1,26 @@
 ﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
-	'HasSpaces': boolean
-	'SpaceId': pickList
 	'ProjectName': pickList
-	'ProjectNameInSpace': pickList
 	'ReleaseNumber': string
 	'Channel': pickList
-	'ChannelInSpace': pickList
 	'ChangesetCommentReleaseNotes': boolean
 	'WorkItemReleaseNotes': boolean
 	'CustomReleaseNotes': string
 	'DeployToEnvironment': pickList
-	'DeployToEnvironmentInSpace': pickList
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
-	'DeployForTenantsInSpace': pickList
-	'DeployForTenantTagsInSpace': string
-	'DeploymentProgressInSpace': boolean
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Deploy.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
-	'HasSpaces': boolean
-	'SpaceId': pickList
 	'Project': pickList
-	'ProjectNameInSpace': pickList
 	'ReleaseNumber': string
 	'Environments': pickList
-	'EnvironmentsInSpace': pickList
 	'ShowProgress': boolean
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
-	'DeployForTenantsInSpace': pickList
-	'DeployForTenantTagsInSpace': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.OctoCli.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
@@ -61,25 +47,16 @@ OctoTFS.Tests.resources.tasks.Pack.task.json
 OctoTFS.Tests.resources.tasks.Promote.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
-	'HasSpaces': boolean
-	'SpaceId': pickList
 	'Project': pickList
-	'ProjectNameInSpace': pickList
 	'From': pickList
-	'FromEnvironmentInSpace': pickList
 	'To': pickList
-	'ToEnvironmentsInSpace': pickList
 	'ShowProgress': boolean
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
-	'DeployForTenantsInSpace': pickList
-	'DeployForTenantTagsInSpace': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Push.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
-	'HasSpaces': boolean
-	'SpaceName': pickList
 	'Package': multiLine
 	'Replace': boolean
 	'AdditionalArguments': string
