@@ -79,9 +79,14 @@ export function getPortableOctoCommandRunner(command: string) : Option<ToolRunne
     return result;
 }
 
-export const connectionArguments = curry(({url, apiKey } : OctoServerConnectionDetails, tool: ToolRunner) => {
-    return tool.arg(`--server=${url}`)
-               .arg(`--apiKey=${apiKey}`);
+export const connectionArguments = curry(({ url, apiKey, ignoreSslErrors }: OctoServerConnectionDetails, tool: ToolRunner) => {
+    let tr = tool
+        .arg(`--server=${url}`)
+        .arg(`--apiKey=${apiKey}`);
+    if (ignoreSslErrors) {
+        tr = tr.arg(`--ignoreSslErrors`);
+    }
+    return tr;
 });
 
 export const multiArgument = curry((arg: ArgFormatter, name: string, values: string[], tool: ToolRunner) => {
