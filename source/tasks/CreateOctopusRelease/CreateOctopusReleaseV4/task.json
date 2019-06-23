@@ -24,6 +24,16 @@
             "isExpanded": true
         },
         {
+            "name": "deployment",
+            "displayName": "Deployment",
+            "isExpanded": false
+        },
+        {
+            "name": "tenant",
+            "displayName": "Tenants",
+            "isExpanded": false
+        },
+        {
             "name": "additional",
             "displayName": "Additional Options",
             "isExpanded": false
