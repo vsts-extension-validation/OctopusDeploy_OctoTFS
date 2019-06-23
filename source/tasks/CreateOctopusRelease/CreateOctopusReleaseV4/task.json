@@ -206,9 +206,10 @@
         {
             "target": "DeployForTenants",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllTenantsInSpace",
+            "dataSourceName": "OctopusProjectTenantsInSpace",
             "parameters": {
-                "SpaceId": "$(Space)"
+                "SpaceId": "$(Space)",
+                "ProjectName": "$(ProjectName)"
             },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }

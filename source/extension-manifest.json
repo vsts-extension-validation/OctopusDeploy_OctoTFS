@@ -222,8 +222,8 @@
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
-                        "name": "OctopusAllTenantsInSpace",
-                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/tenants/all",
+                        "name": "OctopusProjectTenantsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/tenants/all?projectId=$(ProjectName)",
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
