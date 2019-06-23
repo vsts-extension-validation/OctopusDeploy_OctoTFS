@@ -28,14 +28,14 @@ export function getOctopusConnectionDetails(name: string): OctoServerConnectionD
     }
 }
 
-export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string, projectUrlFragment: string){
+export function fetchProjectName(details: OctoServerConnectionDetails, projectId: string){
     console.log("Ignore SSL: " + details.ignoreSslErrors);
     const client = new RestClient(
         "OctoTFS",
         details.url,
         [new OctoApiKeyHandler(details.apiKey)],
         {ignoreSslError: details.ignoreSslErrors});
-    return client.get<{Name: string}>(projectUrlFragment)
+    return client.get<{Name: string}>(`api/projects/${projectId}`)
         .then(x => {
             if(x.result){
                 return either.right<string, string>(x.result.Name);
@@ -50,46 +50,8 @@ export const isProjectId = (projectNameOrId: string) => /\w*Projects-\d*/.test(p
 
 export function resolveProjectName(connection: OctoServerConnectionDetails, projectNameOrId: string){
     if(isProjectId(projectNameOrId)) {
-        const projectUrlFragment = `api/projects/${projectNameOrId}`;
-        return fetchProjectName(connection, projectNameOrId, projectUrlFragment);
+        return fetchProjectName(connection, projectNameOrId);
     }
 
     return Promise.resolve(either.right<string, string>(projectNameOrId));
-}
-
-export function resolveProjectNameInSpace(connection: OctoServerConnectionDetails, spaceId: string, projectNameOrId: string){
-    if(isProjectId(projectNameOrId)) {
-        const projectUrlFragment = `api/${spaceId}/projects/${projectNameOrId}`;
-        return fetchProjectName(connection, projectNameOrId, projectUrlFragment);
-    }
-
-    return Promise.resolve(either.right<string, string>(projectNameOrId));
-}
-
-export function fetchSpaceName(details: OctoServerConnectionDetails, spaceId: string){
-    console.log("Ignore SSL: " + details.ignoreSslErrors);
-    const client = new RestClient(
-        "OctoTFS",
-        details.url,
-        [new OctoApiKeyHandler(details.apiKey)],
-        {ignoreSslError: details.ignoreSslErrors});
-    return client.get<{Name: string}>(`api/spaces/${spaceId}`)
-        .then(x => {
-                if(x.result){
-                    return either.right<string, string>(x.result.Name);
-                }
-
-                return either.left<string,string>(`Could not resolve space name given id "${spaceId}". Server returned status code: ${x.statusCode}`);
-            }
-        ).catch(error => either.left<string,string>(error))
-}
-
-export const isSpaceId = (spaceNameOrId: string) => /Spaces-\d*/.test(spaceNameOrId);
-
-export function resolveSpaceName(connection: OctoServerConnectionDetails, spaceNameOrId: string){
-    if(isSpaceId(spaceNameOrId)) {
-        return fetchSpaceName(connection, spaceNameOrId);
-    }
-
-    return Promise.resolve(either.right<string, string>(spaceNameOrId));
 }
