@@ -37,19 +37,13 @@ gulp.task("build:copy", () => {
     .pipe(gulp.dest(outputPath));
 });
 
-gulp.task("build:copy:task:content", gulp.series(["build:tasks"]), () => {
+gulp.task("build:copy:task:content", () => {
     return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
     .pipe(debug({title: "Copy Task Content"})).pipe(gulp.dest(paths.outputPath));
 });
 
 
-gulp.task("build:copy:task:content2", gulp.parallel(["build:copy"]), () => {
-    return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
-    .pipe(debug({title: "Copy Task Content"}))
-    .pipe(gulp.dest(paths.outputPath));
-});
-
-gulp.task("build:copy:externals", gulp.series(["build:tasks"]), (cb) => {
+gulp.task("build:copy:externals", (cb) => {
     var stream = gulp.src(paths.externals.map(x => `node_modules/${x}/**/*.*`), { base: "."});
 
     glob(`${paths.outputPath}/tasks/**/task.json`, (err, matches) => {
@@ -79,9 +73,13 @@ gulp.task("clean", () => {
 gulp.task("build",
     gulp.series(
         "clean",
-        "build:tasks",
-        "build:widgets",
-        "build:copy",
-        "build:copy:task:content"
+        gulp.parallel(
+            "build:tasks",
+            "build:widgets",
+            "build:copy",
+            "build:copy:task:content",
+            "build:copy:externals"
+
+        )
     )
 );
