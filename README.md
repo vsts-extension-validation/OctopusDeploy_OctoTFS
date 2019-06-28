@@ -1,8 +1,8 @@
 # OctoTFS
 
-OctoTFS is a repository containing components for integration with Team Foundation Server and Visual Studio Team Services (VSTS).
+OctoTFS is a set of components for integration with Azure DevOps and Team Foundation Server (TFS).
 
-> Visual Studio Team Services (VSTS) was formerly known as Visual Studio Online (VSO)
+> Azure DevOps was formerly known as Visual Studio Team Services (VSTS) and Visual Studio Online (VSO).
 
 ## Manual Building and Testing
 
