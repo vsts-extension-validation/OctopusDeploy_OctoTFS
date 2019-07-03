@@ -187,9 +187,11 @@
         {
             "target": "DeployToEnvironment",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "dataSourceName": "OctopusProjectChannelEnvironmentsInSpace",
             "parameters": {
-                "SpaceId": "$(Space)"
+                "SpaceId": "$(Space)",
+                "ProjectId": "$(ProjectName)",
+                "ChannelId": "$(Channel)"
             },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },

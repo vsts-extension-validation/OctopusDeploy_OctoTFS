@@ -227,6 +227,16 @@
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
+                        "name": "OctopusProjectEnvironmentsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/environments/all?projectId=$(ProjectId)",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusProjectChannelEnvironmentsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/environments/all?projectId=$(ProjectId)&channelId=$(ChannelId)",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
                         "name": "OctopusAllTenants",
                         "endpointUrl": "$(endpoint.url)/api/tenants/all",
                         "resultSelector": "jsonpath:$.[*]"

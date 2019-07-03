@@ -140,18 +140,20 @@
         {
             "target": "From",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "dataSourceName": "OctopusProjectEnvironmentsInSpace",
             "parameters": {
-                "SpaceId": "$(Space)"
+                "SpaceId": "$(Space)",
+                "ProjectId": "$(Project)"
             },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "To",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllEnvironmentsInSpace",
+            "dataSourceName": "OctopusProjectEnvironmentsInSpace",
             "parameters": {
-                "SpaceId": "$(Space)"
+                "SpaceId": "$(Space)",
+                "ProjectId": "$(Project)"
             },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
