@@ -111,7 +111,7 @@ function OctopusStatusWidget() {
                                     } else {
                                         $projectH2.text('');
                                         if (settings.spaceName) {
-                                            $environmentH3Span.text("No deployment found for " + settings.projectName + " to " + settings.environmentName + " in " + settings.spaceName + " space.");
+                                            $environmentH3Span.text("No deployment found for " + settings.projectName + " to " + settings.environmentName + " in the " + settings.spaceName + " space.");
                                         }
                                         else {
                                             $environmentH3Span.text("No deployment found for " + settings.projectName + " to " + settings.environmentName);
