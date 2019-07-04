@@ -1,8 +1,8 @@
 # OctoTFS
 
-OctoTFS is a repository containing the Octopus Build and Release tasks for integration with Microsoft Team Foundation Server (TFS) and Azure DevOps (ADO) pipelines.  
+OctoTFS is a set of packaging and release tasks and a widget for using Octopus Deploy with Azure DevOps and Team Foundation Server (TFS).
 
-> Azure DevOps (ADO) was previously Visual Studio Team Services (VSTS) and previously Visual Studio Online (VSO)
+> Azure DevOps was formerly known as Visual Studio Team Services (VSTS) and Visual Studio Online (VSO).
 
 OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as an web extension that can be installed with TFS or ADO. 
 
