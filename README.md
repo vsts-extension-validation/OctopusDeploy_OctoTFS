@@ -16,7 +16,7 @@ To learn more about how to use the extension and custom tasks, read the [VSTS RE
 * [Deploy Octopus Release](source/tasks/Deploy)
 * [Promote Octopus Release](source/tasks/Promote)
 
-This extension provides a friendly interface to the [Octopus CLI](https://github.com/octopusdeploy/octopusclients) which does the heavy lifting to integrate.
+This extension provides a friendly interface to the [Octopus CLI](https://g.octopushq.com/ExternalToolOctoTools) which does the heavy lifting to integrate.
 
 ## Dev
 
