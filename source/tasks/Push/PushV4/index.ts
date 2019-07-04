@@ -19,6 +19,7 @@ async function run() {
         const replace = tasks.getBoolInput("Replace");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
+        await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages);
 

@@ -22,6 +22,7 @@ async function run() {
         const showProgress = tasks.getBoolInput("ShowProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
+        await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
 
         const configure = [
