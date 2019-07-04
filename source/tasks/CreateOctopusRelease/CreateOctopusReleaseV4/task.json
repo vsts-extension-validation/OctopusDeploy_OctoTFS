@@ -57,7 +57,7 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space. (Octopus Deploy 2019.1+)"
+            "helpMarkDown": "The space within Octopus. You can leave this blank to use the default space. (Octopus Deploy 2019.1+)"
         },
         {
             "name": "ProjectName",
@@ -68,7 +68,7 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Octopus Deploy Project Name"
+            "helpMarkDown": "The project within Octopus."
         },
         {
             "name": "ReleaseNumber",
