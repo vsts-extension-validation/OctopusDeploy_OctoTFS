@@ -51,14 +51,14 @@ This will generate the full extension content required to create the extension V
 
 **Packaging**
 
-In order to package and test the extension on a local TFS instance without publishing to the marketplace you can run the following at a PowerShell command prompt.
+In order to package and test the extension on a local TFS instance, without publishing to the marketplace, you can run the following at a PowerShell command prompt.
  
 `./pack.ps1 -environment localtest -version "x.x.x"`
 
 **Task dependencies**
 
-Although we use webpack to bundle we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
-also previously bundled a version of octo tools, however we no longer bundle in favor of using an octo installer task.
+Although we use webpack to bundle, we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
+also previously bundled a version of octo tools with each task, but to reduce package size this was moved to the octo installer task.
 
 ### How to testing the extension
 
@@ -66,29 +66,29 @@ If you're doing updates/enhancements or bug fixes, the fastest development flow 
 
 ### Local
 
-It's highly recommended to setup two Virtual Machines running Windows Server. This is generally done locally and it's best to give your VM at least 8 gigs of memory and 4 CPU cores otherwise, the TFS/ADO installation can fail or take hours.    
+It's highly recommended to set up two Virtual Machines running Windows Server. This is generally done locally and it's best to give your VM at least 8 gigs of memory and 4 CPU cores, otherwise the TFS/ADO installation can fail or take hours.
 
 1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions so it's a very good for regression testing.  
-2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally and continually publishing to the Azure DevOps Marketplace. 
+2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally than continually publishing to the Azure DevOps Marketplace.
 
 To install locally, build and package the application as per the instructions above. Then install the extension by uploading it. Instructions to do this are available in Microsoft's [TFS/ADO docs](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs). 
 
-**Additional tips:** 
+#### Additional tips
 
 * TFS/ADO is accessible on port 8080 by default (this can be changed if desired) at something like the following: `http://<server name/ip>:8080/tfs/`
-* The TFS/ADO manage extensions page where you upload test extensions is available at `http://<server name/ip>:8080/tfs/_gallery/manage`
+* The TFS/ADO "Manage Extensions" page, where you upload test extensions, is available at `http://<server name/ip>:8080/tfs/_gallery/manage`
 * You may need to tweak your VM firewall settings to access it from outside of your VM in the host OS. Assuming it's local, turning it off is pretty quick and safe. 
 
-**Testing Gotchas**
+#### Testing Gotchas
 
 * If you design a build pipeline with the current live extension, you can't upgrade it. You need to install the `localtest` extension first and use it in your builds. Then you can upgrade it and you will get your latest updates/fixes etc.
 * Pay special attention to [this approval test](tests/OctoTFS.Tests/OctoTFS.Tests/ContractStabilityFixture.EnsureInputNamesAndTypesHaveNotChanged.approved.txt). It ensures we do not break our contract and we have to explicitly update it when updating the extension.
-* We need to maintain backwards compatibility and we need to ensure any existing buidls will not break after we publish an updated. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
-* Building on the previous point, there is no way to rollback an extension so testing is difficul as well. The recommended approach to this is to snapshot your local test VMs when you have a working builds so you can update the extension and revert back to the snapshot as needed.        
+* We need to maintain backwards compatibility and we need to ensure any existing builds will not break after we publish an update. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
+* Building on the previous point, there is no way to roll back an extension so testing is difficult as well. The recommended approach to this is to snapshot your local test VMs when you have a working build, so you can update the extension and revert back to the snapshot as needed.
 
 ### Test environment
 
-Octopus staff can publish an extension for testing which is wired up to a test Azure DevOps organisation. This is a great area for further live testing against the latest and greatest release of Azure DevOps.
+Octopus staff can publish an extension for testing which is wired up to a test Azure DevOps organization. This is a great area for further live testing against the latest and greatest release of Azure DevOps.
 
 - [Octopus Extension in Marketplace](https://marketplace.visualstudio.com/items?itemName=octopusdeploy.octopus-deploy-build-release-tasks-test)
 - [Octopus VSTS Environment](https://octopus-deploy-test.visualstudio.com)
