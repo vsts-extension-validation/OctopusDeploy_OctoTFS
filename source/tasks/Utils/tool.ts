@@ -96,10 +96,10 @@ export const assertOctoVersionAcceptsIds = async function (): Promise<void> {
     const compatible
         = `${major}.${minor}.${patch}` == "1.0.0" // allow dev versions
         || major > 6
-        || (major == 6 && minor > 8)
-        || (major == 6 && minor == 8 && patch >= 3);
+        || (major == 6 && minor > 10)
+        || (major == 6 && minor == 10 && patch >= 0);
     if (!compatible) {
-        throw new Error("The Octo CLI tools are too old to run this task. Please use version 6.8.3 or newer, or downgrade the task to version 3.*.");
+        throw new Error("The Octo CLI tools are too old to run this task. Please use version 6.10.0 or newer, or downgrade the task to version 3.*.");
     }
 };
 
