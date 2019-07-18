@@ -70,13 +70,10 @@ gulp.task("clean", () => {
 gulp.task("build",
     gulp.series(
         "clean",
-        gulp.parallel(
-            "build:tasks",
-            "build:widgets",
-            "build:copy",
-            "build:copy:task:content",
-            "build:copy:externals"
-
-        )
+        "build:tasks",
+        "build:widgets",
+        "build:copy",
+        "build:copy:task:content",
+        "build:copy:externals"
     )
 );
