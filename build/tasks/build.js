@@ -4,10 +4,8 @@ var clean = require("gulp-clean");
 var paths = require("../paths");
 var glob = require("glob");
 var spawn = require('child_process').spawn;
-var debug = require('gulp-debug');
 const argv = require('yargs').argv
 
-console.log(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`));
 const sourceRoot =  path.resolve(paths.sourceRoot);
 const outputPath = path.resolve(paths.outputPath);
 
@@ -41,7 +39,7 @@ gulp.task("build:copy", () => {
 
 gulp.task("build:copy:task:content", () => {
     return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
-    .pipe(debug({title: "Copy Task Content"})).pipe(gulp.dest(paths.outputPath));
+    .pipe(gulp.dest(paths.outputPath));
 });
 
 
@@ -53,11 +51,8 @@ gulp.task("build:copy:externals", (cb) => {
             cb(err);
             return;
         }
-        console.log("Matches : " + matches.length);
 
         matches.forEach((task) => {
-            var dir = path.basename(task);
-            console.log(dir);
             stream = stream.pipe(gulp.dest(path.dirname(task)));
         })
 
