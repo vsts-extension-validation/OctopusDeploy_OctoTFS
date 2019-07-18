@@ -3,7 +3,7 @@ var path = require("path");
 var clean = require("gulp-clean");
 var paths = require("../paths");
 var glob = require("glob");
-var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 var debug = require('gulp-debug');
 const argv = require('yargs').argv
 
@@ -12,8 +12,10 @@ const sourceRoot =  path.resolve(paths.sourceRoot);
 const outputPath = path.resolve(paths.outputPath);
 
 gulp.task("build:tasks", () => {
-    return exec(`${path.resolve("./node_modules/.bin/webpack")} --mode=development --require ts-node/register --require tsconfig-paths/register`,
+    return spawn(`${path.resolve("./node_modules/.bin/webpack")} --mode=development --require ts-node/register --require tsconfig-paths/register`,
     {
+        shell: true,
+        stdio: 'inherit',
         env: {
             TS_NODE_PROJECT: "build/tsconfig-webpack.json",
             EXTENSION_VERSION: argv.extensionVersion
