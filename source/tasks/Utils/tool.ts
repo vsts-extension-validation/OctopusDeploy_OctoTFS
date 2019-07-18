@@ -92,7 +92,7 @@ export const assertOctoVersionAcceptsIds = async function (): Promise<void> {
         .getOrElseL(x => { throw new Error(x); });
 
     const outputLastLine = result.stdout.trim().split(/\r?\n/).pop() || "";
-    const [, major, minor, patch] = outputLastLine.trim().match(/^(\d+)\.(\d+)\.(\d+)\b/) || [, 0, 0, 0];
+    const [, major, minor, patch] = outputLastLine.trim().match(/^(\d+)\.(\d+)\.(\d+)\b/) || [0, 0, 0, 0];
     const compatible
         = `${major}.${minor}.${patch}` == "1.0.0" // allow dev versions
         || major > 6
