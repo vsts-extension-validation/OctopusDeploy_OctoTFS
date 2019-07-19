@@ -75,7 +75,6 @@ gulp.task("build",
         "build:tasks",
         "build:widgets",
         "build:copy",
-        "build:copy:task:content",
-        "build:copy:externals"
+        "build:copy:task:content"
     )
 );
