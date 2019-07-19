@@ -10,7 +10,7 @@ const sourceRoot =  path.resolve(paths.sourceRoot);
 const outputPath = path.resolve(paths.outputPath);
 
 gulp.task("build:tasks", () => {
-    return spawn(`${path.resolve("./node_modules/.bin/webpack")} --mode=development --require ts-node/register --require tsconfig-paths/register`,
+    return spawn(path.join(sourceRoot, "../node_modules/.bin/webpack") + " --mode=development --require ts-node/register --require tsconfig-paths/register",
     {
         shell: true,
         stdio: 'inherit',
@@ -22,14 +22,16 @@ gulp.task("build:tasks", () => {
 });
 
 gulp.task("build:widget:source", () => {
-    return gulp.src(path.join(sourceRoot, `widgets/**/*`), {base: path.join(paths.sourceRoot, `widgets`) })
-    .pipe(gulp.dest(path.join(paths.outputPath, `widgets`)));
+    return gulp.src(path.join(sourceRoot, `widgets/**/*`), {base: path.join(sourceRoot, `widgets`) })
+    .pipe(gulp.dest(path.join(outputPath, `widgets`)));
 });
 
 gulp.task("build:widgets", gulp.series(["build:widget:source"], () =>
 {
-    return gulp.src("node_modules/vss-web-extension-sdk/lib/**/*.*",{ base: "node_modules/vss-web-extension-sdk" })
-    .pipe(gulp.dest(`${paths.outputPath}widgets/ProjectStatus`));
+    return gulp.src(
+        path.join(sourceRoot, "../node_modules/vss-web-extension-sdk/lib/**/*.*"),
+        { base: path.join(sourceRoot, "../node_modules/vss-web-extension-sdk") })
+        .pipe(gulp.dest(path.join(outputPath, `widgets/ProjectStatus`)));
 }));
 
 gulp.task("build:copy", () => {
@@ -38,15 +40,15 @@ gulp.task("build:copy", () => {
 });
 
 gulp.task("build:copy:task:content", () => {
-    return gulp.src(path.join(path.resolve(paths.sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: path.resolve(paths.sourceRoot)})
-    .pipe(gulp.dest(paths.outputPath));
+    return gulp.src(path.join(path.resolve(sourceRoot), `tasks/**/*.{json,png,svg,zip,gz}`), { base: sourceRoot })
+    .pipe(gulp.dest(outputPath));
 });
 
 
 gulp.task("build:copy:externals", (cb) => {
     var stream = gulp.src(paths.externals.map(x => `node_modules/${x}/**/*.*`), { base: "."});
 
-    glob(`${paths.outputPath}/tasks/**/task.json`, (err, matches) => {
+    glob(path.join(outputPath, `tasks/**/task.json`), (err, matches) => {
         if(err){
             cb(err);
             return;
