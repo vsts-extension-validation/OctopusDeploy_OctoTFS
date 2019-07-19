@@ -149,7 +149,7 @@
             "dataSourceName": "OctopusProjectTenantsInSpace",
             "parameters": {
                 "SpaceId": "$(Space)",
-                "ProjectName": "$(ProjectName)"
+                "ProjectName": "$(Project)"
             },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
