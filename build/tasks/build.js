@@ -26,11 +26,11 @@ gulp.task("build:widget:source", () => {
     .pipe(gulp.dest(path.join(paths.outputPath, `widgets`)));
 });
 
-gulp.task("build:widgets", gulp.series(["build:widget:source"]), () =>
+gulp.task("build:widgets", gulp.series(["build:widget:source"], () =>
 {
     return gulp.src("node_modules/vss-web-extension-sdk/lib/**/*.*",{ base: "node_modules/vss-web-extension-sdk" })
     .pipe(gulp.dest(`${paths.outputPath}widgets/ProjectStatus`));
-});
+}));
 
 gulp.task("build:copy", () => {
     return gulp.src([ path.join(sourceRoot, `*.*`), path.join(sourceRoot, `img/**/*.*`)], { base: sourceRoot })
