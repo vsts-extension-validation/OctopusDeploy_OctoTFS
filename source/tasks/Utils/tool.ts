@@ -1,5 +1,5 @@
-import * as tasks from 'vsts-task-lib/task';
-import { ToolRunner } from 'vsts-task-lib/toolrunner';
+import * as tasks from 'azure-pipelines-task-lib/task';
+import { ToolRunner, IExecSyncResult } from 'azure-pipelines-task-lib/toolrunner';
 import { OctoServerConnectionDetails } from "./connection";
 import { curry } from "ramda";
 import { isNullOrWhitespace } from "./inputs";
@@ -25,13 +25,20 @@ export class OctoLauncher {
         this.runner = runner;
     }
 
-    public launchOcto(configurations: Array<(tool: ToolRunner) => ToolRunner>) {
-        const options: any = { env: {"OCTOEXTENSION": process.env.EXTENSION_VERSION, ...process.env }};
+    private getExecOptions(): any {
+        return { env: { "OCTOEXTENSION": process.env.EXTENSION_VERSION, ...process.env } };
+    }
 
-        const configure = configureTool(configurations);
-        configure(this.runner);
+    public launchOcto(configurations: Array<(tool: ToolRunner) => ToolRunner>): Q.Promise<number> {
+        configureTool(configurations)(this.runner);
 
-        return this.runner.exec(options);
+        return this.runner.exec(this.getExecOptions());
+    }
+
+    public launchOctoSync(configurations: Array<(tool: ToolRunner) => ToolRunner>): IExecSyncResult {
+        configureTool(configurations)(this.runner);
+
+        return this.runner.execSync(this.getExecOptions());
     }
 }
 
@@ -79,9 +86,31 @@ export function getPortableOctoCommandRunner(command: string) : Option<ToolRunne
     return result;
 }
 
-export const connectionArguments = curry(({url, apiKey } : OctoServerConnectionDetails, tool: ToolRunner) => {
-    return tool.arg(`--server=${url}`)
-               .arg(`--apiKey=${apiKey}`);
+export const assertOctoVersionAcceptsIds = async function (): Promise<void> {
+    const octo = await getOrInstallOctoCommandRunner("version");
+    const result = octo.map(x => x.launchOctoSync([]))
+        .getOrElseL(x => { throw new Error(x); });
+
+    const outputLastLine = result.stdout.trim().split(/\r?\n/).pop() || "";
+    const [, major, minor, patch] = outputLastLine.trim().match(/^(\d+)\.(\d+)\.(\d+)\b/) || [0, 0, 0, 0];
+    const compatible
+        = `${major}.${minor}.${patch}` == "1.0.0" // allow dev versions
+        || major > 6
+        || (major == 6 && minor > 10)
+        || (major == 6 && minor == 10 && patch >= 0);
+    if (!compatible) {
+        throw new Error("The Octo CLI tools are too old to run this task. Please use version 6.10.0 or newer, or downgrade the task to version 3.*.");
+    }
+};
+
+export const connectionArguments = curry(({ url, apiKey, ignoreSslErrors }: OctoServerConnectionDetails, tool: ToolRunner) => {
+    let tr = tool
+        .arg(`--server=${url}`)
+        .arg(`--apiKey=${apiKey}`);
+    if (ignoreSslErrors) {
+        tr = tr.arg(`--ignoreSslErrors`);
+    }
+    return tr;
 });
 
 export const multiArgument = curry((arg: ArgFormatter, name: string, values: string[], tool: ToolRunner) => {

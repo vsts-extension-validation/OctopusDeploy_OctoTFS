@@ -8,7 +8,8 @@ function OctopusStatusWidget() {
             var $releaseDateSpan = $('#octo-info-releasedate');
             var $linkElement = $('#octo-info-link');
             var $projectH2 = $('#octo-info-project');
-            var $environmentH3 = $('#octo-info-environment');
+            var $environmentH3Span = $('#octo-info-environment');
+            var $spaceH3Span = $('#octo-info-space');
             var $statusDescriptionDiv = $("#octo-extra-description");
 
             var getOctopusStatus = function (widgetSettings) {
@@ -20,9 +21,10 @@ function OctopusStatusWidget() {
                 }
                 // clear
                 $projectH2.text('Loading...');
-                $environmentH3.text('');
+                $environmentH3Span.text('');
+                $spaceH3Span.text('');
                 $versionSpan.text('');
-                $releaseDateSpan.text('')
+                $releaseDateSpan.text('');
                 $linkElement.removeAttr('href');
                 $statusIconDiv.removeClass('bowtie-status-success bowtie-status-failure bowtie-status-run bowtie-status-warning bowtie-status-help');
                 $statusDescriptionDiv.text('');
@@ -47,7 +49,16 @@ function OctopusStatusWidget() {
                             var endpointDetails = data;
 
                             var queryUri = baseUri + '/_apis/distributedtask/serviceendpointproxy?endpointId=' + settings.connectionId + '&api-version=3.0-preview.1';
-                            var dashboardQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusDashboardForProject", "parameters":{"ProjectId": "' + settings.projectId + '"}}}';
+
+                            var dashboardQueryContent;
+
+                            if (settings.spaceId) {
+                                dashboardQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusDashboardForProjectInSpace", "parameters":{"SpaceId": "' + settings.spaceId + '", "ProjectId": "' + settings.projectId + '"}}}';
+                            }
+                            else {
+                                dashboardQueryContent = '{"dataSourceDetails": {"dataSourceName":"OctopusDashboardForProject", "parameters":{"ProjectId": "' + settings.projectId + '"}}}';
+                            }
+
                             $.ajax({
                                 type: "POST",
                                 url: queryUri,
@@ -72,7 +83,8 @@ function OctopusStatusWidget() {
                                     });
                                     if (deploymentElement) {
                                         $projectH2.text(settings.projectName).attr('title', settings.projectName);
-                                        $environmentH3.text(settings.environmentName);
+                                        if (settings.spaceId) { $spaceH3Span.text(settings.spaceName + "-"); }
+                                        $environmentH3Span.text(settings.environmentName);
                                         $versionSpan.text(deploymentElement.ReleaseVersion);
                                         if (deploymentElement.IsCompleted) {
                                             $releaseDateSpan.text(moment(deploymentElement.CompletedTime).format('LL'));
@@ -86,7 +98,7 @@ function OctopusStatusWidget() {
                                             $statusIconDiv.addClass('bowtie-status-success');
                                             $statusDescriptionDiv.text("Duration: " + deploymentElement.Duration);
                                         } else if (deploymentElement.State === "Success") {
-                                            $statusIconDiv.addClass('bowtie-status-warning')
+                                            $statusIconDiv.addClass('bowtie-status-warning');
                                             $statusDescriptionDiv.text("Duration: " + deploymentElement.Duration);
                                         } else if (deploymentElement.State === "Failed") {
                                             $statusIconDiv.addClass('bowtie-status-failure');
@@ -98,7 +110,12 @@ function OctopusStatusWidget() {
                                         }
                                     } else {
                                         $projectH2.text('');
-                                        $environmentH3.text("No deployment found for " + settings.projectName + " to " + settings.environmentName);
+                                        if (settings.spaceName) {
+                                            $environmentH3Span.text("No deployment found for " + settings.projectName + " to " + settings.environmentName + " in the " + settings.spaceName + " space.");
+                                        }
+                                        else {
+                                            $environmentH3Span.text("No deployment found for " + settings.projectName + " to " + settings.environmentName);
+                                        }
                                     }
 
                                 });
@@ -106,7 +123,7 @@ function OctopusStatusWidget() {
 
                 });
                 return WidgetHelpers.WidgetStatusHelper.Success();
-            }
+            };
 
             return {
                 load: function (widgetSettings) {
@@ -120,4 +137,4 @@ function OctopusStatusWidget() {
 
         VSS.notifyLoadSucceeded();
     }
-};
+}

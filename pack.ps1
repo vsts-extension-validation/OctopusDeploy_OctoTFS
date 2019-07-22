@@ -16,11 +16,11 @@ $buildDirectoryPath = "$basePath/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
 function CleanNodeModules() {
-    $command = "node-prune.exe";
+    $command = "node-prune";
 
     if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
     {
-        $command = "$($env:GOPATH)\bin\node-prune.exe"
+        $command = "$($env:GOPATH)/bin/node-prune"
 
         if(-Not (Test-Path $command)){
             Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
@@ -29,13 +29,17 @@ function CleanNodeModules() {
         }
     }
 
-    Invoke-Expression "$command $($basePath)\dist\tasks\CreateOctopusRelease\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Deploy\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\OctoCli\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\OctoInstaller\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Pack\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Promote\node_modules"
-    Invoke-Expression "$command $($basePath)\dist\tasks\Push\node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoCli/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoInstaller/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Pack/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV3/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV4/node_modules"
 }
 
 function UpdateTfxCli() {
@@ -68,9 +72,12 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         Write-Host "Updating version to $version in $taskManifestFile..."
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
         $netVersion = [System.Version]::Parse($version)
-        $task.version.Major = $netVersion.Major
-        $task.version.Minor = $netVersion.Minor
-        $task.version.Patch = $netVersion.Build
+
+        if ($task.version.Major -gt 3) {
+            $task.version.Major  = $netVersion.Major
+            $task.version.Minor = $netVersion.Minor
+            $task.version.Patch = $netVersion.Build
+        }
 
         $task.helpMarkDown = "Version: $version. [More Information](https://g.octopushq.com/TFS-VSTS)"
 

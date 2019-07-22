@@ -11,9 +11,9 @@
     ],
     "author": "Octopus Deploy",
     "version": {
-        "Major": 0,
+        "Major": 3,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 224
     },
     "demands": [],
     "minimumAgentVersion": "2.115.0",
@@ -51,10 +51,13 @@
         {
             "name": "Space",
             "type": "string",
-            "label": "Space",
+            "label": "Space (Legacy - Use version 4 of this task)",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "properties": {
+                "EditableOptions": "False"
+            },
+            "helpMarkDown": "Version 3 of this task has limited support for spaces. We recommend using version 4 of this task for a better experience."
         },
         {
             "name": "ProjectName",

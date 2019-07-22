@@ -3,7 +3,7 @@ const uuidv1 = require("uuid/v1");
 import * as vsts from "azure-devops-node-api/WebApi";
 import * as wit from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces"
 import * as bi from "azure-devops-node-api/interfaces/BuildInterfaces";
-import * as tasks from "vsts-task-lib";
+import * as tasks from "azure-pipelines-task-lib";
 import { isNullOrWhitespace } from "./inputs";
 
 export interface ReleaseEnvironmentVariables {

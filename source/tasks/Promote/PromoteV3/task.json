@@ -1,8 +1,8 @@
 ﻿{
-    "id": "8ca1d96a-151d-44b7-bc4f-9251e2ea6971",
-    "name": "OctopusDeployRelease",
-    "friendlyName": "Deploy Octopus Release",
-    "description": "Deploy an Octopus Deploy Release",
+    "id": "1627fcfe-f292-4904-adac-26cfb14bdb07",
+    "name": "OctopusPromote",
+    "friendlyName": "Promote Octopus Release",
+    "description": "Promote an Octopus release from one environment to another",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Deploy",
     "visibility": [
@@ -11,9 +11,9 @@
     ],
     "author": "Octopus Deploy",
     "version": {
-        "Major": 0,
+        "Major": 3,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 224
     },
     "demands": [],
     "minimumAgentVersion": "2.115.0",
@@ -41,10 +41,13 @@
         {
             "name": "Space",
             "type": "string",
-            "label": "Space",
+            "label": "Space (Legacy - Use version 4 of this task)",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "The space name within Octopus. You can leave this blank to use the default space."
+            "properties": {
+                "EditableOptions": "False"
+            },
+            "helpMarkDown": "Version 3 of this task has limited support for spaces. We recommend using version 4 of this task for a better experience."
         },
         {
             "name": "Project",
@@ -58,23 +61,26 @@
             "helpMarkDown": "Octopus Deploy Project Name"
         },
         {
-            "name": "ReleaseNumber",
-            "type": "string",
-            "label": "Release Number",
-            "defaultValue": "latest",
-            "required": true,
-            "helpMarkDown": "The number of the release to deploy. Use 'latest' to deploy the latest release."
-        },
-        {
-            "name": "Environments",
+            "name": "From",
             "type": "pickList",
-            "label": "Deploy to Environments",
+            "label": "Promote From",
             "defaultValue": "",
             "required": true,
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Comma separated list of environments to deploy to."
+            "helpMarkDown": "The environment the release is currently deployed to. e.g. 'Staging'"
+        },
+        {
+            "name": "To",
+            "type": "pickList",
+            "label": "Promote To",
+            "defaultValue": "",
+            "required": true,
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "helpMarkDown": "Comma separated list of environments to deploy to"
         },
         {
             "name": "ShowProgress",
@@ -84,7 +90,7 @@
             "required": false,
             "helpMarkDown": "If checked, the build process will only succeed if the deployment is successful."
         },
-         {
+        {
             "name": "DeployForTenants",
             "type": "pickList",
             "label": "Tenant(s)",
@@ -93,16 +99,16 @@
             "properties": {
                 "EditableOptions": "True"
             },
-            "helpMarkDown": "Deploy the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
+            "helpMarkDown": "Promote the release for this comma delimited list of tenants. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.",
             "groupName": "tenant"
         },
         {
             "name": "DeployForTenantTags",
             "type": "string",
-            "label": "Tenant tag(s)",
+            "label": "Tenant Tag(s)",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Deploy the release for tenants who match these tags and are ready to deploy to the provided environment.",
+            "helpMarkDown": "Promote the release for tenants who match these tags and are ready to deploy to the provided environment.",
             "groupName": "tenant"
         },
         {
@@ -111,7 +117,7 @@
             "label": "Additional Arguments",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Deploying+releases) for available parameters.",
+            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Promoting+releases) for available parameters.",
             "groupName": "advanced"
         }
     ],
@@ -123,7 +129,13 @@
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
-            "target": "Environments",
+            "target": "From",
+            "endpointId": "$(OctoConnectedServiceName)",
+            "dataSourceName": "OctopusAllEnvironments",
+            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+        },
+        {
+            "target": "To",
             "endpointId": "$(OctoConnectedServiceName)",
             "dataSourceName": "OctopusAllEnvironments",
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
@@ -135,7 +147,7 @@
             "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Deploy Octopus Release: $(Project) to $(Environments)",
+    "instanceNameFormat": "Promote $(Project) from $(From) to $(To)",
     "execution": {
         "Node": {
             "target": "index.js"

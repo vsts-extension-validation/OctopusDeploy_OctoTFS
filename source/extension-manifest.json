@@ -192,8 +192,18 @@
                 "displayName": "Octopus Deploy",
                 "dataSources": [
                     {
+                        "name": "OctopusAllSpaces",
+                        "endpointUrl": "$(endpoint.url)/api/spaces/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
                         "name": "OctopusAllProjects",
                         "endpointUrl": "$(endpoint.url)/api/projects/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusAllProjectsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/projects/all",
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
@@ -202,8 +212,18 @@
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
+                        "name": "OctopusAllEnvironmentsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/environments/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
                         "name": "OctopusAllTenants",
                         "endpointUrl": "$(endpoint.url)/api/tenants/all",
+                        "resultSelector": "jsonpath:$.[*]"
+                    },
+                    {
+                        "name": "OctopusProjectTenantsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/tenants/all?projectId=$(ProjectName)",
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
@@ -212,8 +232,18 @@
                         "resultSelector": "jsonpath:$.Items[*]"
                     },
                     {
+                        "name": "OctopusProjectChannelsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/projects/$(ProjectName)/channels",
+                        "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
                         "name": "OctopusProjectEnvironmentDeployments",
                         "endpointUrl": "$(endpoint.url)/api/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
+                        "resultSelector": "jsonpath:$.Items[*]"
+                    },
+                    {
+                        "name": "OctopusProjectEnvironmentDeploymentsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/deployments?projects=$(ProjectId)&environments=$(EnvironmentId)",
                         "resultSelector": "jsonpath:$.Items[*]"
                     },
                     {
@@ -222,7 +252,17 @@
                         "resultSelector": "jsonpath:$"
                     },
                     {
+                        "name": "OctopusDashboardForProjectInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/dashboard?projectId=$(ProjectId)",
+                        "resultSelector": "jsonpath:$"
+                    },
+                    {
                         "name": "OctopusTaskDetails",
+                        "endpointUrl": "$(endpoint.url)$(TaskApiUri)",
+                        "resultSelector": "jsonpath:$"
+                    },
+                    {
+                        "name": "OctopusTaskDetailsInSpace",
                         "endpointUrl": "$(endpoint.url)$(TaskApiUri)",
                         "resultSelector": "jsonpath:$"
                     }

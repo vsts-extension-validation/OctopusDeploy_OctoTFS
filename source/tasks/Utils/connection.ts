@@ -1,4 +1,4 @@
-import * as tasks from 'vsts-task-lib/task';
+import * as tasks from 'azure-pipelines-task-lib/task';
 import {RestClient} from "typed-rest-client/RestClient";
 import { getDefaultOctoConnectionInputValue } from "./inputs";
 import { either } from "fp-ts";
@@ -46,7 +46,7 @@ export function fetchProjectName(details: OctoServerConnectionDetails, projectId
     ).catch(error => either.left<string,string>(error))
 }
 
-export const isProjectId = (projectNameOrId: string) => /Projects-\d*/.test(projectNameOrId);
+export const isProjectId = (projectNameOrId: string) => /\w*Projects-\d*/.test(projectNameOrId);
 
 export function resolveProjectName(connection: OctoServerConnectionDetails, projectNameOrId: string){
     if(isProjectId(projectNameOrId)) {

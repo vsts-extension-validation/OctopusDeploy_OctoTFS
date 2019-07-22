@@ -1,5 +1,5 @@
-import * as tasks from 'vsts-task-lib/task';
-import * as utils from "../Utils";
+import * as tasks from 'azure-pipelines-task-lib/task';
+import * as utils from "../../Utils";
 import {
     multiArgument,
     connectionArguments,
@@ -7,17 +7,16 @@ import {
     flag,
     argumentEnquote,
     argumentIfSet
-} from '../Utils/tool';
+} from '../../Utils';
 
 async function run() {
     try {
         const environmentVariables = utils.getVstsEnvironmentVariables();
         const vstsConnection = utils.createVstsConnection(environmentVariables);
-        const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
-        const project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true))
-        .then(x => x.value);
+        const project = tasks.getInput("ProjectName", true);
         const releaseNumber = tasks.getInput("ReleaseNumber");
         const channel = tasks.getInput("Channel");
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
@@ -26,9 +25,10 @@ async function run() {
         const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
         const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
         const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
-        const deploymentProgress = tasks.getBoolInput("DeploymentProgress")
+        const deploymentProgress = tasks.getBoolInput("DeploymentProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
+        await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("create-release");
 
         let linkedReleaseNotes = "";
@@ -36,7 +36,7 @@ async function run() {
             linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
         }
 
-        const realseNotesFile = utils.createReleaseNotesFile(() => {
+        const releaseNotesFile = utils.createReleaseNotesFile(() => {
             return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
         },  environmentVariables.defaultWorkingDirectory);
 
@@ -45,13 +45,13 @@ async function run() {
             argumentEnquote("project", project),
             argumentIfSet(argumentEnquote, "releaseNumber", releaseNumber),
             argumentIfSet(argumentEnquote, "channel", channel),
-            connectionArguments(octoConnection),
+            connectionArguments(connection),
             flag("enableServiceMessages", true),
             multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
-            argumentEnquote("releaseNotesFile", realseNotesFile),
+            argumentEnquote("releaseNotesFile", releaseNotesFile),
             includeArguments(additionalArguments)
         ];
 

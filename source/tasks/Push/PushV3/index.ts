@@ -1,5 +1,5 @@
-import * as tasks from 'vsts-task-lib/task';
-import * as utils from "../Utils";
+import * as tasks from 'azure-pipelines-task-lib/task';
+import * as utils from "../../Utils";
 
 import {
     multiArgument,
@@ -8,7 +8,7 @@ import {
     flag,
     argumentEnquote,
     argumentIfSet
-} from '../Utils/tool';
+} from '../../Utils/tool';
 
 async function run() {
     try {

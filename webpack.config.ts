@@ -16,7 +16,17 @@ const resolveTasks = (): Promise<string[]> => {
 };
 
 const createTaskConfig = (filePath: string): Configuration => {
-    const outFolder =  path.resolve(`${paths.outputPath}tasks/${path.basename(path.dirname(filePath))}`);
+
+    let taskPath;
+
+    if (filePath.includes("V3") || filePath.includes("V4")) {
+        var tmpPath = path.dirname(filePath);
+        let parts = tmpPath.split("/tasks/");
+        taskPath = parts[1];
+    } else {
+        taskPath = path.basename(path.dirname(filePath));
+    }
+    const outFolder =  path.resolve(`${paths.outputPath}tasks/${taskPath}`);
 
     return {
         target: "node",
