@@ -44,7 +44,7 @@ Microsoft's web extension tooling is cross platform so you can run this on Windo
 
 Run the following at a commandline.
 
-* `npm install --nosave`
+* `npm install --no-save`
 * `npm run build`
 
 This will generate the full extension content required to create the extension VSIX.
