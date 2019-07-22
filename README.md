@@ -55,7 +55,7 @@ In order to package and test the extension on a local TFS instance, without publ
  
 `./pack.ps1 -environment localtest -version "x.x.x"`
 
-### How to testing the extension
+### How to test the extension
 
 If you're doing updates/enhancements or bug fixes, the fastest development flow is to code locally, build, package and deploy it locally. Once your changes are stable, then it's a good idea to deploy to Test for further testing and finally Production.
 
