@@ -73,7 +73,7 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
         $netVersion = [System.Version]::Parse($version)
 
-        if ($task.version.Major -ne 3) {
+        if ($task.version.Major -gt 3) {
             $task.version.Major  = $netVersion.Major
             $task.version.Minor = $netVersion.Minor
             $task.version.Patch = $netVersion.Build
