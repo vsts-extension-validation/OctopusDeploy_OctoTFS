@@ -55,11 +55,6 @@ In order to package and test the extension on a local TFS instance, without publ
  
 `./pack.ps1 -environment localtest -version "x.x.x"`
 
-**Task dependencies**
-
-Although we use webpack to bundle, we don't generally include the dependencies as part of the bundle itself. We treat these as external and install the associated modules for the task based on the global dependencies that we have. We
-also previously bundled a version of octo tools with each task, but to reduce package size this was moved to the octo installer task.
-
 ### How to testing the extension
 
 If you're doing updates/enhancements or bug fixes, the fastest development flow is to code locally, build, package and deploy it locally. Once your changes are stable, then it's a good idea to deploy to Test for further testing and finally Production.
