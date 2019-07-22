@@ -4,7 +4,7 @@ OctoTFS is a set of packaging and release tasks and a widget for using Octopus D
 
 > Azure DevOps was formerly known as Visual Studio Team Services (VSTS) and Visual Studio Online (VSO).
 
-OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as an web extension that can be installed with TFS or ADO. 
+OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO with Octopus Deploy. This is packaged up as a web extension that can be installed in TFS or ADO.
 
 ## TFS / Azure DevOps Web Extension Custom Tasks 
 
@@ -34,7 +34,7 @@ Microsoft TFS/ADO web extensions are powered by Node.js under the hood. Simply o
 * Node-Prune (`go get github.com/tj/node-prune/cmd/node-prune`)
 * PowerShell (`choco install powershell-core` or `brew cask install powershell` or web (google it...))
 
-NOTE: PowerShell is required to if you intend to publish the extension either to a local TFS instance or otherwise.
+NOTE: PowerShell is required if you intend to publish the extension either to a local TFS instance or otherwise.
 
 ### How to build and package the extension
 
