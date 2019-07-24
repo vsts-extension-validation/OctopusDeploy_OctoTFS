@@ -80,7 +80,7 @@
             "label": "Replace Existing",
             "defaultValue": "False",
             "required": true,
-            "helpMarkDown": "If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to 'True' to overwrite the existing package."
+            "helpMarkDown": "If the package metadata already exists in the repository, the default behavior is to reject the new package metadata being pushed. Set this to 'True' to overwrite the existing package metadata."
         },
         {
             "name": "AdditionalArguments",
@@ -88,7 +88,7 @@
             "label": "Additional Arguments",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Pushing+packages) for available parameters.",
+            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push-metadata) for available parameters.",
             "groupName": "advanced"
         }
     ],
