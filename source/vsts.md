@@ -155,10 +155,15 @@ Options include:
 
 ![Multiple Widgets on Dashboard](img/multiple-widget-preview.jpg)
 
+Each instance of this widget displays the status of an Octopus project in one environment.
+
 Configuration settings:
  * **Size**: Either a 1x1 or a 2x1 widget size.
- * **Octopus Connection**: The Octopus Server (click **New** to [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
- * **Octopus Project**: The Octopus project.
- * **Environment**: The Octopus environment. Note that you may select any environment, but the widget will only be populated if there is a deployment of that project to that environment.
+ * **Octopus Connection**: The Octopus Server (available once you [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
+ * **Space**: The Octopus space the project is in.
+ * **Octopus Project**: The Octopus project to display.
+ * **Environment**: The Octopus environment to display status in.
 
- **Note:** Clicking on the widget will open the deployment log for the displayed task in Octopus.
+Clicking on the widget will open the deployment log for the displayed task in Octopus.
+
+**Note:** The widget will only be populated when a deployment of the specified project to the specified environment has occurred.
