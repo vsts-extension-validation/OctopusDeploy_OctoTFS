@@ -9,9 +9,13 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 
 You will need a minimum build agent version of `2.115.0` with .NET Core SDK `2.0` or later. When targeting build agents without the SDK, you can use the **.NET Core SDK Installer** task to install it. Generally the Hosted Linux, Mac and Hosted VS2017 agent queues already provide it, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools.
 
-The Octopus tasks will automatically download, cache, and use the latest version of the Octopus tools, unless they are supplied using the **Octopus tools installer** task, or found using the `PATH` environment variable.
+## Add Octo.exe Command Line tools
 
-If the **Octopus tools installer** task version is set to `embedded`, it will supply an embedded copy of the tools instead of downloading.
+The Octopus tasks require the Octo.exe Command Line tools, which can be supplied any of the following ways:
+
+* Insert the **Octopus tools installer** task into the build pipeline. If you leave the version as `embedded`, a built-in copy of the tools will be supplied to the other tasks. If you set the version to `latest` or a specific number, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tools will be used.
+* Update the system `PATH` environment variable to include a folder containing `Octo.exe` or `Octo.cmd`, on all systems running VSTS agents. You will need to restart the `VSTS Agent` service (or the whole system) for the change to take effect.
+* If the Octo.exe Command Line tools are not supplied, the Octopus tasks will attempt to download the latest version themselves. **Note**: For technical reasons they cannot access the built-in copy of the tools unless the **Octopus tools installer** task already ran.
 
 ## Add a service connection to Octopus Deploy
 
@@ -44,11 +48,13 @@ And the following widget:
 
 ## <a name="tools-installer"></a>![Installer Icon](img/octopus_installer.png) Octopus tools installer
 
-Optional. Use this task to download a specific version of the Octopus tools, or to use the version embedded in the extension. Otherwise, the other tasks will find tools using the `PATH` environment variable, or automatically download, cache, and use the latest version.
+Optional. Use this task to supply the Octo.exe Command Line tools to other tasks, by downloading them or using a built-in copy.
+
+Alternatively, you can supply the tools using the system `PATH` environment variable, or allow the other tasks to download the latest version themselves. For more information, see [Add Octo.exe Command Line tools](#add-octoexe-command-line-tools) above.
 
  Options include:
 
- * **Octopus Tool Version**: The version to download, or `embedded` to use the tools embedded in the extension, or `latest` to download the most recent version.
+ * **Octopus Tool Version**: If you leave the version as `embedded`, a built-in copy of the tools will be supplied to the other tasks. If you set the version to `latest` or a specific number, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tools will be used.
 
 ## <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
 
