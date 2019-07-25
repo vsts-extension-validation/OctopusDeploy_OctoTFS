@@ -94,7 +94,10 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 }
 
 async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOption> {
-    console.log(`Attempting to contact ${OctopurlsUrl} to find latest CLI tools`);
+    if (version === null || version === undefined) {
+        version = "latest";
+    }
+    console.log(`Attempting to contact ${OctopurlsUrl} to find octo version ${version}`);
 
     const response =  await octopurls.get<LatestResponse>("LatestTools");
 
@@ -108,7 +111,7 @@ async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOp
         throw Error(`Failed to resolve octo portable download location. The result did not contain the download location.`);
     }
 
-    if(version === null || version === undefined || version === "latest" || version === response.result.latest){
+    if(version === "latest" || version === response.result.latest){
         return option;
     }
 

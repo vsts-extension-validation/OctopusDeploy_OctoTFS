@@ -10,7 +10,7 @@ async function run(){
             console.log("Forcing the use of embedded octo.");
             await getEmbeddedOcto(tasks.resolve(__dirname, "embedded")).then(addToolToPath);
         }else{
-            let option = await resolvePublishedOctoVersion(tasks.getInput("version"));
+            let option = await resolvePublishedOctoVersion(version);
             console.log(`Using octo version ${option.version}`);
             await getOrDownloadOcto(option).then(addToolToPath);
 
@@ -23,7 +23,7 @@ async function run(){
             return;
         }
 
-        console.log(`Failed to resolve latest octo version. Using embedded version. ${error}`);
+        console.log(`Failed to resolve octo version ${version}. Using embedded version. ${error}`);
 
         try {
             await getEmbeddedOcto(tasks.resolve(__dirname, "embedded")).then(addToolToPath);
