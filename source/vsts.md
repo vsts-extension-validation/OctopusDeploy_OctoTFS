@@ -121,12 +121,6 @@ Options include:
    * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
  * **Additional Octo.exe Arguments**:  Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Creating+releases) to include.
 
-### Regarding Release Notes
-
-The *Release Notes* options, if selected, will result in nicely formatted release notes with deep links to Azure DevOps/TFS. Even if no additional options are selected, the related build number will be included in the Octopus release notes.
-
-![Release Notes in Octopus Deploy Release](img/tfsbuild-releasenotes.png)
-
 ### <a name="deploy-octopus-release"></a>![Deploy Release Image](img/octopus_deploy-02.png) Deploy Octopus Release
 
  ![Configure Deploy Release Step](img/deploy-release-options.png)
