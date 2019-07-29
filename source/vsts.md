@@ -13,7 +13,7 @@ You will need a minimum build agent version of `2.115.0` with .NET Core SDK `2.0
 
 The Octopus tasks require the Octo Command Line tool, which can be supplied any of the following ways:
 
-* Add the **Octopus tools installer** task to the build pipeline, ahead of other Octopus tasks. If you leave the version as `embedded`, a built-in copy of the Octo command line tool will be supplied to the other tasks. If you set the version to `latest` or a specific number, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
+* Add the **Octopus tools installer** task to the build pipeline, ahead of other Octopus tasks. If you leave the version as `embedded`, a built-in copy of the Octo command line tool will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
 * Update the system `PATH` environment variable to include a folder containing `Octo.exe` or `Octo.cmd`, on all systems running VSTS agents. You will need to restart the `VSTS Agent` service (or the whole system) for the change to take effect.
 * If the Octo command line tool is not supplied, the Octopus tasks will attempt to download the latest version themselves. **Note**: For technical reasons they cannot access the built-in copy of the tool unless the **Octopus tools installer** task already ran.
 
@@ -54,7 +54,7 @@ Alternatively, you can supply the tool using the system `PATH` environment varia
 
  Options include:
 
- * **Octopus Tool Version**: If you leave the version as `embedded`, a built-in copy of the tool will be supplied to the other tasks. If you set the version to `latest` or a specific number, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
+ * **Octopus Tool Version**: If you leave the version as `embedded`, a built-in copy of the tool will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
 
 ## <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
 
