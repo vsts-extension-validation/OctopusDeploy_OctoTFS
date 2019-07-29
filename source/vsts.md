@@ -9,9 +9,13 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 
 You will need a minimum build agent version of `2.115.0` with .NET Core SDK `2.0` or later. When targeting build agents without the SDK, you can use the **.NET Core SDK Installer** task to install it. Generally the Hosted Linux, Mac and Hosted VS2017 agent queues already provide it, however please refer to Microsoft documentation regarding what capabilities are provided by which hosted agent pools.
 
-The Octopus tasks will automatically download, cache, and use the latest version of the Octopus tools, unless they are supplied using the **Octopus tools installer** task, or found using the `PATH` environment variable.
+## Add Octo Command Line tool
 
-If the **Octopus tools installer** task version is set to `embedded`, it will supply an embedded copy of the tools instead of downloading.
+The Octopus tasks require the Octo Command Line tool, which can be supplied any of the following ways:
+
+* Add the **Octopus tools installer** task to the build pipeline, ahead of other Octopus tasks. If you leave the version as `embedded`, a built-in copy of the Octo command line tool will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
+* Update the system `PATH` environment variable to include a folder containing `Octo.exe` or `Octo.cmd`, on all systems running VSTS agents. You will need to restart the `VSTS Agent` service (or the whole system) for the change to take effect.
+* If the Octo command line tool is not supplied, the Octopus tasks will attempt to download the latest version themselves.
 
 ## Add a service connection to Octopus Deploy
 
@@ -44,11 +48,13 @@ And the following widget:
 
 ## <a name="tools-installer"></a>![Installer Icon](img/octopus_installer.png) Octopus tools installer
 
-Optional. Use this task to download a specific version of the Octopus tools, or to use the version embedded in the extension. Otherwise, the other tasks will find tools using the `PATH` environment variable, or automatically download, cache, and use the latest version.
+Optional. Use this task to supply the Octo command line tool to other tasks, by downloading them or using a built-in copy.
+
+Alternatively, you can supply the tool using the system `PATH` environment variable, or allow the other tasks to download the latest version themselves. For more information, see [Add Octo Command Line tool](#add-octo-command-line-tool) above.
 
  Options include:
 
- * **Octopus Tool Version**: The version to download, or `embedded` to use the tools embedded in the extension, or `latest` to download the most recent version.
+ * **Octopus Tool Version**: If you leave the version as `embedded`, a built-in copy of the tool will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
 
 ## <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
 
@@ -64,7 +70,7 @@ Options include:
  * **Source Path**: The folder containing the files and folders to package. Defaults to working directory.
  * **Output Path**: The directory into which the generated package will be written. Defaults to working directory.
  * **NuGet** section: Additional details for the NuGet Package Metadata.
- * **Advanced Options** section: Additional files to include in the package, whether to overwrite any existing file of the same name, and other options.
+ * **Advanced Options** section: Additional files to include in the package, whether to overwrite any existing file of the same name, and additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/pack) to include.
 
 ## <a name="push-packages-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Packages to Octopus
 
@@ -76,7 +82,7 @@ Options include:
  * **Space**: The Octopus space to push a package to.
  * **Package**: Package file to push. To push multiple packages, enter multiple lines.
  * **Replace Existing**: If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to **True** to overwrite the existing package.
- * **Additional Arguments**: Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Pushing+packages) to include.
+ * **Additional Arguments**: Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push) to include.
 
 ## <a name="push-package-metadata-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Package Metadata to Octopus
 
@@ -86,11 +92,11 @@ Options include:
 
  * **Octopus Deploy Server**: The Octopus Server (click **New** to [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
  * **Space**: The Octopus space to push package metadata to.
- * **Package ID**: The ID of the package, pushed previously, to push metadata onto. e.g. MyCompany.App
- * **Package Version**: The version of the package, pushed previously, to push metadata onto.
- * **Work Items Source**: The service hosting any work items associated with each version of the package. Octopus will add information about the work items to the package metadata, which can be used in release notes.
+ * **Package ID**: The ID of the package, pushed separately, to push metadata onto. e.g. MyCompany.App
+ * **Package Version**: The version of the package, pushed separately, to push metadata onto.
+ * **Work Items Source**: The service hosting any work items or issues associated with each version of the package. Octopus will add information about the work items or issues to the package metadata, which can be used in release notes. For more information see the [Issue Trackers documentation](https://octopus.com/docs/deployment-process/issue-tracking).
  * **Replace Existing**: If the package metadata already exists in the repository, the default behavior is to reject the new metadata being pushed. Set this flag to 'True' to overwrite the existing package metadata.
- * **Additional Arguments**: Any additional [Octo.exe arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push-metadata) to include.
+ * **Additional Arguments**: Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push-metadata) to include.
 
 ## <a name="create-octopus-release"></a>![Create Release Icon](img/octopus_create-release-04.png) Create Octopus Release
 
@@ -103,20 +109,17 @@ Options include:
  * **Project**: The Octopus project to create a release for.
  * **Release Number**: Release number for the new release (leave blank to let Octopus decide).
  * **Channel**: Channel to use for the new release.
- * **Include Changeset Comments**:  Whether to include changeset/commit comments in the Octopus release notes.
- * **Include Work Items**:  Whether to include linked work item titles in the Octopus release notes.
- * **Custom Notes**: Any additional static release notes to be included in the Octopus release.
- * **To Environment**:  Optional environment to deploy to after release creation.
- * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log, and only succeeding if the operation finished successfully.
- * **Tenant(s)**: Comma-separated list of Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Tenant tag(s)**: Comma-separated list of Tenant tags matching Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Additional Octo.exe Arguments**:  Any additional [Octo.exe arguments](http://docs.octopusdeploy.com/display/OD/Creating+releases) to include.
-
-### Regarding Release Notes
-
-The *Release Notes* options, if selected, will result in nicely formatted release notes with deep links to Team Foundation Server or Visual Studio Team Services. Even if no additional options are selected, the related VSTS Build number will be included in the Octopus release notes.
-
-![Release Notes in Octopus Deploy Release](img/tfsbuild-releasenotes.png)
+ * **Release Notes** section:
+   * **Include Changeset Comments**:  Whether to include changeset/commit comments in the Octopus release notes.
+   * **Include Work Items**:  Whether to include linked work item titles in the Octopus release notes.
+   * **Custom Notes**: Any additional static release notes to be included in the Octopus release.
+ * **Deployment** section:
+   * **To Environment**:  Optional environment to deploy to after release creation.
+   * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
+ * **Tenants** section:
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+ * **Additional Octo.exe Arguments**:  Any additional [Octo arguments](http://docs.octopusdeploy.com/display/OD/Creating+releases) to include.
 
 ### <a name="deploy-octopus-release"></a>![Deploy Release Image](img/octopus_deploy-02.png) Deploy Octopus Release
 
@@ -129,10 +132,11 @@ The *Release Notes* options, if selected, will result in nicely formatted releas
  * **Project**: The Octopus project to deploy.
  * **Release Number**: Release number for the new release (defaults to `latest`).
  * **Deploy to Environments**: Comma-separated list of environments to deploy to.
- * **Show Deployment Progress**: Whether to wait for the deployment to finish, recording output in the log, and only succeeding if the deployment finished successfully.
- * **Tenant(s)**: Comma-separated list of Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Tenant tag(s)**: Comma-separated list of Tenant tags matching Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Additional Arguments**:  Any additional [Octo.exe arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/deploy-release) to include.
+ * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
+ * **Tenants** section:
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+ * **Additional Arguments**:  Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/deploy-release) to include.
 
 ### <a name="promote-octopus-release"></a>![Promote Release Image](img/octopus_promote-05.png) Promote Octopus Release
 
@@ -144,10 +148,11 @@ Options include:
  * **Project**: The Octopus project to deploy.
  * **Promote From**: The environment to promote a deployment from.
  * **Promote To**: The environment to promote a deployment to.
- * **Show Deployment Progress**: Whether to wait for the deployment to finish, recording output in the log, and only succeeding if the deployment finished successfully.
- * **Tenant(s)**: Comma-separated list of Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Tenant tag(s)**: Comma-separated list of Tenant tags matching Tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Additional Arguments**:  Any additional [Octo.exe arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/promote-release) to include.
+ * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
+ * **Tenants** section:
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+ * **Additional Arguments**:  Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/promote-release) to include.
 
 <hr/>
 
@@ -155,10 +160,15 @@ Options include:
 
 ![Multiple Widgets on Dashboard](img/multiple-widget-preview.jpg)
 
+Each instance of this widget displays the status of an Octopus project in one environment.
+
 Configuration settings:
  * **Size**: Either a 1x1 or a 2x1 widget size.
- * **Octopus Connection**: The Octopus Server (click **New** to [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
- * **Octopus Project**: The Octopus project.
- * **Environment**: The Octopus environment. Note that you may select any environment, but the widget will only be populated if there is a deployment of that project to that environment.
+ * **Octopus Connection**: The Octopus Server (available once you [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
+ * **Space**: The Octopus space the project is in.
+ * **Octopus Project**: The Octopus project to display.
+ * **Environment**: The Octopus environment to display status in.
 
- **Note:** Clicking on the widget will open the deployment log for the displayed task in Octopus.
+Clicking on the widget will open the deployment log for the displayed task in Octopus.
+
+**Note:** The widget will only be populated when a deployment of the specified project to the specified environment has occurred.
