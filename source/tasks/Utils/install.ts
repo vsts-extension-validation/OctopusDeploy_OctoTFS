@@ -94,7 +94,7 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 }
 
 async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOption> {
-    if (version === null || version === undefined) {
+    if (!version) {
         version = "latest";
     }
     console.log(`Attempting to contact ${OctopurlsUrl} to find octo version ${version}`);
