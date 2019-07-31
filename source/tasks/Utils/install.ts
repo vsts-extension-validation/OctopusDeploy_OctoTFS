@@ -144,6 +144,8 @@ async function getEmbeddedOcto(folderPath: string): Promise<string> {
         throw "Could not resolve original download location of embedded Octo version";
     }
 
+    console.log(`Using embedded Octo command line tool (version ${option.version}).`);
+
     return getOrDownloadOcto(option, () => {
         return new Promise((resolve) => resolve(path.join(tempDirectory, path.basename(folderPath), "bin")))
     }, false);
