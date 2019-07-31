@@ -131,7 +131,7 @@ function addToolToPath(toolPath: string){
     return toolPath;
 }
 
-async function getEmbeddedOcto(folderPath: string){
+async function getEmbeddedOcto(folderPath: string): Promise<string> {
 
     const versionPath = path.join(folderPath, "version.json");
     const option = <DownloadOption>JSON.parse(await readFile(versionPath));
