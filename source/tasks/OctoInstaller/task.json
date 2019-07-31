@@ -36,10 +36,10 @@
             "label": "Octopus Tool Version",
             "defaultValue": "embedded",
             "required": true,
-            "helpMarkDown": "Specify the exact version of the octo tools to use.<br/>"
+            "helpMarkDown": "Specify the exact version of the Octo command line tool to use.<br/>"
         }
     ],
-    "instanceNameFormat": "Use octo tools version $(version)",
+    "instanceNameFormat": "Use Octo command line tool version $(version)",
     "execution": {
         "Node": {
             "target": "index.js"
