@@ -29,7 +29,6 @@ Microsoft TFS/ADO web extensions are powered by Node.js under the hood. Simply o
 
 * Node.js 10.15.3 (LTS) (`choco install nodejs` or `brew install node@10` or [web](https://nodejs.org)) 
 * NPM: 5.6.0+ (`npm install npm@latest -g`)
-* Gulp (`npm install gulp -g`)
 * TFX (`npm install tfx tfx-cli -g`)
 * Install golang (`choco install golang` or `brew install go` or [web](https://golang.org))
 * Node-Prune (`go get github.com/tj/node-prune/cmd/node-prune`)
@@ -58,13 +57,13 @@ In order to package and test the extension on a local TFS instance, without publ
 
 ### How to test the extension
 
-If you're doing updates/enhancements or bug fixes, the fastest development flow is to code locally, build, package and deploy it locally. Once your changes are stable, then it's a good idea to deploy to Test for further testing and finally Production.
+If you're doing updates, enhancements, or bug fixes, the fastest development flow is to code locally, build, package and deploy locally. Once your changes are stable, it's a good idea to deploy to Test for further testing, and finally Production.
 
 ### Local
 
-It's highly recommended to set up two Virtual Machines running Windows Server. This is generally done locally and it's best to give your VM at least 8 gigs of memory and 4 CPU cores, otherwise the TFS/ADO installation can fail or take hours.
+It's highly recommended to set up two Virtual Machines running Windows Server. This is generally done locally, and it's best to give your VM at least 8 gigs of memory and 4 CPU cores, otherwise the TFS/ADO installation can fail or take hours.
 
-1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions so it's a very good for regression testing.  
+1. Microsoft TFS Server 2017 Update 1 - This is the first version of TFS that supported extensions, so it's very good for regression testing.
 2. Microsoft Azure DevOps Server vLatest - This is the on-prem version of Microsoft's hosted Azure DevOps services/tooling. It's generally faster/easier to test this locally than continually publishing to the Azure DevOps Marketplace.
 
 To install locally, build and package the application as per the instructions above. Then install the extension by uploading it. Instructions to do this are available in Microsoft's [TFS/ADO docs](https://docs.microsoft.com/en-us/vsts/marketplace/get-tfs-extensions?view=tfs-2018#install-extensions-for-disconnected-tfs). 
@@ -77,9 +76,9 @@ To install locally, build and package the application as per the instructions ab
 
 #### Testing Gotchas
 
-* If you design a build pipeline with the current live extension, you can't upgrade it. You need to install the `localtest` extension first and use it in your builds. Then you can upgrade it and you will get your latest updates/fixes etc.
-* Pay special attention to [this approval test](tests/OctoTFS.Tests/OctoTFS.Tests/ContractStabilityFixture.EnsureInputNamesAndTypesHaveNotChanged.approved.txt). It ensures we do not break our contract and we have to explicitly update it when updating the extension.
-* We need to maintain backwards compatibility and we need to ensure any existing builds will not break after we publish an update. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
+* If you design a build pipeline with the current live extension, you can't upgrade it to a local version. You need to install the `localtest` extension first and use it in your builds. Then you can upgrade it and you will get your latest changes.
+* Pay special attention to [this approval test](tests/OctoTFS.Tests/OctoTFS.Tests/ContractStabilityFixture.EnsureInputNamesAndTypesHaveNotChanged.approved.txt). It ensures we do not break our contract, and we have to explicitly update it when updating the extension.
+* We need to maintain backwards compatibility, and we need to ensure any existing builds will not break after we publish an update. Therefore regression testing is critical. The recommended approach for regression testing is to build the current live extension for `localtest` and create build pipelines covering the areas you're changing. Then update the extension and re-run all your builds to ensure everything is still green/working.
 * Building on the previous point, there is no way to roll back an extension so testing is difficult as well. The recommended approach to this is to snapshot your local test VMs when you have a working build, so you can update the extension and revert back to the snapshot as needed.
 
 ### Test environment
