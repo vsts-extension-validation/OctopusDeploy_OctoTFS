@@ -56,7 +56,7 @@ export async function getOrInstallOctoCommandRunner(command: string) : Promise<E
         tasks.error(err);
         throw Error("Unable to locate and download the latest Octo command line tool. To use the embedded copy"
             + " or another specific version, add the Octopus tools installer task to the build pipeline"
-            + " ahead of this task.");
+            + " before this task.");
     })
     .then(addToolToPath)
     .then(() => getOctoCommandRunner(command).map(x => new OctoLauncher(x)))
