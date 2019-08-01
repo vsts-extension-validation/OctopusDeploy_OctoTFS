@@ -69,7 +69,7 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 
     if(!cachedToolPath){
         try{
-            console.log("Attempting to download octo cli");
+            console.log("Attempting to download the Octo command line tool");
             let downloadPath = await (download !== undefined && download != null ? download(option) : tools.downloadTool(option.location));
             let toolPath = extractTool ? await extract(downloadPath) : downloadPath;
 
@@ -78,13 +78,13 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
             cachedToolPath = await tools.cacheDir(toolPath, ToolName, option.version);
 
         }catch(exception){
-            throw new Error(`Failed to download octo tools ${option.version}. ${exception}`)
+            throw new Error(`Failed to download Octo command line tool version ${option.version}. ${exception}`)
         }
     }
 
     const octoPath = findOcto(cachedToolPath);
     if(!octoPath){
-        throw new Error("Octo wasn't found in tools directory")
+        throw new Error("The Octo command line tool wasn't found in tools directory")
     }
 
     tools.debug(`Found ${ToolName} at ${octoPath}`)
@@ -94,21 +94,24 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 }
 
 async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOption> {
-    console.log(`Attempting to contact ${OctopurlsUrl} to find latest CLI tools`);
+    if (!version) {
+        version = "latest";
+    }
+    console.log(`Attempting to contact ${OctopurlsUrl} to find Octo command line tool version ${version}`);
 
     const response =  await octopurls.get<LatestResponse>("LatestTools");
 
     if(response.result === null || response.result === undefined){
-        throw Error(`Failed to resolve octo version ${version}. Endpoint returned status code ${response.statusCode})`);
+        throw Error(`Failed to resolve Octo command line tool version ${version}. Endpoint returned status code ${response.statusCode})`);
     }
 
     var option = filterPortableDownload(response.result.downloads);
 
     if(option === null || option === undefined){
-        throw Error(`Failed to resolve octo portable download location. The result did not contain the download location.`);
+        throw Error(`Failed to resolve the Octo command line tool portable download location. The result did not contain the download location.`);
     }
 
-    if(version === null || version === undefined || version === "latest" || version === response.result.latest){
+    if(version === "latest" || version === response.result.latest){
         return option;
     }
 
@@ -128,7 +131,7 @@ function addToolToPath(toolPath: string){
     return toolPath;
 }
 
-async function getEmbeddedOcto(folderPath: string){
+async function getEmbeddedOcto(folderPath: string): Promise<string> {
 
     const versionPath = path.join(folderPath, "version.json");
     const option = <DownloadOption>JSON.parse(await readFile(versionPath));
@@ -138,8 +141,10 @@ async function getEmbeddedOcto(folderPath: string){
 
     if(!option)
     {
-        throw "Could not resolve original download location of embedded Octo version";
+        throw "Could not resolve the original download location of the embedded Octo command line tool.";
     }
+
+    console.log(`Using the embedded Octo command line tool (version ${option.version}).`);
 
     return getOrDownloadOcto(option, () => {
         return new Promise((resolve) => resolve(path.join(tempDirectory, path.basename(folderPath), "bin")))
