@@ -10,7 +10,7 @@
         },
         {
             "id": "Microsoft.TeamFoundation.Server",
-            "version": "[15.1,)"
+            "version": "[15.2,)"
         }
     ],
     "description": "Build and Release tasks and other features for integrating with Octopus Deploy. Octopus is great for deploying ASP.NET or Core apps to on IIS or Azure, SQL databases, Windows services and much more.",
