@@ -325,7 +325,7 @@
                         ]
                     }
                 ],
-                "helpMarkDown": "The Octopus URL must be accessible from both VSTS and any agents that are running builds or releases. See [g.octopushq.com/ApiKey](http://g.octopushq.com/ApiKey) for details on how to generate an API key."
+                "helpMarkDown": "The Octopus URL must be accessible from any agents that are running builds or releases. See [g.octopushq.com/ApiKey](http://g.octopushq.com/ApiKey) for details on how to generate an API key."
             }
         }
     ]
