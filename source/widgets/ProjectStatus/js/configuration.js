@@ -165,13 +165,14 @@ function OctopusStatusWidgetConfiguration() {
                 load: function (widgetSettings, widgetConfigurationContext) {
                     var settings = JSON.parse(widgetSettings.customSettings.data);
 
-                    VSS.getAccessToken().then(function (token) {
+                    return VSS.getAccessToken().then(function (token) {
                         var webContext = VSS.getWebContext();
                         var baseUri = webContext.collection.uri + "/" + webContext.project.name;
                         var endpointUri = baseUri + '/_apis/distributedtask/serviceendpoints?type=OctopusEndpoint&api-version=3.0-preview.1';
 
                         var authToken = VSS_Auth_Service.authTokenManager.getAuthorizationHeader(token);
 
+                        return new Promise((resolve, reject) => {
                         $.ajax({
                             type: "GET",
                             url: endpointUri,
@@ -206,8 +207,9 @@ function OctopusStatusWidgetConfiguration() {
                                     saveSettings(widgetConfigurationContext, $connectionDropdown.val(), $spaceDropdown.val(), $(':selected', $spaceDropdown).text(), $projectDropdown.val(), $(':selected', $projectDropdown).text(), $environmentDropdown.val(), $(':selected', $environmentDropdown).text());
                                 }
 
-                                return WidgetHelpers.WidgetStatusHelper.Success();
+                                resolve(WidgetHelpers.WidgetStatusHelper.Success());
                             });
+                        });
                     });
                 },
                 onSave: function () {
