@@ -62,6 +62,7 @@ async function run() {
         await tasks.mkdirP(metadataDir);
         await tasks.writeFile(metadataFile, JSON.stringify(metaData, null, 2));
 
+        await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("push-metadata");
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
         const configure: Array<(tool: ToolRunner) => ToolRunner> = [
