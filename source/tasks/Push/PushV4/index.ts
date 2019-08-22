@@ -5,9 +5,10 @@ import {
     multiArgument,
     connectionArguments,
     includeArguments,
-    flag,
+    argument,
     argumentEnquote,
-    argumentIfSet
+    argumentIfSet,
+    getOverwriteModeFromReplaceInput
 } from '../../Utils';
 
 async function run() {
@@ -16,7 +17,7 @@ async function run() {
 
         const space = tasks.getInput("Space");
         const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
-        const replace = tasks.getBoolInput("Replace");
+        const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         await utils.assertOctoVersionAcceptsIds();
@@ -27,7 +28,7 @@ async function run() {
             connectionArguments(connection),
             argumentIfSet(argumentEnquote, "space", space),
             multiArgument(argumentEnquote, "package", matchedPackages),
-            flag("replace-existing", replace),
+            argument("overwrite-mode", overwriteMode),
             includeArguments(additionalArguments)
         ];
 

@@ -4,6 +4,16 @@ import * as glob from "glob";
 import { flatten } from "ramda";
 import { Promise } from "ts-promise";
 
+export enum ReplaceOverwriteMode {
+    false = 'FailIfExists',
+    true = 'OverwriteExisting',
+    IgnoreIfExists = 'IgnoreIfExists'
+}
+
+export function getOverwriteModeFromReplaceInput(replace: string): ReplaceOverwriteMode {
+    return ReplaceOverwriteMode[replace as keyof typeof ReplaceOverwriteMode] || ReplaceOverwriteMode.false;
+}
+
 export const DefaultOctoConnectionInputName = "OctoConnectedServiceName";
 
 export const pGlobNoNull = (pattern: string): Promise<string[]> => {
