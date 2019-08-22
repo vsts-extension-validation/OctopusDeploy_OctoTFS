@@ -80,7 +80,7 @@
             "label": "Overwrite Mode",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "If the package metadata already exists in the repository, the default behavior is to reject the new package metadata being pushed ('Fail if exists'). You can use the overwrite mode to 'Overwrite existing' or 'Ignore if exists'.",
+            "helpMarkDown": "Normally, if the same package metadata already exists on the server, the server will reject the package metadata push. This is a good practice as it ensures metadata isn't accidentally overwritten or ignored. Use this setting to override this behavior.",
             "options": {
                 "false": "Fail if exists",
                 "true": "Overwrite existing",
