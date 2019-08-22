@@ -52,7 +52,7 @@ OctoTFS.Tests.resources.tasks.Metadata.task.json
 	'PackageId': string
 	'PackageVersion': string
 	'CommentParser': pickList
-	'Replace': boolean
+	'Replace': pickList
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.OctoCli.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
@@ -106,5 +106,5 @@ OctoTFS.Tests.resources.tasks.Push.PushV4.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': pickList
 	'Package': multiLine
-	'Replace': boolean
+	'Replace': pickList
 	'AdditionalArguments': string
