@@ -54,11 +54,16 @@
         },
         {
             "name": "Replace",
-            "type": "boolean",
-            "label": "Replace Existing",
-            "defaultValue": "False",
+            "type": "pickList",
+            "label": "Overwrite Mode",
+            "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to 'True' to overwrite the existing package."
+            "helpMarkDown": "If the package already exists in the repository, the default behavior is to reject the new package being pushed ('Fail if exists'). You can use the overwrite mode to 'Overwrite existing' or 'Ignore if exists'.",
+            "options": {
+                "false": "Fail if exists",
+                "true": "Overwrite existing",
+                "IgnoreIfExists": "Ignore if exists"
+            }
         },
         {
             "name": "AdditionalArguments",

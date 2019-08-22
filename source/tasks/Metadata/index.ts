@@ -6,10 +6,10 @@ import * as path from "path";
 import {
     connectionArguments,
     includeArguments,
-    flag,
     argument,
     argumentEnquote,
-    argumentIfSet
+    argumentIfSet,
+    getOverwriteModeFromReplaceInput
 } from '../Utils';
 
 export interface IOctopusPackageMetadata {
@@ -37,7 +37,7 @@ async function run() {
         const packageId = tasks.getInput("PackageId", true);
         const packageVersion = tasks.getInput("PackageVersion", true);
         const commentParser = tasks.getInput("CommentParser");
-        const replace = tasks.getBoolInput("Replace", true);
+        const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
         const commits = await utils.getBuildChanges(vstsConnection);
@@ -71,7 +71,7 @@ async function run() {
             argumentEnquote("package-id", packageId),
             argument("version", packageVersion),
             argumentEnquote("metadata-file", metadataFile),
-            flag("replace-existing", replace),
+            argument("overwrite-mode", overwriteMode),
             includeArguments(additionalArguments)
         ];
 
