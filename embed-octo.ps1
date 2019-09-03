@@ -54,6 +54,13 @@ function Resolve-InstallerTask($path){
     }
 }
 
+function Expand-EmbeddedOctoZip($zipPath, $extractPath) {
+    Write-Host "Extracting $zipPath to $extractPath"
+    Add-Type -assembly "System.IO.Compression.Filesystem"
+    [IO.Compression.Zipfile]::ExtractToDirectory($zipPath, $extractPath)
+}
+
+
 $manifest = Invoke-RestMethod -Uri $latestOctoUrl
 $option = $manifest.downloads | Where-Object { $_.platform -ieq $platform -and $_.extension -ieq $extension }
 $option = Resolve-Version $version $option
@@ -65,11 +72,6 @@ if(!(Test-Path $destinationFolder)){
     New-Item -ItemType Directory -Path $destinationFolder | Out-Null
 }
 
-function Expand-EmbeddedOctoZip($zipPath, $extractPath) {
-    Write-Host "Extracting $zipPath to $extractPath"
-    Add-Type -assembly "System.IO.Compression.Filesystem"
-    [IO.Compression.Zipfile]::ExtractToDirectory($zipPath, $extractPath)
-}
 
 if($override){
     Write-Host "Using octo override $($override) for embedded octo"
