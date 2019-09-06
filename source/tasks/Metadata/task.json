@@ -37,7 +37,7 @@
             "name": "Space",
             "type": "pickList",
             "label": "Space",
-            "defaultValue": "Default",
+            "defaultValue": "",
             "required": true,
             "properties": {
                 "EditableOptions": "True"
