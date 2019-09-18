@@ -20,7 +20,7 @@
     "groups": [
         {
             "name": "releasenotes",
-            "displayName": "Release Notes",
+            "displayName": "Release Notes (Legacy)",
             "isExpanded": true
         },
         {
@@ -95,7 +95,7 @@
             "label": "Include Changeset Comments",
             "defaultValue": "false",
             "required": false,
-            "helpMarkDown": "Whether to include linked Changeset comments in Octopus Release notes.",
+            "helpMarkDown": "Whether to add linked changeset comments to Octopus Release notes.\n\n*Note: These Release Notes options are considered legacy. We recommend clearing them and pushing [Build Information](https://g.octopushq.com/BuildInformation) alongside your packages, which allows the customizable [Release Notes Template](https://g.octopushq.com/ReleaseNotesTemplate) to generate automatic release notes.*",
             "groupName": "releasenotes"
         },
         {
@@ -104,7 +104,7 @@
             "label": "Include Work Items",
             "defaultValue": "false",
             "required": false,
-            "helpMarkDown": "Whether to include linked Work Item Titles in Octopus Release notes.",
+            "helpMarkDown": "Whether to add linked Work Item titles to Octopus Release notes.\n\n*Note: These Release Notes options are considered legacy. We recommend clearing them and pushing [Build Information](https://g.octopushq.com/BuildInformation) alongside your packages, which allows the customizable [Release Notes Template](https://g.octopushq.com/ReleaseNotesTemplate) to generate automatic release notes.*",
             "groupName": "releasenotes"
         },
         {
@@ -113,7 +113,7 @@
             "label": "Custom Notes",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Custom notes appended to Octopus Release notes. This field supports markdown. To include newlines, you can use HTML linebreaks.",
+            "helpMarkDown": "Custom notes appended to Octopus Release notes. This field supports markdown. To include newlines, you can use HTML linebreaks.\n\n*Note: These Release Notes options are considered legacy. We recommend clearing them and pushing [Build Information](https://g.octopushq.com/BuildInformation) alongside your packages, which allows the customizable [Release Notes Template](https://g.octopushq.com/ReleaseNotesTemplate) to generate automatic release notes.*",
             "groupName": "releasenotes"
         },
         {
