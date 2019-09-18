@@ -31,15 +31,6 @@ async function run() {
         await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("create-release");
 
-        let linkedReleaseNotes = "";
-        if(workItemReleaseNotes || changesetCommentReleaseNotes){
-            linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
-        }
-
-        const releaseNotesFile = utils.createReleaseNotesFile(() => {
-            return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
-        },  environmentVariables.defaultWorkingDirectory);
-
         const configure = [
             argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("project", project),
@@ -50,10 +41,22 @@ async function run() {
             multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
-            multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),
-            argumentEnquote("releaseNotesFile", releaseNotesFile),
-            includeArguments(additionalArguments)
+            multiArgument(argumentEnquote, "tenanttag", deployForTenantTags)
         ];
+
+        if (workItemReleaseNotes || changesetCommentReleaseNotes || (customReleaseNotes && /[^\s]/.test(customReleaseNotes))) {
+            const linkedReleaseNotes = (workItemReleaseNotes || changesetCommentReleaseNotes)
+                ? await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes)
+                : "";
+
+            const releaseNotesFile = utils.createReleaseNotesFile(() => {
+                return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
+            }, environmentVariables.defaultWorkingDirectory);
+
+            configure.push(argumentEnquote("releaseNotesFile", releaseNotesFile));
+        }
+
+        configure.push(includeArguments(additionalArguments));
 
         const code:Number = await octo.map(x => x.launchOcto(configure))
             .getOrElseL((x) => { throw new Error(x); });
