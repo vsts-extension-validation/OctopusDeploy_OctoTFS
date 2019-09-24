@@ -117,7 +117,7 @@
             "label": "Additional Arguments",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](http://docs.octopusdeploy.com/display/OD/Promoting+releases) for available parameters.",
+            "helpMarkDown": "Additional arguments to be supplied to Octo.exe. See [Octo.exe Command Line documentation](https://g.octopushq.com/OctoExePromoteRelease) for available parameters.",
             "groupName": "advanced"
         }
     ],
