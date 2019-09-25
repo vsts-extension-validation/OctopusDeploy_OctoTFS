@@ -58,7 +58,7 @@ Alternatively, you can supply the tool using the system `PATH` environment varia
 
 ## <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
 
-*Note: You can still use [OctoPack](http://docs.octopusdeploy.com/display/OD/Using+OctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus when targeting full .NET framework projects.*
+*Note: You can still use [OctoPack](https://g.octopushq.com/ExternalToolOctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus when targeting full .NET framework projects.*
 
 ![Configure Package Application Step](img/create-package-options.png)
 
@@ -117,9 +117,9 @@ Options include:
    * **To Environment**:  Optional environment to deploy to after release creation.
    * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
  * **Tenants** section:
-   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
-   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
- * **Additional Octo.exe Arguments**:  Any additional [Octo arguments](http://docs.octopusdeploy.com/display/OD/Creating+releases) to include.
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
+ * **Additional Octo.exe Arguments**:  Any additional [Octo arguments](https://g.octopushq.com/OctoExeCreateRelease) to include.
 
 ### <a name="deploy-octopus-release"></a>![Deploy Release Image](img/octopus_deploy-02.png) Deploy Octopus Release
 
@@ -134,8 +134,8 @@ Options include:
  * **Deploy to Environments**: Comma-separated list of environments to deploy to.
  * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
  * **Tenants** section:
-   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
-   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
  * **Additional Arguments**:  Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/deploy-release) to include.
 
 ### <a name="promote-octopus-release"></a>![Promote Release Image](img/octopus_promote-05.png) Promote Octopus Release
@@ -150,8 +150,8 @@ Options include:
  * **Promote To**: The environment to promote a deployment to.
  * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
  * **Tenants** section:
-   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
-   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](http://docs.octopusdeploy.com/display/OD/Multi-tenant+deployments) by Octopus.
+   * **Tenant(s)**: Comma-separated list of tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
+   * **Tenant tag(s)**: Comma-separated list of tenant tags matching tenants to deploy to. Note that if completed, this will be treated as a [Tenanted Deployment](https://g.octopushq.com/MultiTenantDeployments) by Octopus.
  * **Additional Arguments**:  Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/promote-release) to include.
 
 <hr/>
