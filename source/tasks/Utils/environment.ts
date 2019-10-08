@@ -202,8 +202,15 @@ export const getVcsTypeFromProvider = (buildRepositoryProvider: string) => {
     }
 };
 
+export const getBuildBranch = async (client: vsts.WebApi) => {
+    const environment = getVstsEnvironmentVariables();
+    const api = await client.getBuildApi();
+    return (await api.getBuild(environment.buildId, environment.projectName)).sourceBranch;
+};
+
 export const getBuildChanges = async (client: vsts.WebApi) => {
     const environment = getVstsEnvironmentVariables();
     const api = await client.getBuildApi();
+    (await api.getBuild(1)).sourceBranch
     return await api.getBuildChanges(environment.projectName, environment.buildId);
 };

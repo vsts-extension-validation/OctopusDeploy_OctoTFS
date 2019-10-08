@@ -12,18 +12,18 @@ import {
     getOverwriteModeFromReplaceInput
 } from '../Utils';
 
-export interface IOctopusPackageMetadata {
+export interface IOctopusBuildInformation {
     BuildEnvironment: string;
-    CommentParser: string;
     BuildNumber: string;
     BuildUrl: string;
+    Branch: string;
     VcsType: string;
     VcsRoot: string;
     VcsCommitNumber: string;
-    Commits: IOctopusMetadataCommit[];
+    Commits: IOctopusBuildInformationCommit[];
 }
 
-export interface IOctopusMetadataCommit {
+export interface IOctopusBuildInformationCommit {
     Id: string;
     Comment: string;
 }
@@ -36,41 +36,41 @@ async function run() {
         const space = tasks.getInput("Space");
         const packageId = tasks.getInput("PackageId", true);
         const packageVersion = tasks.getInput("PackageVersion", true);
-        const commentParser = tasks.getInput("CommentParser");
         const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
+        const branch = await utils.getBuildBranch(vstsConnection);
         const commits = await utils.getBuildChanges(vstsConnection);
 
-        const metaData: IOctopusPackageMetadata = {
+        const buildInformation: IOctopusBuildInformation = {
             BuildEnvironment: "Azure DevOps",
-            CommentParser: commentParser,
             BuildNumber: environment.buildNumber,
             BuildUrl: (
                 environment.teamCollectionUri.replace(/\/$/, '')
                 + '/' + environment.projectName
                 + '/_build/results?buildId=' + environment.buildId
             ),
+            Branch: branch,
             VcsType: utils.getVcsTypeFromProvider(environment.buildRepositoryProvider),
             VcsRoot: environment.buildRepositoryUri,
             VcsCommitNumber: environment.buildSourceVersion,
             Commits: commits.map(change => ({ Id: change.id, Comment: change.message }))
         };
 
-        const metadataDir = path.join(environment.agentBuildDirectory, "octo");
-        const metadataFile = path.join(metadataDir, `${environment.buildId}-metadata.json`);
-        await tasks.mkdirP(metadataDir);
-        await tasks.writeFile(metadataFile, JSON.stringify(metaData, null, 2));
+        const buildInformationDir = path.join(environment.agentBuildDirectory, "octo");
+        const buildInformationFile = path.join(buildInformationDir, `${environment.buildId}-buildinformation.json`);
+        await tasks.mkdirP(buildInformationDir);
+        await tasks.writeFile(buildInformationFile, JSON.stringify(buildInformation, null, 2));
 
         await utils.assertOctoVersionAcceptsIds();
-        const octo = await utils.getOrInstallOctoCommandRunner("push-metadata");
+        const octo = await utils.getOrInstallOctoCommandRunner("build-information");
         const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
         const configure: Array<(tool: ToolRunner) => ToolRunner> = [
             connectionArguments(connection),
             argumentIfSet(argumentEnquote, "space", space),
             argumentEnquote("package-id", packageId),
             argument("version", packageVersion),
-            argumentEnquote("metadata-file", metadataFile),
+            argumentEnquote("file", buildInformationFile),
             argument("overwrite-mode", overwriteMode),
             includeArguments(additionalArguments)
         ];
@@ -81,7 +81,7 @@ async function run() {
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
     } catch (err) {
         tasks.error(err);
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to push metadata. " + err.message);
+        tasks.setResult(tasks.TaskResult.Failed, "Failed to push build information. " + err.message);
     }
 }
 
