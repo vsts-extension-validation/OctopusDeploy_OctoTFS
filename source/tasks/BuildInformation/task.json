@@ -65,7 +65,7 @@
             "label": "Overwrite Mode",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "Normally, if the same package metadata already exists on the server, the server will reject the package metadata push. This is a good practice as it ensures metadata isn't accidentally overwritten or ignored. Use this setting to override this behavior.",
+            "helpMarkDown": "Normally, if the same package build information already exists on the server, the server will reject the package build information push. This is a good practice as it ensures build information isn't accidentally overwritten or ignored. Use this setting to override this behavior.",
             "options": {
                 "false": "Fail if exists",
                 "true": "Overwrite existing",
