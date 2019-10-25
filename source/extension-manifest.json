@@ -167,7 +167,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "tasks/Metadata"
+                "name": "tasks/BuildInformation"
             }
         },
         {

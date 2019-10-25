@@ -1,13 +1,12 @@
 ﻿{
     "id": "b1861ef4-b62e-40c1-bcb0-be00d454a8a7",
     "name": "OctopusMetadata",
-    "friendlyName": "Push Package Metadata to Octopus",
-    "description": "Collect metadata related to the build, including work items from commit messages, and push to your Octopus Deploy Server.",
+    "friendlyName": "Push Package Build Information to Octopus",
+    "description": "Collect information related to the build, including work items from commit messages, and push to your Octopus Deploy Server.",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Package",
     "visibility": [
-        "Build",
-        "Release"
+        "Build"
     ],
     "author": "Octopus Deploy",
     "version": {
@@ -61,26 +60,12 @@
             "helpMarkDown": "The version of the package; must be a valid [SemVer](http://semver.org/) version."
         },
         {
-            "name": "CommentParser",
-            "type": "pickList",
-            "label": "Work Items Source",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "The source of work items or issues addressed by changes in the package",
-            "options": {
-                "-": "",
-                "Jira": "Jira",
-                "GitHub": "GitHub",
-                "Azure DevOps": "Azure DevOps"
-            }
-        },
-        {
             "name": "Replace",
             "type": "pickList",
             "label": "Overwrite Mode",
             "defaultValue": "false",
             "required": true,
-            "helpMarkDown": "Normally, if the same package metadata already exists on the server, the server will reject the package metadata push. This is a good practice as it ensures metadata isn't accidentally overwritten or ignored. Use this setting to override this behavior.",
+            "helpMarkDown": "Normally, if the same package build information already exists on the server, the server will reject the package build information push. This is a good practice as it ensures build information isn't accidentally overwritten or ignored. Use this setting to override this behavior.",
             "options": {
                 "false": "Fail if exists",
                 "true": "Overwrite existing",
@@ -105,7 +90,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Push Package Metadata to Octopus",
+    "instanceNameFormat": "Push Package Build Information to Octopus",
     "execution": {
         "Node": {
             "target": "index.js"

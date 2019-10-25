@@ -1,4 +1,11 @@
-﻿OctoTFS.Tests.resources.tasks.CreateOctopusRelease.CreateOctopusReleaseV3.task.json
+﻿OctoTFS.Tests.resources.tasks.BuildInformation.task.json
+	'OctoConnectedServiceName': connectedService:OctopusEndpoint
+	'Space': pickList
+	'PackageId': string
+	'PackageVersion': string
+	'Replace': pickList
+	'AdditionalArguments': string
+OctoTFS.Tests.resources.tasks.CreateOctopusRelease.CreateOctopusReleaseV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': string
 	'ProjectName': pickList
@@ -45,14 +52,6 @@ OctoTFS.Tests.resources.tasks.Deploy.DeployV4.task.json
 	'ShowProgress': boolean
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
-	'AdditionalArguments': string
-OctoTFS.Tests.resources.tasks.Metadata.task.json
-	'OctoConnectedServiceName': connectedService:OctopusEndpoint
-	'Space': pickList
-	'PackageId': string
-	'PackageVersion': string
-	'CommentParser': pickList
-	'Replace': pickList
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.OctoCli.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint

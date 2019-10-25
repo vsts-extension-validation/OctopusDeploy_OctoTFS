@@ -35,7 +35,7 @@ This extension adds the following tasks:
 - Octopus tools installer
 - Package Application for Octopus
 - Push Packages to Octopus
-- Push Package Metadata to Octopus
+- Push Package Build Information to Octopus
 - Create Octopus Release
 - Deploy Octopus Release
 - Promote Octopus Release
@@ -84,18 +84,18 @@ Options include:
  * **Replace Existing**: If the package already exists in the repository, the default behavior is to reject the new package being pushed. Set this flag to **True** to overwrite the existing package.
  * **Additional Arguments**: Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push) to include.
 
-## <a name="push-package-metadata-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Package Metadata to Octopus
+## <a name="push-package-build-information-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Package Build Information to Octopus
 
- ![Configure Push Package Metadata Step](img/push-metadata-options.png)
+ ![Configure Push Package Build Information Step](img/push-metadata-options.png)
 
  Options include:
 
  * **Octopus Deploy Server**: The Octopus Server (click **New** to [add a service connection](#Add-a-service-connection-to-Octopus-Deploy)).
- * **Space**: The Octopus space to push package metadata to.
- * **Package ID**: The ID of the package, pushed separately, to push metadata onto. e.g. MyCompany.App
- * **Package Version**: The version of the package, pushed separately, to push metadata onto.
- * **Work Items Source**: The service hosting any work items or issues associated with each version of the package. Octopus will add information about the work items or issues to the package metadata, which can be used in release notes. For more information see the [Issue Trackers documentation](https://octopus.com/docs/deployment-process/issue-tracking).
- * **Replace Existing**: If the package metadata already exists in the repository, the default behavior is to reject the new metadata being pushed. Set this flag to 'True' to overwrite the existing package metadata.
+ * **Space**: The Octopus space to push package build information to.
+ * **Package ID**: The ID of the package, pushed separately, to push build information onto. e.g. MyCompany.App
+ * **Package Version**: The version of the package, pushed separately, to push build information onto.
+ * **Work Items Source**: The service hosting any work items or issues associated with each version of the package. Octopus will add information about the work items or issues to the package build information, which can be used in release notes. For more information see the [Issue Trackers documentation](https://octopus.com/docs/deployment-process/issue-tracking).
+ * **Replace Existing**: If the package build information already exists in the repository, the default behavior is to reject the new build information being pushed. Set this flag to 'True' to overwrite the existing package build information.
  * **Additional Arguments**: Any additional [Octo arguments](https://octopus.com/docs/octopus-rest-api/octo.exe-command-line/push-metadata) to include.
 
 ## <a name="create-octopus-release"></a>![Create Release Icon](img/octopus_create-release-04.png) Create Octopus Release
