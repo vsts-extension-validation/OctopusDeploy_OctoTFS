@@ -57,7 +57,7 @@ async function run() {
             Commits: commits.map(change => ({ Id: change.id, Comment: change.message }))
         };
 
-        if (!environment.agentBuildDirectory || environment.agentBuildDirectory == "") {
+        if (!environment.agentBuildDirectory) {
             tasks.error("The Build Information step requires build information and therefore is not compatible with use in a Release pipeline.");
             return;
         }
