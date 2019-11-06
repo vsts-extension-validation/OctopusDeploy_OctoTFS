@@ -57,6 +57,11 @@ async function run() {
             Commits: commits.map(change => ({ Id: change.id, Comment: change.message }))
         };
 
+        if (!environment.agentBuildDirectory) {
+            tasks.error("The Build Information step requires build information and therefore is not compatible with use in a Release pipeline.");
+            return;
+        }
+
         const buildInformationDir = path.join(environment.agentBuildDirectory, "octo");
         const buildInformationFile = path.join(buildInformationDir, `${environment.buildId}-buildinformation.json`);
         await tasks.mkdirP(buildInformationDir);
