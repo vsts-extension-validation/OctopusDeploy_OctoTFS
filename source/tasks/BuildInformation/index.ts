@@ -9,7 +9,8 @@ import {
     argument,
     argumentEnquote,
     argumentIfSet,
-    getOverwriteModeFromReplaceInput
+    getOverwriteModeFromReplaceInput,
+    multiArgument
 } from '../Utils';
 
 export interface IOctopusBuildInformation {
@@ -34,7 +35,7 @@ async function run() {
         const vstsConnection = utils.createVstsConnection(environment);
 
         const space = tasks.getInput("Space");
-        const packageId = tasks.getInput("PackageId", true);
+        const packageIds = utils.getLineSeparatedItems(tasks.getInput("PackageId", true));
         const packageVersion = tasks.getInput("PackageVersion", true);
         const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
@@ -73,7 +74,7 @@ async function run() {
         const configure: Array<(tool: ToolRunner) => ToolRunner> = [
             connectionArguments(connection),
             argumentIfSet(argumentEnquote, "space", space),
-            argumentEnquote("package-id", packageId),
+            multiArgument(argumentEnquote, "package-id", packageIds),
             argument("version", packageVersion),
             argumentEnquote("file", buildInformationFile),
             argument("overwrite-mode", overwriteMode),
