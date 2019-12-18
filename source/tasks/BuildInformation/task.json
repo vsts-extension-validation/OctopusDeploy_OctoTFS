@@ -45,7 +45,7 @@
         },
         {
             "name": "PackageId",
-            "type": "string",
+            "type": "multiLine",
             "label": "Package IDs",
             "defaultValue": "",
             "required": true,
