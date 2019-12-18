@@ -1,7 +1,7 @@
 ﻿OctoTFS.Tests.resources.tasks.BuildInformation.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
 	'Space': pickList
-	'PackageId': string
+	'PackageId': multiLine
 	'PackageVersion': string
 	'Replace': pickList
 	'AdditionalArguments': string
