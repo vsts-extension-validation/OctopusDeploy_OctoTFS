@@ -45,11 +45,11 @@
         },
         {
             "name": "PackageId",
-            "type": "string",
-            "label": "Package ID",
+            "type": "multiLine",
+            "label": "Package IDs",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "The ID of the package. e.g. MyCompany.App"
+            "helpMarkDown": "Newline-separated package IDs; e.g.\nMyCompany.MyApp\nMyCompany.MyApp2"
         },
         {
             "name": "PackageVersion",
