@@ -66,10 +66,12 @@ export async function getOrInstallOctoCommandRunner(command: string) : Promise<E
 
 export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
     const isWindows = /windows/i.test(tasks.osType());
-    if(isWindows){
-        return stringOption(tasks.which(`${ToolName}`, false))
-        .map(tasks.tool)
-        .map(x => x.arg(command));
+    if (isWindows) {
+        return stringOption(
+            tasks.which(`${ToolName}`, false)
+            || tasks.which(`${ToolNameUntil6_17_3}`, false))
+            .map(tasks.tool)
+            .map(x => x.arg(command));
     }
 
     return getPortableOctoCommandRunner(command);
