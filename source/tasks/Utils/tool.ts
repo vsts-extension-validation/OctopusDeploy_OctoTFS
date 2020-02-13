@@ -7,7 +7,8 @@ import { Option, some, none } from "fp-ts/lib/Option"
 import { Either, right, fromOption  } from "fp-ts/lib/Either";
 import { getOrDownloadOcto, addToolToPath, resolvePublishedOctoVersion } from './install';
 
-export const ToolName = "Octo";
+export const ToolName = "octo";
+export const ToolNameUntil6_17_3 = "Octo";
 
 
 export interface ArgFormatter{
@@ -75,7 +76,9 @@ export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
 }
 
 export function getPortableOctoCommandRunner(command: string) : Option<ToolRunner>{
-    const octo = stringOption(tasks.which(`${ToolName}.dll`, false));
+    const octo = stringOption(
+        tasks.which(`${ToolName}.dll`, false)
+        || tasks.which(`${ToolNameUntil6_17_3}.dll`, false));
     const dotnet = tasks.which("dotnet", false);
 
     if (isNullOrWhitespace(dotnet)){
