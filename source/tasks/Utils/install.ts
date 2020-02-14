@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as tasks from 'azure-pipelines-task-lib/task';
 import * as tools from 'azure-pipelines-tool-lib/tool';
 import * as TypedRestClient from "typed-rest-client/RestClient";
-import { ToolName, ToolNameUntil6_17_3 } from "../Utils";
+import { ToolName, ToolNameBeforeV7 } from "../Utils";
 import { head, filter } from "ramda";
 
 interface LatestResponse {
@@ -53,11 +53,11 @@ function getExecutableExtention(): string {
 
 function getLocalTool(version:string): string {
     console.log("Checking local tool cache");
-    return tools.findLocalTool(ToolName, version) || tools.findLocalTool(ToolNameUntil6_17_3, version);
+    return tools.findLocalTool(ToolName, version) || tools.findLocalTool(ToolNameBeforeV7, version);
 }
 
 function findOcto(rootFolder: string){
-    var octoPath = [path.join(rootFolder, "*" + ToolName + getExecutableExtention()), path.join(rootFolder, "*" + ToolNameUntil6_17_3 + getExecutableExtention())];
+    var octoPath = [path.join(rootFolder, "*" + ToolName + getExecutableExtention()), path.join(rootFolder, "*" + ToolNameBeforeV7 + getExecutableExtention())];
     console.log(`Looking for ${octoPath}`);
     var allPaths = tasks.find(rootFolder);
     var matches = tasks.match(allPaths, octoPath, rootFolder);
