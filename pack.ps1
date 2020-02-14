@@ -77,8 +77,8 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         if ($task.version.Major -gt 3) {
             $task.version.Major  = $netVersion.Major
             $task.version.Minor = $netVersion.Minor
-            $task.version.Patch = $netVersion.Build
         }
+        $task.version.Patch = $netVersion.Build
 
         $task.helpMarkDown = "Version: $version. [More Information](https://g.octopushq.com/TFS-VSTS)"
 
