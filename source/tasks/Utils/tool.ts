@@ -8,7 +8,7 @@ import { Either, right, fromOption  } from "fp-ts/lib/Either";
 import { getOrDownloadOcto, addToolToPath, resolvePublishedOctoVersion } from './install';
 
 export const ToolName = "octo";
-export const ToolNameUntil6_17_3 = "Octo";
+export const ToolNameBeforeV7 = "Octo";
 
 
 export interface ArgFormatter{
@@ -69,7 +69,7 @@ export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
     if (isWindows) {
         return stringOption(
             tasks.which(`${ToolName}`, false)
-            || tasks.which(`${ToolNameUntil6_17_3}`, false))
+            || tasks.which(`${ToolNameBeforeV7}`, false))
             .map(tasks.tool)
             .map(x => x.arg(command));
     }
@@ -80,7 +80,7 @@ export function getOctoCommandRunner(command: string) : Option<ToolRunner> {
 export function getPortableOctoCommandRunner(command: string) : Option<ToolRunner>{
     const octo = stringOption(
         tasks.which(`${ToolName}.dll`, false)
-        || tasks.which(`${ToolNameUntil6_17_3}.dll`, false));
+        || tasks.which(`${ToolNameBeforeV7}.dll`, false));
     const dotnet = tasks.which("dotnet", false);
 
     if (isNullOrWhitespace(dotnet)){
