@@ -2,6 +2,8 @@ This extension provides Build and Release tasks to integrate with [Octopus Deplo
 
 [Octopus Deploy](https://octopus.com) is great for deploying ASP.NET or .NET Core applications running on IIS or Azure, Windows services, SQL databases, and much, much more.
 
+The [Azure Devops guides](https://g.octopushq.com/GuidesAzureDevops) provide step by step instructions for deploying applications to Octopus from Azure Devops.
+
 <div style="border:1px solid #888;background-color: #ffc;color:#444;padding:5px;">Note: This extension is only compatible with Azure DevOps, Team Foundation Server (TFS) 2017 Update 2 and above, and Visual Studio Team Services (VSTS).<br/><br/>There is an alternative extension compatible with TFS 2015 Update 2 and above. See <a href="https://g.octopushq.com/TFS-VSTS-compat">the Octopus Documentation</a> for extension compatibility details and a download link.
 </div>
 
