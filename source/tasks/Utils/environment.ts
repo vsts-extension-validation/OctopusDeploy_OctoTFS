@@ -211,5 +211,25 @@ export const getBuildBranch = async (client: vsts.WebApi) => {
 export const getBuildChanges = async (client: vsts.WebApi) => {
     const environment = getVstsEnvironmentVariables();
     const api = await client.getBuildApi();
-    return await api.getBuildChanges(environment.projectName, environment.buildId);
+    const gitApi = await client.getGitApi();
+
+    const changes = await api.getBuildChanges(environment.projectName, environment.buildId);
+
+    if(environment.buildRepositoryProvider === "TfsGit") 
+    {
+        changes.map(async x => {
+            if(x.messageTruncated)
+            {
+                const segments = x.location.split("/");
+                const repositoryId = segments[segments.length - 3];
+
+                const commit = await gitApi.getCommit(x.id, repositoryId);
+                x.message = commit.comment;
+            }
+
+            return x;
+        });
+    }
+
+    return changes; 
 };
