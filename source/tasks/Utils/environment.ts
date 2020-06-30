@@ -218,7 +218,7 @@ export const getBuildChanges = async (client: vsts.WebApi) => {
     console.log(`Environment Build Repository Provider ${environment.buildRepositoryProvider}`);
     if(environment.buildRepositoryProvider === "TfsGit") 
     {
-        changes.map(async x => {
+        await changes.map(async x => {
             console.log(`Commit ${x.id}`);
             console.log(`Commit message: ${x.message}`);
             console.log(`Is truncated: ${x.messageTruncated}`);
