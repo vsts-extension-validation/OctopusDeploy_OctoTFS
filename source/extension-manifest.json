@@ -207,14 +207,14 @@
                         "resultSelector": "jsonpath:$.[*]"
                     },
                     {
-                        "name": "OctopusAllProjects",
-                        "endpointUrl": "$(endpoint.url)/api/projects/all",
-                        "resultSelector": "jsonpath:$.[*]"
+                        "name": "OctopusListProjects",
+                        "endpointUrl": "$(endpoint.url)/api/projects?partialName=$(PartialNameFilter)",
+                        "resultSelector": "jsonpath:$.Items[*]"
                     },
                     {
-                        "name": "OctopusAllProjectsInSpace",
-                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/projects/all",
-                        "resultSelector": "jsonpath:$.[*]"
+                        "name": "OctopusListProjectsInSpace",
+                        "endpointUrl": "$(endpoint.url)/api/$(SpaceId)/projects?partialName=$(PartialNameFilter)",
+                        "resultSelector": "jsonpath:$.Items[*]"
                     },
                     {
                         "name": "OctopusAllEnvironments",
