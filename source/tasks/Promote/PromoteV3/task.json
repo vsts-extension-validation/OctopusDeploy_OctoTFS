@@ -18,7 +18,7 @@
     "demands": [],
     "minimumAgentVersion": "2.115.0",
     "groups": [
-         {
+        {
             "name": "tenant",
             "displayName": "Tenants",
             "isExpanded": false
@@ -48,6 +48,14 @@
                 "EditableOptions": "False"
             },
             "helpMarkDown": "Version 3 of this task has limited support for spaces. We recommend using version 4 of this task for a better experience."
+        },
+        {
+            "name": "ProjectFilter",
+            "type": "string",
+            "label": "Filter project by name",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "This helps you narrow the next Project dropdown with more specific results."
         },
         {
             "name": "Project",
@@ -125,8 +133,11 @@
         {
             "target": "Project",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllProjects",
-            "resultTemplate": "{\"Value\":\"{{{Name}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
+            "dataSourceName": "OctopusListProjects",
+            "parameters": {
+                "PartialNameFilter": "$(ProjectFilter)"
+            },
+            "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
             "target": "From",

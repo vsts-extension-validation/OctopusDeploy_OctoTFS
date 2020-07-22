@@ -60,6 +60,14 @@
             "helpMarkDown": "Version 3 of this task has limited support for spaces. We recommend using version 4 of this task for a better experience."
         },
         {
+            "name": "ProjectFilter",
+            "type": "string",
+            "label": "Filter project by name",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "This helps you narrow the next Project dropdown with more specific results."
+        },
+        {
             "name": "ProjectName",
             "type": "pickList",
             "label": "Project Name",
@@ -172,7 +180,10 @@
         {
             "target": "ProjectName",
             "endpointId": "$(OctoConnectedServiceName)",
-            "dataSourceName": "OctopusAllProjects",
+            "dataSourceName": "OctopusListProjects",
+            "parameters": {
+                "PartialNameFilter": "$(ProjectFilter)"
+            },
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         },
         {
