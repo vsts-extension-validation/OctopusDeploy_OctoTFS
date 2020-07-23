@@ -134,7 +134,7 @@ function OctopusStatusWidgetConfiguration() {
 
                         fetchDataSourceContent(queryUri, authToken, "OctopusAllEnvironmentsInSpace", selectedSpaceId, null).done(appendEnvironmentData);
                     } else {
-                        fetchDataSourceContent(queryUri, authToken, "OctopusListProjectGroups", null, null).done(function (projectGroupData) {
+                        fetchDataSourceContent(queryUri, authToken, "OctopusAllProjectGroups", null, null).done(function (projectGroupData) {
                             appendProjectGroupData(projectGroupData);
                             const selectedProjectGroupId = $projectGroupDropdown.val();
                             fetchDataSourceContent(queryUri, authToken, "OctopusListProjectsInProjectGroup", null, selectedProjectGroupId).done(appendProjectData);
