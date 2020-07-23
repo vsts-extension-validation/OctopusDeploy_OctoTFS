@@ -216,8 +216,12 @@ export const getBuildChanges = async (client: vsts.WebApi) => {
                 const segments = x.location.split("/");
                 const repositoryId = segments[segments.length - 3];
 
-                const commit = await gitApi.getCommit(x.id, repositoryId);
-                x.message = commit.comment;
+                try {
+                    const commit = await gitApi.getCommit(x.id, repositoryId);
+                    x.message = commit.comment;
+                } catch (err) {
+                    tasks.warning(`Using a truncated commit message for commit ${x.id}, because an error occurred while fetching the full message. ${err}`);
+                }
             }
 
             return x;
