@@ -323,7 +323,7 @@
                                 "validation": {
                                     "isRequired": true,
                                     "dataType": "string",
-                                    "maxLength": 32
+                                    "maxLength": 36
                                 }
                             }
                         ],
