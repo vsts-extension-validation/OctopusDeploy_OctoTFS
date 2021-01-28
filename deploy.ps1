@@ -7,8 +7,6 @@ $shareWith = $OctopusParameters["ShareWith"]
 $publish = [System.Convert]::ToBoolean($OctopusParameters["Publish"])
 $embeddedOctoVersion = $OctopusParameters["EmbeddedOctoVersion"]
 
-& npm install -g tfx-cli
-
 & "$PSScriptRoot\embed-octo.ps1" -version $embeddedOctoVersion
 & "$PSScriptRoot\pack.ps1" -environment $environment -version $version
 if ($publish) {
