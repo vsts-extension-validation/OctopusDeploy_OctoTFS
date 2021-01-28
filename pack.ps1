@@ -43,11 +43,6 @@ function CleanNodeModules() {
     Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV4/node_modules"
 }
 
-function UpdateTfxCli() {
-    Write-Host "Updating tfx-cli..."
-    & npm up -g tfx-cli
-}
-
 function UpdateExtensionManifestOverrideFile($workingDirectory, $environment, $version) {
     Write-Host "Finding environment-specific manifest overrides..."
     $overridesSourceFilePath = "$workingDirectory/extension-manifest.$environment.json"
@@ -169,7 +164,6 @@ function Pack($envName, $environment, $workingDirectory) {
     & tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
-UpdateTfxCli
 InstallTaskDependencies $buildDirectoryPath
 CleanNodeModules
 Pack "VSTSExtensions" $environment $buildDirectoryPath
