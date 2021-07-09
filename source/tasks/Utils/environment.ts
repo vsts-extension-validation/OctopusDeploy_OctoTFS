@@ -208,7 +208,7 @@ export const getBuildChanges = async (client: vsts.WebApi) => {
     const api = await client.getBuildApi();
     const gitApi = await client.getGitApi();
 
-    const changes = await api.getBuildChanges(environment.projectName, environment.buildId, null, 100000);
+    const changes = await api.getBuildChanges(environment.projectName, environment.buildId, undefined, 100000);
 
     if (environment.buildRepositoryProvider === "TfsGit") {
         let promises = changes.map(async (x) => {
