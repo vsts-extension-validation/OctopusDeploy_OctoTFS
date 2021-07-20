@@ -53,11 +53,17 @@
         "getstarted": {
             "uri": "https://g.octopushq.com/TFS-VSTS"
         },
+        "license": {
+            "uri": "https://octopus.com/legal/customer-agreement"
+        },
         "support": {
             "uri": "https://octopus.com/support"
         },
         "repository": {
             "uri": "https://github.com/OctopusDeploy/OctoTFS"
+        },
+        "privacypolicy": {
+            "uri": "https://octopus.com/legal/privacy"
         }
     },
     "files": [
