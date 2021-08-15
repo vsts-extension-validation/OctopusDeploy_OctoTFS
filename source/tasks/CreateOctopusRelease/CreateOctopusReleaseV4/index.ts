@@ -20,6 +20,8 @@ async function run() {
         const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
         const deploymentProgress = tasks.getBoolInput("DeploymentProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
+        const gitRef = tasks.getInput("GitRef");
+        const gitCommit = tasks.getInput("GitCommit");
 
         await utils.assertOctoVersionAcceptsIds();
         const octo = await utils.getOrInstallOctoCommandRunner("create-release");
@@ -32,6 +34,8 @@ async function run() {
             connectionArguments(connection),
             flag("enableServiceMessages", true),
             multiArgument(argumentEnquote, "deployTo", deployToEnvironments),
+            argumentIfSet(argumentEnquote, "gitRef", gitRef),
+            argumentIfSet(argumentEnquote, "gitCommit", gitCommit),
             flag("progress", deployToEnvironments.length > 0 && deploymentProgress),
             multiArgument(argumentEnquote, "tenant", deployForTenants),
             multiArgument(argumentEnquote, "tenanttag", deployForTenantTags),

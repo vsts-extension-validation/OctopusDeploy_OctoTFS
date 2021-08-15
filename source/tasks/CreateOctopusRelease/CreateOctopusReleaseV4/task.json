@@ -170,6 +170,24 @@
             "groupName": "deployment"
         },
         {
+            "name": "GitRef",
+            "type": "string",
+            "label": "Git Reference",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Git branch reference to use when creating the release for version controlled Projects.",
+            "groupName": "versionControl"
+        },
+        {
+            "name": "GitCommit",
+            "type": "string",
+            "label": "Git Commit",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Git commit to use when creating the release for version controlled Projects. Use in conjunction with the gitRef parameter to select any previous commit.",
+            "groupName": "versionControl"
+        },
+        {
             "name": "AdditionalArguments",
             "type": "string",
             "label": "Additional Arguments",
