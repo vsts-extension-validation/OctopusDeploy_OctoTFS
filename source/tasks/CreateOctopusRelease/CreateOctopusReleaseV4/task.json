@@ -34,6 +34,11 @@
             "isExpanded": false
         },
         {
+            "name": "versionControl",
+            "displayName": "Version Control",
+            "isExpanded": false
+        },
+        {
             "name": "additional",
             "displayName": "Additional Options",
             "isExpanded": false
@@ -168,6 +173,24 @@
             "required": false,
             "helpMarkDown": "Output from the deployment will appear in the log. If checked, the task will only succeed if the deployment is successful.",
             "groupName": "deployment"
+        },
+        {
+            "name": "GitRef",
+            "type": "string",
+            "label": "Git Reference",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Git branch reference to use when creating the release for version controlled Projects.",
+            "groupName": "versionControl"
+        },
+        {
+            "name": "GitCommit",
+            "type": "string",
+            "label": "Git Commit",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Git commit to use when creating the release for version controlled Projects. Use in conjunction with the gitRef parameter to select any previous commit.",
+            "groupName": "versionControl"
         },
         {
             "name": "AdditionalArguments",
