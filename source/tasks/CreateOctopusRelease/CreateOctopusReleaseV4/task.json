@@ -34,6 +34,11 @@
             "isExpanded": false
         },
         {
+            "name": "versionControl",
+            "displayName": "Version Control",
+            "isExpanded": false
+        },
+        {
             "name": "additional",
             "displayName": "Additional Options",
             "isExpanded": false
