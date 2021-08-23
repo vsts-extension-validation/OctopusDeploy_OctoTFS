@@ -34,6 +34,8 @@ OctoTFS.Tests.resources.tasks.CreateOctopusRelease.CreateOctopusReleaseV4.task.j
 	'DeployForTenants': pickList
 	'DeployForTenantTags': string
 	'DeploymentProgress': boolean
+	'GitRef': string
+	'GitCommit': string
 	'AdditionalArguments': string
 OctoTFS.Tests.resources.tasks.Deploy.DeployV3.task.json
 	'OctoConnectedServiceName': connectedService:OctopusEndpoint
