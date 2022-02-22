@@ -1,5 +1,5 @@
 import * as path from "path";
-const uuidv1 = require("uuid/v1");
+import { v4 as uuidv4 } from 'uuid';
 import * as vsts from "azure-devops-node-api/WebApi";
 import * as wit from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces";
 import * as bi from "azure-devops-node-api/interfaces/BuildInterfaces";
@@ -81,7 +81,7 @@ export const generateReleaseNotesContent = (environment: VstsEnvironmentVariable
 };
 
 export const createReleaseNotesFile = (content: () => string, directory: string): string => {
-    const filePath = path.join(directory, `release-notes-${uuidv1()}.md`);
+    const filePath = path.join(directory, `release-notes-${uuidv4()}.md`);
     tasks.writeFile(filePath, content(), { encoding: "utf8" });
     return filePath;
 };
@@ -200,7 +200,7 @@ export const getVcsTypeFromProvider = (buildRepositoryProvider: string) => {
 export const getBuildBranch = async (client: vsts.WebApi) => {
     const environment = getVstsEnvironmentVariables();
     const api = await client.getBuildApi();
-    return (await api.getBuild(environment.buildId, environment.projectName)).sourceBranch;
+    return (await api.getBuild(environment.projectName, environment.buildId)).sourceBranch;
 };
 
 export const getBuildChanges = async (client: vsts.WebApi) => {
