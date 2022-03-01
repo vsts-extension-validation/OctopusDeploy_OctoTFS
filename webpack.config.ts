@@ -5,7 +5,7 @@ import { Configuration } from "webpack";
 
 const config: Configuration = {
     mode: 'production',
-    target: 'node',
+    target: 'node10',
     entry: () => {
         return new Promise((resolve, reject) => {
             glob(path.join(__dirname, 'source', 'tasks', '**', 'index.ts'), (err, matches) => {
