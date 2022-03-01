@@ -1,4 +1,4 @@
-import { getOrDownloadOcto, resolvePublishedOctoVersion, addToolToPath, getEmbeddedOcto } from "../Utils/install";
+import { getOrDownloadOcto, resolvePublishedOctoVersion, addToolToPath, getEmbeddedOcto } from "../../Utils/install";
 import * as tasks from "azure-pipelines-task-lib/task";
 
 async function run() {

@@ -1,9 +1,9 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
-import * as utils from "../Utils";
+import * as utils from "../../Utils";
 import * as path from "path";
 
-import { connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, getOverwriteModeFromReplaceInput, multiArgument } from "../Utils";
+import { connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, getOverwriteModeFromReplaceInput, multiArgument } from "../../Utils";
 
 export interface IOctopusBuildInformation {
     BuildEnvironment: string;

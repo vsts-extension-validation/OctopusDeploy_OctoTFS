@@ -1,7 +1,7 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import * as fs from "fs";
-import * as utils from "../Utils";
-import { argument, argumentIfSet, flag, multiArgument, argumentEnquote, includeAdditionalArguments } from "../Utils";
+import * as utils from "../../Utils";
+import { argument, argumentIfSet, flag, multiArgument, argumentEnquote, includeAdditionalArguments } from "../../Utils";
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 
 export interface PackageRequiredInputs {

@@ -1,22 +1,16 @@
 {
+  "extends": "@tsconfig/node10/tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
     "declaration": false,
     "sourceMap": false,
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
     "baseUrl": "./source",
     "allowSyntheticDefaultImports": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "useUnknownInCatchVariables": false,
-    "lib": [
-      "es2015"
-    ]
   }
 }

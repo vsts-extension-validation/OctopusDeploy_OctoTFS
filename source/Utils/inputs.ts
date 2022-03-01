@@ -1,6 +1,6 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import { option } from "fp-ts";
-import * as glob from "glob";
+import glob from "glob";
 import { flatten } from "ramda";
 import { Promise } from "ts-promise";
 

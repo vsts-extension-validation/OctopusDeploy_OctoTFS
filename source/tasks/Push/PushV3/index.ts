@@ -1,7 +1,7 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../Utils";
+import * as utils from "../../../Utils";
 
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../Utils/tool";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../../Utils/tool";
 
 async function run() {
     try {
