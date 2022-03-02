@@ -12,5 +12,6 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "useUnknownInCatchVariables": false,
+    "isolatedModules": true,
   }
 }
