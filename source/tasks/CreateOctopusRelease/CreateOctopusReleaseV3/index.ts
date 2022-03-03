@@ -1,8 +1,8 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../../Utils/tool";
-import { createReleaseNotesFile, createVstsConnection, generateReleaseNotesContent, getLinkedReleaseNotes, getVstsEnvironmentVariables } from "../../../Utils/environment";
-import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../../Utils/connection";
-import { getOptionalCsvInput } from "../../../Utils/inputs";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../Utils/tool";
+import { createReleaseNotesFile, createVstsConnection, generateReleaseNotesContent, getLinkedReleaseNotes, getVstsEnvironmentVariables } from "../../Utils/environment";
+import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../Utils/connection";
+import { getOptionalCsvInput } from "../../Utils/inputs";
 
 async function run() {
     try {

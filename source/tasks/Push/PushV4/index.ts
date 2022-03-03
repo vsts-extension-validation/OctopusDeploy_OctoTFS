@@ -1,8 +1,8 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 
-import { getLineSeparatedItems, getOverwriteModeFromReplaceInput, resolveGlobs } from "../../../Utils/inputs";
-import { argument, argumentEnquote, argumentIfSet, assertOctoVersionAcceptsIds, connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArgumentsAndProxyConfig, multiArgument } from "../../../Utils/tool";
-import { getDefaultOctopusConnectionDetailsOrThrow } from "../../../Utils/connection";
+import { getLineSeparatedItems, getOverwriteModeFromReplaceInput, resolveGlobs } from "../../Utils/inputs";
+import { argument, argumentEnquote, argumentIfSet, assertOctoVersionAcceptsIds, connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArgumentsAndProxyConfig, multiArgument } from "../../Utils/tool";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
 
 async function run() {
     try {

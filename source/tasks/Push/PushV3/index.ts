@@ -1,8 +1,8 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../../Utils/tool";
-import { getLineSeparatedItems, resolveGlobs } from "../../../Utils/inputs";
-import { getDefaultOctopusConnectionDetailsOrThrow } from "../../../Utils/connection";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../Utils/tool";
+import { getLineSeparatedItems, resolveGlobs } from "../../Utils/inputs";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
 
 async function run() {
     try {
