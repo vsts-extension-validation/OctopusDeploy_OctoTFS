@@ -9,19 +9,41 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function entryPoints() {
-    const matches = glob.sync(join(__dirname, "source", "tasks", "**", "index.ts"));
-    const entries = {};
+    function doReplacements(entries, source) {
+        const matches = glob.sync(join(__dirname, "source", source, "**", "index.ts"));
 
-    for (let match of matches) {
-        const key = match.replace(join(__dirname, "source") + "/", "").replace(".ts", "");
-        entries[key] = match;
+        for (let match of matches) {
+            const key = match.replace(join(__dirname, "source", source) + "/", "tasks/").replace(".ts", "");
+            entries[key] = match;
+        }
     }
+
+    const entries = {};
+    doReplacements(entries, "tasks");
+    doReplacements(entries, "tasksLegacy");
 
     return entries;
 }
 
 function filesToCopy() {
-    const matches = glob.sync(join(__dirname, "source", "tasks", "**", "*"));
+    function doTasks(toCopy, source) {
+        const matches = glob.sync(join(__dirname, "source", source, "**", "*"));
+        for (let match of matches) {
+            if (match.endsWith(".ts")) {
+                continue;
+            }
+
+            if (statSync(match).isDirectory()) {
+                continue;
+            }
+
+            const to = match.replace(join(__dirname, "source", source) + "/", "./tasks/");
+            toCopy.push({
+                from: match.replace(join(__dirname, "source") + "/", "./source/"),
+                to: to.substring(0, to.lastIndexOf("/")),
+            });
+        }
+    }
 
     const toCopy = [
         {
@@ -45,21 +67,9 @@ function filesToCopy() {
             to: "./widgets/ProjectStatus/lib",
         },
     ];
-    for (let match of matches) {
-        if (match.endsWith(".ts")) {
-            continue;
-        }
 
-        if (statSync(match).isDirectory()) {
-            continue;
-        }
-
-        const to = match.replace(join(__dirname, "source") + "/", "./");
-        toCopy.push({
-            from: match.replace(join(__dirname, "source") + "/", "./source/"),
-            to: to.substring(0, to.lastIndexOf("/")),
-        });
-    }
+    doTasks(toCopy, "tasks");
+    doTasks(toCopy, "tasksLegacy");
 
     return toCopy;
 }
