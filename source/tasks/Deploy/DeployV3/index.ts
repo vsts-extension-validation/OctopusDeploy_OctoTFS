@@ -1,21 +1,22 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../../Utils";
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../../Utils/tool";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../../Utils/tool";
+import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../../Utils/connection";
+import { getOptionalCsvInput, getRequiredCsvInput } from "../../../Utils/inputs";
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
         const releaseNumber = tasks.getInput("ReleaseNumber", true);
-        const environments = utils.getRequiredCsvInput("Environments");
+        const environments = getRequiredCsvInput("Environments");
         const showProgress = tasks.getBoolInput("ShowProgress");
-        const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+        const deploymentForTenants = getOptionalCsvInput("DeployForTenants");
+        const deployForTenantTags = getOptionalCsvInput("DeployForTenantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
-        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then((x) => x.value);
+        const project = await resolveProjectName(connection, tasks.getInput("Project", true)).then((x) => x.value);
 
-        const octo = await utils.getOrInstallOctoCommandRunner("deploy-release");
+        const octo = await getOrInstallOctoCommandRunner("deploy-release");
 
         const configure = [
             argumentIfSet(argumentEnquote, "space", space),

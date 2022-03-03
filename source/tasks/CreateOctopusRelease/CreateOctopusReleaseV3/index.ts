@@ -1,35 +1,37 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../../Utils";
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../../Utils/tool";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../../Utils/tool";
+import { createReleaseNotesFile, createVstsConnection, generateReleaseNotesContent, getLinkedReleaseNotes, getVstsEnvironmentVariables } from "../../../Utils/environment";
+import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../../Utils/connection";
+import { getOptionalCsvInput } from "../../../Utils/inputs";
 
 async function run() {
     try {
-        const environmentVariables = utils.getVstsEnvironmentVariables();
-        const vstsConnection = utils.createVstsConnection(environmentVariables);
-        const octoConnection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const environmentVariables = getVstsEnvironmentVariables();
+        const vstsConnection = createVstsConnection(environmentVariables);
+        const octoConnection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
-        const project = await utils.resolveProjectName(octoConnection, tasks.getInput("ProjectName", true)).then((x) => x.value);
+        const project = await resolveProjectName(octoConnection, tasks.getInput("ProjectName", true)).then((x) => x.value);
         const releaseNumber = tasks.getInput("ReleaseNumber");
         const channel = tasks.getInput("Channel");
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
         const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
         const customReleaseNotes = tasks.getInput("CustomReleaseNotes");
-        const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
-        const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+        const deployToEnvironments = getOptionalCsvInput("DeployToEnvironment");
+        const deployForTenants = getOptionalCsvInput("DeployForTenants");
+        const deployForTenantTags = getOptionalCsvInput("DeployForTenantTags");
         const deploymentProgress = tasks.getBoolInput("DeploymentProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const octo = await utils.getOrInstallOctoCommandRunner("create-release");
+        const octo = await getOrInstallOctoCommandRunner("create-release");
 
         let linkedReleaseNotes = "";
         if (workItemReleaseNotes || changesetCommentReleaseNotes) {
-            linkedReleaseNotes = await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
+            linkedReleaseNotes = await getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes);
         }
 
-        const releaseNotesFile = utils.createReleaseNotesFile(() => {
-            return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
+        const releaseNotesFile = createReleaseNotesFile(() => {
+            return generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
         }, environmentVariables.defaultWorkingDirectory);
 
         const configure = [

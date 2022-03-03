@@ -1,8 +1,8 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import * as fs from "fs";
-import * as utils from "../../Utils";
-import { argument, argumentIfSet, flag, multiArgument, argumentEnquote, includeAdditionalArguments } from "../../Utils";
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
+import { getLineSeparatedItems, isNullOrWhitespace, removeTrailingSlashes, safeTrim } from "../../Utils/inputs";
+import { argument, argumentEnquote, argumentIfSet, flag, getOrInstallOctoCommandRunner, includeAdditionalArguments, multiArgument } from "../../Utils/tool";
 
 export interface PackageRequiredInputs {
     packageId: string;
@@ -41,7 +41,7 @@ export const configure = (inputs: PackageInputs) => {
         argument("overwrite", inputs.overwrite.toString()),
         includeAdditionalArguments(inputs.additionalArguments),
         (tool: ToolRunner) => {
-            if (!utils.isNullOrWhitespace(inputs.nuGetReleaseNotesFile) && fs.existsSync(inputs.nuGetReleaseNotesFile) && fs.lstatSync(inputs.nuGetReleaseNotesFile).isFile()) {
+            if (!isNullOrWhitespace(inputs.nuGetReleaseNotesFile) && fs.existsSync(inputs.nuGetReleaseNotesFile) && fs.lstatSync(inputs.nuGetReleaseNotesFile).isFile()) {
                 console.log(`Release notes file: ${inputs.nuGetReleaseNotesFile}`);
                 argumentEnquote("releaseNotesFile", inputs.nuGetReleaseNotesFile, tool);
             } else {
@@ -59,15 +59,15 @@ export const getInputs = (): PackageInputs => {
         packageId: tasks.getInput("PackageId", true),
         packageFormat: tasks.getInput("PackageFormat", true),
         packageVersion: tasks.getInput("PackageVersion"),
-        outputPath: utils.removeTrailingSlashes(utils.safeTrim(tasks.getPathInput("OutputPath"))) || undefined,
-        sourcePath: utils.removeTrailingSlashes(utils.safeTrim(tasks.getPathInput("SourcePath"))) || undefined,
+        outputPath: removeTrailingSlashes(safeTrim(tasks.getPathInput("OutputPath"))) || undefined,
+        sourcePath: removeTrailingSlashes(safeTrim(tasks.getPathInput("SourcePath"))) || undefined,
         nuGetAuthor: tasks.getInput("NuGetAuthor"),
         nuGetTitle: tasks.getInput("NuGetTitle"),
         nuGetDescription: tasks.getInput("NuGetDescription"),
         nuGetReleaseNotes: tasks.getInput("NuGetReleaseNotes"),
         nuGetReleaseNotesFile: tasks.getInput("NuGetReleaseNotesFile", false),
         overwrite: tasks.getBoolInput("Overwrite"),
-        include: utils.getLineSeparatedItems(tasks.getInput("Include")),
+        include: getLineSeparatedItems(tasks.getInput("Include")),
         listFiles: tasks.getBoolInput("ListFiles"),
         additionalArguments: tasks.getInput("AdditionalArguments"),
         compressionLevel: tasks.getInput("CompressionLevel"),
@@ -76,7 +76,7 @@ export const getInputs = (): PackageInputs => {
 
 async function run() {
     try {
-        const octo = await utils.getOrInstallOctoCommandRunner("pack");
+        const octo = await getOrInstallOctoCommandRunner("pack");
         const configureTool = configure(getInputs());
 
         const code: number = await octo

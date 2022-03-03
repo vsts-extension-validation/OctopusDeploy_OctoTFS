@@ -1,12 +1,14 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../../Utils";
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../../Utils";
+import { createReleaseNotesFile, createVstsConnection, generateReleaseNotesContent, getLinkedReleaseNotes, getVstsEnvironmentVariables } from "../../../Utils/environment";
+import { argumentEnquote, argumentIfSet, assertOctoVersionAcceptsIds, connectionArguments, flag, getOrInstallOctoCommandRunner, includeAdditionalArgumentsAndProxyConfig, multiArgument } from "../../../Utils/tool";
+import { getOptionalCsvInput } from "../../../Utils/inputs";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../../Utils/connection";
 
 async function run() {
     try {
-        const environmentVariables = utils.getVstsEnvironmentVariables();
-        const vstsConnection = utils.createVstsConnection(environmentVariables);
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const environmentVariables = getVstsEnvironmentVariables();
+        const vstsConnection = createVstsConnection(environmentVariables);
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
         const project = tasks.getInput("ProjectName", true);
@@ -15,16 +17,16 @@ async function run() {
         const changesetCommentReleaseNotes = tasks.getBoolInput("ChangesetCommentReleaseNotes");
         const workItemReleaseNotes = tasks.getBoolInput("WorkItemReleaseNotes");
         const customReleaseNotes = tasks.getInput("CustomReleaseNotes");
-        const deployToEnvironments = utils.getOptionalCsvInput("DeployToEnvironment");
-        const deployForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTenantTags");
+        const deployToEnvironments = getOptionalCsvInput("DeployToEnvironment");
+        const deployForTenants = getOptionalCsvInput("DeployForTenants");
+        const deployForTenantTags = getOptionalCsvInput("DeployForTenantTags");
         const deploymentProgress = tasks.getBoolInput("DeploymentProgress");
         const additionalArguments = tasks.getInput("AdditionalArguments");
         const gitRef = tasks.getInput("GitRef");
         const gitCommit = tasks.getInput("GitCommit");
 
-        await utils.assertOctoVersionAcceptsIds();
-        const octo = await utils.getOrInstallOctoCommandRunner("create-release");
+        await assertOctoVersionAcceptsIds();
+        const octo = await getOrInstallOctoCommandRunner("create-release");
 
         const configure = [
             argumentIfSet(argumentEnquote, "space", space),
@@ -42,10 +44,10 @@ async function run() {
         ];
 
         if (workItemReleaseNotes || changesetCommentReleaseNotes || (customReleaseNotes && /[^\s]/.test(customReleaseNotes))) {
-            const linkedReleaseNotes = workItemReleaseNotes || changesetCommentReleaseNotes ? await utils.getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes) : "";
+            const linkedReleaseNotes = workItemReleaseNotes || changesetCommentReleaseNotes ? await getLinkedReleaseNotes(vstsConnection, changesetCommentReleaseNotes, workItemReleaseNotes) : "";
 
-            const releaseNotesFile = utils.createReleaseNotesFile(() => {
-                return utils.generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
+            const releaseNotesFile = createReleaseNotesFile(() => {
+                return generateReleaseNotesContent(environmentVariables, linkedReleaseNotes, customReleaseNotes);
             }, environmentVariables.defaultWorkingDirectory);
 
             configure.push(argumentEnquote("releaseNotesFile", releaseNotesFile));

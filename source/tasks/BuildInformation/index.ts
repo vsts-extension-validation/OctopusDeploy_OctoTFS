@@ -1,9 +1,10 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
-import * as utils from "../../Utils";
 import * as path from "path";
-
-import { connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, getOverwriteModeFromReplaceInput, multiArgument } from "../../Utils";
+import { createVstsConnection, getBuildBranch, getBuildChanges, getVcsTypeFromProvider, getVstsEnvironmentVariables } from "../../Utils/environment";
+import { getLineSeparatedItems, getOverwriteModeFromReplaceInput } from "../../Utils/inputs";
+import { assertOctoVersionAcceptsIds, getOrInstallOctoCommandRunner, connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, multiArgument } from "../../Utils/tool";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
 
 export interface IOctopusBuildInformation {
     BuildEnvironment: string;
@@ -23,24 +24,24 @@ export interface IOctopusBuildInformationCommit {
 
 async function run() {
     try {
-        const environment = utils.getVstsEnvironmentVariables();
-        const vstsConnection = utils.createVstsConnection(environment);
+        const environment = getVstsEnvironmentVariables();
+        const vstsConnection = createVstsConnection(environment);
 
         const space = tasks.getInput("Space");
-        const packageIds = utils.getLineSeparatedItems(tasks.getInput("PackageId", true));
+        const packageIds = getLineSeparatedItems(tasks.getInput("PackageId", true));
         const packageVersion = tasks.getInput("PackageVersion", true);
         const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const branch = await utils.getBuildBranch(vstsConnection);
-        const commits = await utils.getBuildChanges(vstsConnection);
+        const branch = await getBuildBranch(vstsConnection);
+        const commits = await getBuildChanges(vstsConnection);
 
         const buildInformation: IOctopusBuildInformation = {
             BuildEnvironment: "Azure DevOps",
             BuildNumber: environment.buildNumber,
             BuildUrl: environment.teamCollectionUri.replace(/\/$/, "") + "/" + environment.projectName + "/_build/results?buildId=" + environment.buildId,
             Branch: branch,
-            VcsType: utils.getVcsTypeFromProvider(environment.buildRepositoryProvider),
+            VcsType: getVcsTypeFromProvider(environment.buildRepositoryProvider),
             VcsRoot: environment.buildRepositoryUri,
             VcsCommitNumber: environment.buildSourceVersion,
             Commits: commits.map((change) => ({ Id: change.id, Comment: change.message })),
@@ -56,9 +57,9 @@ async function run() {
         await tasks.mkdirP(buildInformationDir);
         await tasks.writeFile(buildInformationFile, JSON.stringify(buildInformation, null, 2));
 
-        await utils.assertOctoVersionAcceptsIds();
-        const octo = await utils.getOrInstallOctoCommandRunner("build-information");
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        await assertOctoVersionAcceptsIds();
+        const octo = await getOrInstallOctoCommandRunner("build-information");
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
         const configure: Array<(tool: ToolRunner) => ToolRunner> = [
             connectionArguments(connection),
             argumentIfSet(argumentEnquote, "space", space),

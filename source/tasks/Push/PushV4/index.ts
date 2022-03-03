@@ -1,20 +1,21 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../../Utils";
 
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, getOverwriteModeFromReplaceInput } from "../../../Utils";
+import { getLineSeparatedItems, getOverwriteModeFromReplaceInput, resolveGlobs } from "../../../Utils/inputs";
+import { argument, argumentEnquote, argumentIfSet, assertOctoVersionAcceptsIds, connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArgumentsAndProxyConfig, multiArgument } from "../../../Utils/tool";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../../Utils/connection";
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
-        const packages = utils.getLineSeparatedItems(tasks.getInput("Package", true));
+        const packages = getLineSeparatedItems(tasks.getInput("Package", true));
         const overwriteMode = getOverwriteModeFromReplaceInput(tasks.getInput("Replace", true));
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        await utils.assertOctoVersionAcceptsIds();
-        const octo = await utils.getOrInstallOctoCommandRunner("push");
-        const matchedPackages = await utils.resolveGlobs(packages);
+        await assertOctoVersionAcceptsIds();
+        const octo = await getOrInstallOctoCommandRunner("push");
+        const matchedPackages = await resolveGlobs(packages);
 
         const configure = [
             connectionArguments(connection),

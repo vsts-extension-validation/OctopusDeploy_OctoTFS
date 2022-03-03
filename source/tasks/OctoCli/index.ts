@@ -1,13 +1,13 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../Utils";
-import { connectionArguments, includeAdditionalArguments } from "../../Utils/tool";
+import { connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArguments } from "../../Utils/tool";
+import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
         const args = tasks.getInput("args", false);
         const command = tasks.getInput("command", true);
-        const octo = await utils.getOrInstallOctoCommandRunner(command);
+        const octo = await getOrInstallOctoCommandRunner(command);
 
         const configure = [connectionArguments(connection), includeAdditionalArguments(args)];
 

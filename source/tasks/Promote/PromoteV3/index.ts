@@ -1,22 +1,23 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as utils from "../../../Utils";
-import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet } from "../../../Utils/tool";
+import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../../Utils/tool";
+import { getOptionalCsvInput, getRequiredCsvInput } from "../../../Utils/inputs";
+import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../../Utils/connection";
 
 async function run() {
     try {
-        const connection = utils.getDefaultOctopusConnectionDetailsOrThrow();
+        const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");
-        const project = await utils.resolveProjectName(connection, tasks.getInput("Project", true)).then((x) => x.value);
+        const project = await resolveProjectName(connection, tasks.getInput("Project", true)).then((x) => x.value);
 
         const from = tasks.getInput("From", true);
-        const to = utils.getRequiredCsvInput("To");
+        const to = getRequiredCsvInput("To");
         const showProgress = tasks.getBoolInput("ShowProgress");
-        const deploymentForTenants = utils.getOptionalCsvInput("DeployForTenants");
-        const deployForTenantTags = utils.getOptionalCsvInput("DeployForTentantTags");
+        const deploymentForTenants = getOptionalCsvInput("DeployForTenants");
+        const deployForTenantTags = getOptionalCsvInput("DeployForTentantTags");
         const additionalArguments = tasks.getInput("AdditionalArguments");
 
-        const octo = await utils.getOrInstallOctoCommandRunner("promote-release");
+        const octo = await getOrInstallOctoCommandRunner("promote-release");
 
         const configure = [
             argumentIfSet(argumentEnquote, "space", space),

@@ -3,9 +3,9 @@ import * as fs from "fs";
 import * as tasks from "azure-pipelines-task-lib/task";
 import * as tools from "azure-pipelines-tool-lib/tool";
 import * as TypedRestClient from "typed-rest-client/RestClient";
-import { ToolName, ToolNameBeforeV7 } from "./index";
 import { head, filter } from "ramda";
 import { IProxyConfiguration } from "typed-rest-client/Interfaces";
+import { ToolName, ToolNameBeforeV7 } from "./tool";
 
 interface LatestResponse {
     latest: string;
