@@ -5,7 +5,7 @@ import glob from "glob";
 import { join } from "path";
 import { statSync } from "fs";
 
-const __dirname = new URL('.', import.meta.url).pathname
+const __dirname = new URL(".", import.meta.url).pathname;
 
 function entryPoints() {
     function doReplacements(entries, source) {
@@ -87,4 +87,6 @@ build({
             assets: filesToCopy(),
         }),
     ],
+    logLimit: 0,
+    logLevel: "info",
 }).catch(() => process.exit(1));
