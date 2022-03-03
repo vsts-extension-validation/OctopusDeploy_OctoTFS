@@ -4,6 +4,7 @@ import { copy } from "esbuild-plugin-copy";
 import glob from "glob";
 import { join } from "path";
 import { statSync } from "fs";
+import yargs from "yargs";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
@@ -73,6 +74,8 @@ function filesToCopy() {
     return toCopy;
 }
 
+const argv = yargs(process.argv).argv;
+
 build({
     entryPoints: entryPoints(),
     bundle: true,
@@ -89,4 +92,6 @@ build({
     ],
     logLimit: 0,
     logLevel: "info",
+    color: false,
+    define: { "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), "process.env.EXTENSION_VERSION": JSON.stringify(argv.extensionVersion) },
 }).catch(() => process.exit(1));
