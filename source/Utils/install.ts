@@ -98,14 +98,16 @@ async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOp
     const proxyConfiguration = tasks.getHttpProxyConfiguration(OctopurlsUrl);
     let proxySettings: IProxyConfiguration | undefined = undefined;
 
-    if(proxyConfiguration) {
-        console.log("Using agent configured proxy. If this command should not be sent via the agent's proxy, you might need to add or modify the agent's .proxybypass file. See https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/proxy#specify-proxy-bypass-urls.");
+    if (proxyConfiguration) {
+        console.log(
+            "Using agent configured proxy. If this command should not be sent via the agent's proxy, you might need to add or modify the agent's .proxybypass file. See https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/proxy#specify-proxy-bypass-urls."
+        );
         proxySettings = {
             proxyUrl: proxyConfiguration.proxyUrl,
             proxyUsername: proxyConfiguration.proxyUsername,
             proxyPassword: proxyConfiguration.proxyPassword,
             proxyBypassHosts: proxyConfiguration.proxyBypassHosts,
-        }
+        };
     }
 
     const octopurls = new RestClient("OctoTFS/Tasks", OctopurlsUrl, undefined, { proxy: proxySettings });

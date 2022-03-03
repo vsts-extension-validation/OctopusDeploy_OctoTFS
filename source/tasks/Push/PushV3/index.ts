@@ -15,7 +15,13 @@ async function run() {
         const octo = await utils.getOrInstallOctoCommandRunner("push");
         const matchedPackages = await utils.resolveGlobs(packages);
 
-        const configure = [connectionArguments(connection), argumentIfSet(argumentEnquote, "space", space), multiArgument(argumentEnquote, "package", matchedPackages), flag("replace-existing", replace), includeAdditionalArgumentsAndProxyConfig(connection.url, additionalArguments)];
+        const configure = [
+            connectionArguments(connection),
+            argumentIfSet(argumentEnquote, "space", space),
+            multiArgument(argumentEnquote, "package", matchedPackages),
+            flag("replace-existing", replace),
+            includeAdditionalArgumentsAndProxyConfig(connection.url, additionalArguments),
+        ];
 
         const code: number = await octo
             .map((x) => x.launchOcto(configure))

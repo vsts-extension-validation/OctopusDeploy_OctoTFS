@@ -1,17 +1,17 @@
 {
-  "extends": "@tsconfig/node10/tsconfig.json",
-  "compilerOptions": {
-    "declaration": false,
-    "sourceMap": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./source",
-    "allowSyntheticDefaultImports": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "useUnknownInCatchVariables": false,
-    "isolatedModules": true,
-  }
+    "extends": "@tsconfig/node10/tsconfig.json",
+    "compilerOptions": {
+        "declaration": false,
+        "sourceMap": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": "./source",
+        "allowSyntheticDefaultImports": true,
+        "strictNullChecks": false,
+        "noImplicitAny": false,
+        "useUnknownInCatchVariables": false,
+        "isolatedModules": true
+    }
 }

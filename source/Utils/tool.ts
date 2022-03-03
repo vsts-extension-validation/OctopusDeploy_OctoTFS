@@ -131,16 +131,18 @@ export const argumentEnquote = curry((name: string, value: string | null | undef
 export const includeAdditionalArgumentsAndProxyConfig = curry((url: string, value: string, tool: ToolRunner) => {
     const proxyRegex = /-proxy=/;
 
-    const proxyConfig = tasks.getHttpProxyConfiguration(url)
+    const proxyConfig = tasks.getHttpProxyConfiguration(url);
 
-    if(proxyConfig) {
-        if (!proxyRegex.test(value)){
-            console.log("Using agent configured proxy. If this command should not be sent via the agent's proxy, you might need to add or modify the agent's .proxybypass file. See https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/proxy#specify-proxy-bypass-urls.");
+    if (proxyConfig) {
+        if (!proxyRegex.test(value)) {
+            console.log(
+                "Using agent configured proxy. If this command should not be sent via the agent's proxy, you might need to add or modify the agent's .proxybypass file. See https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/proxy#specify-proxy-bypass-urls."
+            );
             argument("proxy", proxyConfig.proxyUrl, tool);
-            if(proxyConfig.proxyUsername) {
+            if (proxyConfig.proxyUsername) {
                 argument("proxyUser", proxyConfig.proxyUsername, tool);
             }
-            if(proxyConfig.proxyPassword){
+            if (proxyConfig.proxyPassword) {
                 argument("proxyPass", proxyConfig.proxyPassword, tool);
             }
         }
@@ -162,13 +164,11 @@ export const flag = curry((name: string, value: boolean, tool: ToolRunner) => {
     return value ? tool.arg(`--${name}`) : tool;
 });
 
-export const argumentIf = curry(
-    (predicate: (value: string | null | undefined) => boolean, arg: ArgFormatter, name: string, value: string | null | undefined, tool: ToolRunner): ToolRunner => {
-        if (predicate(value)) {
-            return arg(name, value || "", tool);
-        }
-        return tool;
+export const argumentIf = curry((predicate: (value: string | null | undefined) => boolean, arg: ArgFormatter, name: string, value: string | null | undefined, tool: ToolRunner): ToolRunner => {
+    if (predicate(value)) {
+        return arg(name, value || "", tool);
     }
-);
+    return tool;
+});
 
 export const argumentIfSet = argumentIf((val) => !isNullOrWhitespace(val));
