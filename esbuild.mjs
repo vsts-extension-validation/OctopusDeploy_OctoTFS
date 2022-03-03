@@ -2,11 +2,10 @@ import { build } from "esbuild";
 import { cleanPlugin } from "esbuild-clean-plugin";
 import { copy } from "esbuild-plugin-copy";
 import glob from "glob";
-import { dirname, join } from "path";
+import { join } from "path";
 import { statSync } from "fs";
-import { fileURLToPath } from "url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = new URL('.', import.meta.url).pathname
 
 function entryPoints() {
     function doReplacements(entries, source) {
