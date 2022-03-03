@@ -16,7 +16,7 @@
         "Patch": 0
     },
     "demands": [],
-    "minimumAgentVersion": "2.115.0",
+    "minimumAgentVersion": "2.144.0",
     "groups": [
         {
             "name": "tenant",
@@ -169,7 +169,7 @@
     ],
     "instanceNameFormat": "Promote $(Project) from $(From) to $(To)",
     "execution": {
-        "Node": {
+        "Node10": {
             "target": "index.js"
         }
     }
