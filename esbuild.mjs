@@ -92,6 +92,5 @@ build({
     ],
     logLimit: 0,
     logLevel: "info",
-    color: false,
     define: { "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), "process.env.EXTENSION_VERSION": JSON.stringify(argv.extensionVersion) },
 }).catch(() => process.exit(1));
