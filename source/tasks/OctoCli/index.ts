@@ -11,7 +11,7 @@ async function run() {
 
         const configure = [connectionArguments(connection), includeAdditionalArguments(args)];
 
-        const code: Number = await octo
+        const code: number = await octo
             .map((x) => x.launchOcto(configure))
             .getOrElseL((x) => {
                 throw new Error(x);

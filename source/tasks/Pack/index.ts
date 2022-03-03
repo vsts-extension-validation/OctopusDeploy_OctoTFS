@@ -79,7 +79,7 @@ async function run() {
         const octo = await utils.getOrInstallOctoCommandRunner("pack");
         const configureTool = configure(getInputs());
 
-        const code: Number = await octo
+        const code: number = await octo
             .map((x) => x.launchOcto(configureTool))
             .getOrElseL((x) => {
                 throw new Error(x);

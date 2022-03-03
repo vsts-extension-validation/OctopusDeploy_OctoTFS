@@ -11,7 +11,7 @@ export interface OctoServerConnectionDetails {
 }
 
 export function getDefaultOctopusConnectionDetailsOrThrow() {
-    let result = getDefaultOctoConnectionInputValue().map(getOctopusConnectionDetails).toNullable();
+    const result = getDefaultOctoConnectionInputValue().map(getOctopusConnectionDetails).toNullable();
     if (!result) {
         throw new Error("Could not retrieve default Octo connection information");
     }

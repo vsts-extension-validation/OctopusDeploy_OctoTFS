@@ -2,15 +2,15 @@ import { getOrDownloadOcto, resolvePublishedOctoVersion, addToolToPath, getEmbed
 import * as tasks from "azure-pipelines-task-lib/task";
 
 async function run() {
-    let version = tasks.getInput("version");
-    let forceEmbedded = /embedded/i.test(version);
+    const version = tasks.getInput("version");
+    const forceEmbedded = /embedded/i.test(version);
 
     try {
         if (forceEmbedded) {
             console.log("Forcing the use of the embedded Octopus CLI tool.");
             await getEmbeddedOcto(tasks.resolve(__dirname, "embedded")).then(addToolToPath);
         } else {
-            let option = await resolvePublishedOctoVersion(version);
+            const option = await resolvePublishedOctoVersion(version);
             console.log(`Using Octopus CLI tool version ${option.version}`);
             await getOrDownloadOcto(option).then(addToolToPath);
         }

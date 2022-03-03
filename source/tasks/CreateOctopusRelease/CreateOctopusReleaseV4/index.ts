@@ -53,7 +53,7 @@ async function run() {
 
         configure.push(includeAdditionalArgumentsAndProxyConfig(connection.url, additionalArguments));
 
-        const code: Number = await octo
+        const code: number = await octo
             .map((x) => x.launchOcto(configure))
             .getOrElseL((x) => {
                 throw new Error(x);

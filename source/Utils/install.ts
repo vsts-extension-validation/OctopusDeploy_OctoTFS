@@ -31,7 +31,7 @@ const RestClient = TypedRestClient.RestClient;
 const OctopurlsUrl = "https://g.octopushq.com";
 
 const applyTemplate = (dictionary: Dictionary, template: string) => {
-    return Object.keys(dictionary).reduce((result, key) => result.replace(new RegExp(`{\s*${key}\s*}`, "g"), dictionary[key] ? String(dictionary[key]) : ""), template);
+    return Object.keys(dictionary).reduce((result, key) => result.replace(new RegExp(`{/s*${key}/s*}`, "g"), dictionary[key] ? String(dictionary[key]) : ""), template);
 };
 
 const isPortableDownloadOption = (option: DownloadOption) => {
@@ -54,21 +54,21 @@ function getLocalTool(version: string): string {
 }
 
 function findOcto(rootFolder: string) {
-    var octoPath = [path.join(rootFolder, "*" + ToolName + getExecutableExtension()), path.join(rootFolder, "*" + ToolNameBeforeV7 + getExecutableExtension())];
+    const octoPath = [path.join(rootFolder, "*" + ToolName + getExecutableExtension()), path.join(rootFolder, "*" + ToolNameBeforeV7 + getExecutableExtension())];
     console.log(`Looking for ${octoPath}`);
-    var allPaths = tasks.find(rootFolder);
-    var matches = tasks.match(allPaths, octoPath, rootFolder);
+    const allPaths = tasks.find(rootFolder);
+    const matches = tasks.match(allPaths, octoPath, rootFolder);
     return matches[0];
 }
 
-async function getOrDownloadOcto(option: DownloadOption, download?: (option: DownloadOption) => Promise<string>, extractTool: boolean = true): Promise<string> {
-    var cachedToolPath = getLocalTool(option.version);
+async function getOrDownloadOcto(option: DownloadOption, download?: (option: DownloadOption) => Promise<string>, extractTool = true): Promise<string> {
+    let cachedToolPath = getLocalTool(option.version);
 
     if (!cachedToolPath) {
         try {
             console.log("Attempting to download the Octopus CLI tool");
-            let downloadPath = await (download !== undefined && download != null ? download(option) : tools.downloadTool(option.location));
-            let toolPath = extractTool ? await extract(downloadPath) : downloadPath;
+            const downloadPath = await (download !== undefined && download != null ? download(option) : tools.downloadTool(option.location));
+            const toolPath = extractTool ? await extract(downloadPath) : downloadPath;
 
             tools.debug(`Adding ${ToolName} ${option.version} to cache`);
             tasks.writeFile(path.join(toolPath, `${ToolName}.cmd`), `dotnet "%~dp0/${ToolName}.dll" %*`);
@@ -177,7 +177,7 @@ async function readFile(path: string, encoding = "utf8"): Promise<string> {
 }
 
 function getAgentTempDirectory() {
-    let tempDirectory = tasks.getVariable("Agent.TempDirectory");
+    const tempDirectory = tasks.getVariable("Agent.TempDirectory");
     if (!tempDirectory) {
         throw new Error("Agent.TempDirectory is not set");
     }

@@ -1,4 +1,5 @@
 import { IRequestHandler, IHttpClientResponse } from "typed-rest-client/Interfaces";
+import * as http from "http";
 
 export class OctoApiKeyHandler implements IRequestHandler {
     key: string;
@@ -7,7 +8,7 @@ export class OctoApiKeyHandler implements IRequestHandler {
         this.key = key;
     }
 
-    prepareRequest(options: any): void {
+    prepareRequest(options: http.RequestOptions): void {
         options.headers["X-Octopus-ApiKey"] = this.key;
     }
 

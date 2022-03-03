@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "test": "jest",
-    "build": "webpack",
-    "build2": "tsc --noEmit && node esbuild.mjs",
-    "clean": "rimraf packages/**/lib"
+    "test": "jest --maxWorkers=4 --config=jest.config.js --ci --reporters=default --reporters=jest-junit",
+    "build": "tsc --noEmit && node esbuild.mjs",
+    "lint:fix": "eslint . --fix",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@tsconfig/node10": "^1.0.8",
@@ -13,10 +13,15 @@
     "@types/node": "^6.0.111",
     "@types/ramda": "0.27.64",
     "@types/uuid": "8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
     "esbuild": "^0.14.23",
     "esbuild-clean-plugin": "^1.0.0",
     "esbuild-plugin-copy": "^0.4.0",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.4.0",
     "jest": "24.8.0",
+    "prettier": "2.5.1",
     "rimraf": "2.6.2",
     "ts-jest": "24.0.2",
     "ts-node": "^8.3.0",

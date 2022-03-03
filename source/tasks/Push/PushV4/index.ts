@@ -18,7 +18,7 @@ async function run() {
 
         const configure = [connectionArguments(connection), argumentIfSet(argumentEnquote, "space", space), multiArgument(argumentEnquote, "package", matchedPackages), argument("overwrite-mode", overwriteMode), includeAdditionalArgumentsAndProxyConfig(connection.url, additionalArguments)];
 
-        const code: Number = await octo
+        const code: number = await octo
             .map((x) => x.launchOcto(configure))
             .getOrElseL((x) => {
                 throw new Error(x);

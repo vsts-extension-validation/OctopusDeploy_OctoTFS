@@ -56,7 +56,7 @@ export const getVstsEnvironmentVariables = (): VstsEnvironmentVariables => {
 };
 
 export const generateReleaseNotesContent = (environment: VstsEnvironmentVariables, linkedItemReleaseNote: string, customReleaseNotes: string) => {
-    let notes: string = "Release created by ";
+    let notes = "Release created by ";
     const buildUri = `${environment.teamCollectionUri}${encodeURIComponent(environment.projectName)}/_build/index?_a=summary&buildId=${environment.buildId}`;
 
     if (!isNullOrWhitespace(environment.releaseId)) {
@@ -110,7 +110,7 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
         const changes = await client.getBuildApi().then((x) => x.getBuildChanges(environment.projectName, environment.buildId));
 
         let releaseNotes = "";
-        let newLine = "\r\n\r\n";
+        const newLine = "\r\n\r\n";
 
         if (includeComments) {
             if (environment.buildRepositoryProvider === "TfsVersionControl") {
@@ -146,9 +146,9 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
             const workItemRefs = await client.getBuildApi().then((x) => x.getBuildWorkItemsRefs(environment.projectName, environment.buildId));
 
             if (workItemRefs.length > 0) {
-                var workItems = await client.getWorkItemTrackingApi().then((x) => x.getWorkItems(workItemRefs.map((x) => Number(x.id))));
+                const workItems = await client.getWorkItemTrackingApi().then((x) => x.getWorkItems(workItemRefs.map((x) => Number(x.id))));
 
-                let workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
+                const workItemEditBaseUri = `${environment.teamCollectionUri}${environment.projectId}/_workitems/edit`;
                 releaseNotes += workItems.reduce((prev, current) => {
                     return (prev += `* [${current.id}](${workItemEditBaseUri}/${current.id}): ${current.fields["System.Title"]} ${getWorkItemState(current)} ${getWorkItemTags(current)} ${newLine}`);
                 }, "");
@@ -167,21 +167,21 @@ export const getLinkedReleaseNotes = async (client: vsts.WebApi, includeComments
 };
 
 const getChangesetUrl = (environment: VstsEnvironmentVariables, apiUrl: string) => {
-    let workItemId = apiUrl.substr(apiUrl.lastIndexOf("/") + 1);
+    const workItemId = apiUrl.substr(apiUrl.lastIndexOf("/") + 1);
     return `${environment.teamCollectionUri}${environment.projectId}/_versionControl/changeset/${workItemId}`;
 };
 
 const getCommitUrl = (environment: VstsEnvironmentVariables, change: bi.Change) => {
-    let commitId = change.id;
+    const commitId = change.id;
     const segments = change.location.split("/");
     const repositoryId = segments[segments.length - 3];
     return `${environment.teamCollectionUri}${environment.projectId}/_git/${repositoryId}/commit/${commitId}`;
 };
 
 export const createVstsConnection = (environment: SystemEnvironmentVariables) => {
-    var vstsAuthorization = tasks.getEndpointAuthorization("SystemVssConnection", true);
-    var token = vstsAuthorization.parameters["AccessToken"];
-    let authHandler = vsts.getPersonalAccessTokenHandler(token);
+    const vstsAuthorization = tasks.getEndpointAuthorization("SystemVssConnection", true);
+    const token = vstsAuthorization.parameters["AccessToken"];
+    const authHandler = vsts.getPersonalAccessTokenHandler(token);
     return new vsts.WebApi(environment.teamCollectionUri, authHandler);
 };
 
@@ -211,7 +211,7 @@ export const getBuildChanges = async (client: vsts.WebApi) => {
     const changes = await api.getBuildChanges(environment.projectName, environment.buildId, undefined, 100000);
 
     if (environment.buildRepositoryProvider === "TfsGit") {
-        let promises = changes.map(async (x) => {
+        const promises = changes.map(async (x) => {
             if (x.messageTruncated) {
                 const segments = x.location.split("/");
                 const repositoryId = segments[segments.length - 3];

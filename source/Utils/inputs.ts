@@ -36,7 +36,7 @@ export function safeTrim(value: string | null | undefined): string | null | unde
 }
 
 export function removeTrailingSlashes(value: string | null | undefined): string | null | undefined {
-    return value ? value.replace(/[\/\\]+(?=\s*)$/, "") : value;
+    return value ? value.replace(/[/\\]+(?=\s*)$/, "") : value;
 }
 
 export function getLineSeparatedItems(value: string): Array<string> {
@@ -68,6 +68,7 @@ export function getDefaultOctoConnectionInputValue() {
 }
 
 export const resolveGlobs = (globs: string[]): Promise<string[]> => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return Promise.all(globs.map(pGlobNoNull)).then((x) => flatten<string>(x));
 };

@@ -1,5 +1,5 @@
 import * as tasks from "azure-pipelines-task-lib/task";
-import { ToolRunner, IExecSyncResult } from "azure-pipelines-task-lib/toolrunner";
+import { ToolRunner, IExecSyncResult, IExecOptions } from "azure-pipelines-task-lib/toolrunner";
 import { OctoServerConnectionDetails } from "./connection";
 import { curry } from "ramda";
 import { isNullOrWhitespace } from "./inputs";
@@ -25,7 +25,7 @@ export class OctoLauncher {
         this.runner = runner;
     }
 
-    private getExecOptions(): any {
+    private getExecOptions(): IExecOptions {
         return { env: { OCTOEXTENSION: process.env.EXTENSION_VERSION, ...process.env } };
     }
 
@@ -45,7 +45,7 @@ export class OctoLauncher {
 export async function getOrInstallOctoCommandRunner(command: string): Promise<Either<string, OctoLauncher>> {
     //If we can't find octo then it hasn't been added as an installer task
     //or it hasn't been added to the path.
-    let octo = getOctoCommandRunner(command);
+    const octo = getOctoCommandRunner(command);
     if (octo.isSome()) {
         return right(new OctoLauncher(octo.value));
     }
@@ -82,7 +82,7 @@ export function getPortableOctoCommandRunner(command: string): Option<ToolRunner
 
     const tool = tasks.tool(tasks.which("dotnet", true));
 
-    var result = octo.map((x) => tool.arg(`${x}`).arg(command));
+    const result = octo.map((x) => tool.arg(`${x}`).arg(command));
 
     return result;
 }
