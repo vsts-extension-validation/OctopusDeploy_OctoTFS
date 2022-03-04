@@ -1,6 +1,7 @@
 import { build } from "esbuild";
 import { cleanPlugin } from "esbuild-clean-plugin";
-import { copy } from "esbuild-plugin-copy";
+import { esbuildPluginNodeExternals } from "esbuild-plugin-node-externals";
+import copyStaticFiles from "esbuild-copy-static-files";
 import glob from "glob";
 import { join } from "path";
 import { statSync } from "fs";
@@ -25,56 +26,23 @@ function entryPoints() {
     return entries;
 }
 
-function filesToCopy() {
-    function doTasks(toCopy, source) {
-        const matches = glob.sync(join(__dirname, "source", source, "**", "*"));
-        for (let match of matches) {
-            if (match.endsWith(".ts")) {
-                continue;
-            }
+const argv = yargs(process.argv).argv;
 
-            if (statSync(match).isDirectory()) {
-                continue;
-            }
-
-            const to = match.replace(join(__dirname, "source", source) + "/", "./tasks/");
-            toCopy.push({
-                from: match.replace(join(__dirname, "source") + "/", "./source/"),
-                to: to.substring(0, to.lastIndexOf("/")),
-            });
-        }
+function noTSFiles(src) {
+    if (src.endsWith(".ts")) {
+        return false;
     }
 
-    const toCopy = [
-        {
-            from: "./source/img/**/*",
-            to: "./img",
-        },
-        {
-            from: "./source/*.*",
-            to: "./",
-        },
-        {
-            from: "./source/widgets/ProjectStatus/*",
-            to: "./widgets/ProjectStatus",
-        },
-        {
-            from: "./source/widgets/ProjectStatus/js/*",
-            to: "./widgets/ProjectStatus/js",
-        },
-        {
-            from: "./node_modules/vss-web-extension-sdk/lib/**/*",
-            to: "./widgets/ProjectStatus/lib",
-        },
-    ];
-
-    doTasks(toCopy, "tasks");
-    doTasks(toCopy, "tasksLegacy");
-
-    return toCopy;
+    return true;
 }
 
-const argv = yargs(process.argv).argv;
+function noFolders(src) {
+    if(src === "./source") {
+        return true;
+    }
+
+    return !statSync(src).isDirectory();
+}
 
 build({
     entryPoints: entryPoints(),
@@ -85,10 +53,13 @@ build({
     metafile: true,
     plugins: [
         cleanPlugin(),
-        copy({
-            verbose: false,
-            assets: filesToCopy(),
-        }),
+        copyStaticFiles({ src: "./source/img", dest: "dist/img" }),
+        copyStaticFiles({ src: "./source", dest: "dist", recursive: false, filter: noFolders }),
+        copyStaticFiles({ src: "./source/widgets", dest: "dist/widgets" }),
+        copyStaticFiles({ src: "./node_modules/vss-web-extension-sdk/lib", dest: "dist/widgets/ProjectStatus/lib" }),
+        //copyStaticFiles({ src: "./source/tasks", dest: "dist/tasks", recursive: true, filter: noTSFiles }),
+        copyStaticFiles({ src: "./source/tasksLegacy", dest: "dist/tasks", filter: noTSFiles }),
+        esbuildPluginNodeExternals(),
     ],
     logLimit: 0,
     logLevel: "info",
