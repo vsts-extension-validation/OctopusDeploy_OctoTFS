@@ -47,7 +47,7 @@ function noFolders(src) {
 build({
     entryPoints: entryPoints(),
     bundle: true,
-    target: "es2015",
+    target: "node10",
     platform: "node",
     outdir: "dist",
     metafile: true,
