@@ -1,6 +1,7 @@
 {
     "extends": "@tsconfig/node10/tsconfig.json",
     "compilerOptions": {
+        "target": "ES6",
         "declaration": false,
         "sourceMap": false,
         "noUnusedLocals": true,
@@ -9,6 +10,7 @@
         "noFallthroughCasesInSwitch": true,
         "baseUrl": "./source",
         "allowSyntheticDefaultImports": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "lib": ["ES6", "ES2015"]
     }
 }

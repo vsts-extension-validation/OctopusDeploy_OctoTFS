@@ -14,7 +14,7 @@ function entryPoints() {
         const matches = glob.sync(join(__dirname, "source", source, "**", "index.ts"));
 
         for (let match of matches) {
-            const key = match.replace(join(__dirname, "source", source) + "/", "tasks/").replace(".ts", "");
+            const key = match.replace(`${join(__dirname, "source", source).replace(/\\/g, "/")}/`, "tasks/").replace(".ts", "");
             entries[key] = match;
         }
     }
@@ -47,7 +47,7 @@ function noFolders(src) {
 build({
     entryPoints: entryPoints(),
     bundle: true,
-    target: "node10",
+    target: "es6",
     platform: "node",
     outdir: "dist",
     metafile: true,
