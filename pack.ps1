@@ -33,10 +33,10 @@ function CleanNodeModules() {
     Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV4/node_modules"
     Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV3/node_modules"
     Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV4/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/OctoCli/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/OctoInstaller/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Pack/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/BuildInformation/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoCli/OctoCliV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/OctoInstaller/OctoInstallerV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/Pack/PackV4/node_modules"
+    Invoke-Expression "$command $($basePath)/dist/tasks/BuildInformation/BuildInformationV4/node_modules"
     Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV3/node_modules"
     Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV4/node_modules"
     Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV3/node_modules"
@@ -84,21 +84,8 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
     }
 }
 
-function Get-ObjectMembers {
-    [CmdletBinding()]
-    Param(
-        [Parameter(Mandatory=$True, ValueFromPipeline=$True)]
-        [PSCustomObject]$obj
-    )
-    $obj | Get-Member -MemberType NoteProperty | ForEach-Object {
-        $key = $_.Name
-        [PSCustomObject]@{Key = $key; Value = $obj."$key"}
-    }
-}
-
 function InstallTaskDependencies($workingDirectory) {
     $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
-    $dependencies = (ConvertFrom-JSON (Get-Content "$basePath/package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
 
     foreach ($manifestFile in $taskManifestFiles){
         $directory = Split-Path -parent $manifestFile
@@ -108,7 +95,7 @@ function InstallTaskDependencies($workingDirectory) {
             "{}" | Out-File -FilePath $packageFile -Encoding utf8
             Push-Location $directory
 
-            Invoke-Expression "& npm install $dependencies"
+            Invoke-Expression "& npm install --only=prod"
         }finally{
             Remove-Item $packageFile
             Pop-Location
