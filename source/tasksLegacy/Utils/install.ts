@@ -31,7 +31,7 @@ const RestClient = TypedRestClient.RestClient;
 const OctopurlsUrl = "https://g.octopushq.com";
 
 const applyTemplate = (dictionary: Dictionary, template: string) => {
-    return Object.keys(dictionary).reduce((result, key) => result.replace(new RegExp(`{/s*${key}/s*}`, "g"), dictionary[key] ? String(dictionary[key]) : ""), template);
+    return Object.keys(dictionary).reduce((result, key) => result.replace(new RegExp(`{${key}}`, "g"), dictionary[key] ? String(dictionary[key]) : ""), template);
 };
 
 const isPortableDownloadOption = (option: DownloadOption) => {
@@ -86,6 +86,9 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
     tools.debug(`Found ${ToolName} at ${octoPath}`);
 
     fs.chmod(octoPath, "777");
+
+    tools.debug(`chmod for ${octoPath} applied`);
+
     return octoPath;
 }
 
