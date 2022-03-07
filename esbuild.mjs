@@ -3,18 +3,26 @@ import { cleanPlugin } from "esbuild-clean-plugin";
 import { esbuildPluginNodeExternals } from "esbuild-plugin-node-externals";
 import copyStaticFiles from "esbuild-copy-static-files";
 import glob from "glob";
-import { join } from "path";
+import { sep } from "path";
 import { statSync } from "fs";
+import os from "os";
 import yargs from "yargs";
 
-const __dirname = new URL(".", import.meta.url).pathname;
+let __dirname = new URL(".", import.meta.url).pathname;
+
+if (os.platform() === "win32") {
+    if (__dirname.startsWith("/")) {
+        __dirname = __dirname.substring(1);
+    }
+}
 
 function entryPoints() {
     function doReplacements(entries, source) {
-        const matches = glob.sync(join(__dirname, "source", source, "**", "index.ts"));
+        const matches = glob.sync(`${__dirname}source/${source}/**/index.ts`);
 
         for (let match of matches) {
-            const key = match.replace(`${join(__dirname, "source", source).replace(/\\/g, "/")}/`, "tasks/").replace(".ts", "");
+            const key = match.replace(`${__dirname}source/${source}/`, "tasks/").replace(".ts", "");
+
             entries[key] = match;
         }
     }
@@ -37,11 +45,13 @@ function noTSFiles(src) {
 }
 
 function noFolders(src) {
-    if(src === "./source") {
+    const isDirectory = statSync(src).isDirectory();
+
+    if (src.endsWith(`${sep}source`)) {
         return true;
     }
 
-    return !statSync(src).isDirectory();
+    return !isDirectory;
 }
 
 build({
