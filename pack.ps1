@@ -90,6 +90,7 @@ function SetupTaskDependencies($workingDirectory) {
     foreach ($manifestFile in $taskManifestFiles) {
         $directory = Split-Path -parent $manifestFile
 
+        mkdir "$directory/node_modules"
         Copy-Item -Path "$tempModules/node_modules/*" -Destination "$directory/node_modules" -Recurse
     }
 }
