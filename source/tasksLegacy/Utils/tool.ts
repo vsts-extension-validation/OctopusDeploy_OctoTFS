@@ -77,7 +77,7 @@ export function getPortableOctoCommandRunner(command: string): Option<ToolRunner
     const dotnet = tasks.which("dotnet", false);
 
     if (isNullOrWhitespace(dotnet)) {
-        tasks.warning("DotNet core 2.0 runtime was not found and this task will most likely fail. Target an agent which has the appropriate capability or add a DotNet core installer task to the start of you build definition to fix this problem.");
+        tasks.warning("dotnet runtime was not found and this task will most likely fail. Target an agent which has the appropriate capability or add a DotNet core installer task to the start of you build definition to fix this problem.");
     }
 
     const tool = tasks.tool(tasks.which("dotnet", true));
