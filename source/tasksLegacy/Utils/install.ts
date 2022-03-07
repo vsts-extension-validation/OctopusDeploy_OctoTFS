@@ -85,7 +85,7 @@ async function getOrDownloadOcto(option: DownloadOption, download?: (option: Dow
 
     tools.debug(`Found ${ToolName} at ${octoPath}`);
 
-    fs.chmod(octoPath, "777");
+    fs.chmodSync(octoPath, "777");
 
     tools.debug(`chmod for ${octoPath} applied`);
 
