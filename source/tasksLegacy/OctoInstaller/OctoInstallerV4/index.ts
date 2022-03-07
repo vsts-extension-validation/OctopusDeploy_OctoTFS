@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getOrDownloadOcto, resolvePublishedOctoVersion, addToolToPath, getEmbeddedOcto } from "../../Utils/install";
 import * as tasks from "azure-pipelines-task-lib/task";
-import * as tools from "azure-pipelines-tool-lib";
 import * as os from "os";
 
 async function run() {
@@ -16,11 +15,7 @@ async function run() {
         } else {
             const option = await resolvePublishedOctoVersion(version);
             console.log(`Using Octopus CLI tool version ${option.version}`);
-            tools.debug("getOrDownloadOcto");
-            const v = await getOrDownloadOcto(option);
-            tools.debug("adding to path");
-            addToolToPath(v);
-            tools.debug("added to path");
+            await getOrDownloadOcto(option).then(addToolToPath);
         }
 
         tasks.setResult(tasks.TaskResult.Succeeded, "");
