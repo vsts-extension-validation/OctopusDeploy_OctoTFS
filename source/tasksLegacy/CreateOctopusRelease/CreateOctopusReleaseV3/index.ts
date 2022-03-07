@@ -4,6 +4,7 @@ import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyC
 import { createReleaseNotesFile, createVstsConnection, generateReleaseNotesContent, getLinkedReleaseNotes, getVstsEnvironmentVariables } from "../../Utils/environment";
 import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../Utils/connection";
 import { getOptionalCsvInput } from "../../Utils/inputs";
+import os from "os";
 
 async function run() {
     try {
@@ -63,11 +64,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Create octopus release succeeded with code " + code);
-    } catch (err) {
-        // @ts-expect-error
-        tasks.error(err);
-        // @ts-expect-error
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to create release. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

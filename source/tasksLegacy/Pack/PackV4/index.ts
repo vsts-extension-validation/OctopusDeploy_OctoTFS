@@ -4,6 +4,7 @@ import * as fs from "fs";
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import { getLineSeparatedItems, isNullOrWhitespace, removeTrailingSlashes, safeTrim } from "../../Utils/inputs";
 import { argument, argumentEnquote, argumentIfSet, flag, getOrInstallOctoCommandRunner, includeAdditionalArguments, multiArgument } from "../../Utils/tool";
+import os from "os";
 
 export interface PackageRequiredInputs {
     packageId: string;
@@ -99,11 +100,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Pack succeeded with code " + code);
-    } catch (err) {
-        // @ts-ignore
-        tasks.error(err);
-        // @ts-ignore
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to execute octo pack command. " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to execute octo pack command. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

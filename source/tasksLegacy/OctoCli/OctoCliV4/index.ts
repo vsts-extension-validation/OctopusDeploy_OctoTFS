@@ -2,6 +2,7 @@
 import * as tasks from "azure-pipelines-task-lib/task";
 import { connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArguments } from "../../Utils/tool";
 import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
+import os from "os";
 
 async function run() {
     try {
@@ -21,11 +22,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, `Succeeded executing octo command ${command} with code ${code}`);
-    } catch (err) {
-        // @ts-ignore
-        tasks.error(err);
-        // @ts-ignore
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to execute octo command. " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to execute octo command. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

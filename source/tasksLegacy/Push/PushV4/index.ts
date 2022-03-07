@@ -4,6 +4,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import { getLineSeparatedItems, getOverwriteModeFromReplaceInput, resolveGlobs } from "../../Utils/inputs";
 import { argument, argumentEnquote, argumentIfSet, assertOctoVersionAcceptsIds, connectionArguments, getOrInstallOctoCommandRunner, includeAdditionalArgumentsAndProxyConfig, multiArgument } from "../../Utils/tool";
 import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
+import os from "os";
 
 async function run() {
     try {
@@ -37,11 +38,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
-    } catch (err) {
-        // @ts-expect-error
-        tasks.error(err);
-        // @ts-expect-error
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to push package. " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to push package. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

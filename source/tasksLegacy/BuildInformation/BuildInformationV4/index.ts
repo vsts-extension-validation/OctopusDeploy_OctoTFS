@@ -6,6 +6,7 @@ import { createVstsConnection, getBuildBranch, getBuildChanges, getVcsTypeFromPr
 import { getLineSeparatedItems, getOverwriteModeFromReplaceInput } from "../../Utils/inputs";
 import { assertOctoVersionAcceptsIds, getOrInstallOctoCommandRunner, connectionArguments, includeAdditionalArgumentsAndProxyConfig, argument, argumentEnquote, argumentIfSet, multiArgument } from "../../Utils/tool";
 import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
+import os from "os";
 
 export interface IOctopusBuildInformation {
     BuildEnvironment: string;
@@ -85,11 +86,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded with code " + code);
-    } catch (err) {
-        // @ts-expect-error
-        tasks.error(err);
-        // @ts-expect-error
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to push build information. " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to push build information. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

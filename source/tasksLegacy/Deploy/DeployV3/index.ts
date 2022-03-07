@@ -3,6 +3,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../Utils/tool";
 import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../Utils/connection";
 import { getOptionalCsvInput, getRequiredCsvInput } from "../../Utils/inputs";
+import os from "os";
 
 async function run() {
     try {
@@ -42,11 +43,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Deploy succeeded with code " + code);
-    } catch (err) {
-        // @ts-ignore
-        tasks.error(err);
-        // @ts-ignore
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to deploy release " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to deploy release. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 

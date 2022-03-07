@@ -3,6 +3,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import { multiArgument, connectionArguments, includeAdditionalArgumentsAndProxyConfig, flag, argumentEnquote, argumentIfSet, getOrInstallOctoCommandRunner } from "../../Utils/tool";
 import { getOptionalCsvInput, getRequiredCsvInput } from "../../Utils/inputs";
 import { getDefaultOctopusConnectionDetailsOrThrow, resolveProjectName } from "../../Utils/connection";
+import os from "os";
 
 async function run() {
     try {
@@ -43,11 +44,10 @@ async function run() {
             });
 
         tasks.setResult(tasks.TaskResult.Succeeded, "Succeeded promoting release with code " + code);
-    } catch (err) {
-        // @ts-expect-error
-        tasks.error(err);
-        // @ts-expect-error
-        tasks.setResult(tasks.TaskResult.Failed, "Failed to promote release. " + err.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            tasks.setResult(tasks.TaskResult.Failed, `"Failed to promote release. ${error.message}${os.EOL}${error.stack}`, true);
+        }
     }
 }
 
