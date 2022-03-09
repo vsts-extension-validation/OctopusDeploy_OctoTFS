@@ -153,10 +153,10 @@ function OctopusStatusWidgetConfiguration() {
                 var appendProjectGroupData = appendDropdownOptions($projectGroupDropdown, parseResult, selectId, selectName, settings ? settings.projectGroupId : null);
                 var appendProjectData = appendDropdownOptions($projectDropdown, parseResult, selectId, selectName, settings ? settings.projectId : null);
 
-                fetchDataSourceContent(queryUri, authToken, "OctopusAllProjectGroupsInSpace", selectedSpaceId, null).done(function (projectGroupData) {
+                fetchDataSourceContent(queryUri, authToken, "OctopusAllProjectGroupsInSpace", spaceId, null).done(function (projectGroupData) {
                     appendProjectGroupData(projectGroupData);
                     const selectedProjectGroupId = $projectGroupDropdown.val();
-                    fetchDataSourceContent(queryUri, authToken, "OctopusListProjectsInProjectGroupInSpace", selectedSpaceId, selectedProjectGroupId).done(appendProjectData);
+                    fetchDataSourceContent(queryUri, authToken, "OctopusListProjectsInProjectGroupInSpace", spaceId, selectedProjectGroupId).done(appendProjectData);
                 });
 
                 var appendEnvironmentData = appendDropdownOptions($environmentDropdown, parseResult, selectId, selectName, settings ? settings.environmentId : null);

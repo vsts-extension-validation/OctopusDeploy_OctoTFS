@@ -1,22 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "declaration": false,
-    "sourceMap": false,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "baseUrl": "./source",
-    "allowSyntheticDefaultImports": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "useUnknownInCatchVariables": false,
-    "lib": [
-      "es2015"
-    ]
-  }
+    "extends": "@tsconfig/node10/tsconfig.json",
+    "compilerOptions": {
+        "target": "ES6",
+        "declaration": false,
+        "sourceMap": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": "./source",
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
+        "lib": ["ES6", "ES2015"]
+    }
 }

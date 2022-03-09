@@ -15,34 +15,6 @@ $ErrorActionPreference = "Stop"
 $buildDirectoryPath = "$basePath/dist"
 $buildArtifactsPath = "$buildDirectoryPath/Artifacts"
 
-function CleanNodeModules() {
-    $command = "node-prune";
-
-    if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
-    {
-        $command = "$($env:GOPATH)/bin/node-prune"
-
-        if(-Not (Test-Path $command)){
-            Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
-            Write-Error "go get github.com/tj/node-prune/cmd/node-prune"
-            Exit 1
-        }
-    }
-
-    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV3/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/CreateOctopusRelease/CreateOctopusReleaseV4/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV3/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Deploy/DeployV4/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/OctoCli/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/OctoInstaller/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Pack/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/BuildInformation/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV3/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Promote/PromoteV4/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV3/node_modules"
-    Invoke-Expression "$command $($basePath)/dist/tasks/Push/PushV4/node_modules"
-}
-
 function UpdateExtensionManifestOverrideFile($workingDirectory, $environment, $version) {
     Write-Host "Finding environment-specific manifest overrides..."
     $overridesSourceFilePath = "$workingDirectory/extension-manifest.$environment.json"
@@ -84,35 +56,42 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
     }
 }
 
-function Get-ObjectMembers {
-    [CmdletBinding()]
-    Param(
-        [Parameter(Mandatory=$True, ValueFromPipeline=$True)]
-        [PSCustomObject]$obj
-    )
-    $obj | Get-Member -MemberType NoteProperty | ForEach-Object {
-        $key = $_.Name
-        [PSCustomObject]@{Key = $key; Value = $obj."$key"}
-    }
-}
+function SetupTaskDependencies($workingDirectory) {
+    $tempModules = "$basePath/temp"
+    mkdir $tempModules
+    Copy-Item "$basePath/package.json" -Destination $tempModules
+    try
+    {
+        Push-Location $tempModules
+        Invoke-Expression "& npm install --only=prod"
 
-function InstallTaskDependencies($workingDirectory) {
-    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
-    $dependencies = (ConvertFrom-JSON (Get-Content "$basePath/package.json" -Raw)).dependencies | Get-ObjectMembers | foreach { $dependencies="" } {$dependencies += "$($_.Key)@$($_.Value) "} {$dependencies}
+        $command = "node-prune";
 
-    foreach ($manifestFile in $taskManifestFiles){
-        $directory = Split-Path -parent $manifestFile
-        $packageFile = Join-Path $directory "package.json"
+        if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
+        {
+            $command = "$($env:GOPATH)/bin/node-prune"
 
-        try{
-            "{}" | Out-File -FilePath $packageFile -Encoding utf8
-            Push-Location $directory
-
-            Invoke-Expression "& npm install $dependencies"
-        }finally{
-            Remove-Item $packageFile
-            Pop-Location
+            if(-Not (Test-Path $command)){
+                Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
+                Write-Error "go get github.com/tj/node-prune/cmd/node-prune"
+                Exit 1
+            }
         }
+
+        Invoke-Expression "$command $tempModules/node_modules"
+    }
+    finally
+    {
+        Pop-Location
+    }
+
+    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
+
+    foreach ($manifestFile in $taskManifestFiles) {
+        $directory = Split-Path -parent $manifestFile
+
+        mkdir "$directory/node_modules"
+        Copy-Item -Path "$tempModules/node_modules/*" -Destination "$directory/node_modules" -Recurse
     }
 }
 
@@ -164,6 +143,5 @@ function Pack($envName, $environment, $workingDirectory) {
     & tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
-InstallTaskDependencies $buildDirectoryPath
-CleanNodeModules
+SetupTaskDependencies $buildDirectoryPath
 Pack "VSTSExtensions" $environment $buildDirectoryPath
