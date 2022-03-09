@@ -21,7 +21,10 @@ jobs:
         with:
           node-version: '16'
           cache: 'npm'
-
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.17.7'
       - name: Build
         run: |
           npm install
