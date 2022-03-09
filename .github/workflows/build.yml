@@ -43,10 +43,10 @@ jobs:
         with:
           command: push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
       - name: Create Release
-          uses: burtonr/octopus-cli-action@7.4.4
-          env:
-            OCTOPUS_CLI_SERVER: ${{ secrets.OCTOPUS_URL }}
-            OCTOPUS_CLI_API_KEY: ${{ secrets.INTEGRATIONS_API_KEY }}
-          with:
-            command: create-release --space "Integrations" --project "Azure DevOps Extension" --package $OCTOPUS_VERSION
+        uses: burtonr/octopus-cli-action@7.4.4
+        env:
+          OCTOPUS_CLI_SERVER: ${{ secrets.OCTOPUS_URL }}
+          OCTOPUS_CLI_API_KEY: ${{ secrets.INTEGRATIONS_API_KEY }}
+        with:
+          command: create-release --space "Integrations" --project "Azure DevOps Extension" --package $OCTOPUS_VERSION
 
