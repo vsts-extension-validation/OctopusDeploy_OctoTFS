@@ -43,5 +43,5 @@ jobs:
           docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
       - name: Create Release
         run: |
-          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo create-release --space "Integrations" --project "Azure DevOps Extension" --packageVersion $OCTOPUS_VERSION
+          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo create-release --space "Integrations" --project "Azure DevOps Extension" --packageVersion $OCTOPUS_VERSION --releaseNumber $OCTOPUS_VERSION
 
