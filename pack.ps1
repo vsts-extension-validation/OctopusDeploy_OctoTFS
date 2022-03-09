@@ -57,33 +57,15 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 }
 
 function SetupTaskDependencies($workingDirectory) {
-    $tempModules = "$basePath/temp"
-    mkdir $tempModules
-    Copy-Item "$basePath/package.json" -Destination $tempModules
-    try
-    {
-        Push-Location $tempModules
-        Invoke-Expression "& npm install --only=prod"
+    & npm prune --production
 
-        $command = "node-prune";
 
-        if ((Get-Command node-prune -ErrorAction SilentlyContinue) -eq $null)
-        {
-            $command = "$($env:GOPATH)/bin/node-prune"
+    & go install github.com/tj/node-prune@latest
 
-            if(-Not (Test-Path $command)){
-                Write-Error "Install go and then install node-prune (https://github.com/tj/node-prune)"
-                Write-Error "go get github.com/tj/node-prune/cmd/node-prune"
-                Exit 1
-            }
-        }
+    $goPath = go env GOPATH
+    $command = "$goPath/bin/node-prune"
 
-        Invoke-Expression "$command $tempModules/node_modules"
-    }
-    finally
-    {
-        Pop-Location
-    }
+    Invoke-Expression "$command ./node_modules"
 
     $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
 
@@ -91,7 +73,7 @@ function SetupTaskDependencies($workingDirectory) {
         $directory = Split-Path -parent $manifestFile
 
         mkdir "$directory/node_modules"
-        Copy-Item -Path "$tempModules/node_modules/*" -Destination "$directory/node_modules" -Recurse
+        Copy-Item -Path "./node_modules/*" -Destination "$directory/node_modules" -Recurse
     }
 }
 
@@ -140,7 +122,10 @@ function Pack($envName, $environment, $workingDirectory) {
     OverrideTaskLogos $workingDirectory $environment
 
     Write-Host "Creating VSIX using tfx..."
-    & tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
+
+    & npm install tfx-cli
+
+    & ./node_modules/.bin/tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
 SetupTaskDependencies $buildDirectoryPath
