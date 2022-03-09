@@ -59,7 +59,6 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 function SetupTaskDependencies($workingDirectory) {
     & npm prune --production
 
-
     & go install github.com/tj/node-prune@latest
 
     $goPath = go env GOPATH

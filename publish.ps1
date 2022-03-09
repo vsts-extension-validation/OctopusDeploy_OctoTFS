@@ -9,6 +9,9 @@ param (
     [Parameter(Mandatory=$true,HelpMessage="Get a personal access token from https://octopus-deploy.visualstudio.com/_details/security/tokens following the instructions https://www.visualstudio.com/en-us/integrate/extensions/publish/command-line")]
     [string]
     $accessToken,
+    [Parameter(Mandatory=$true,HelpMessage="The path where the vsix file is")]
+    [string]
+    $packagePath,
     [string]
     $shareWith="octopus-deploy-test",
     [string]
@@ -17,13 +20,7 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$buildArtifactsPath = "$basePath\dist\Artifacts"
-$buildDirectoryPath = "$basePath\dist"
-
-function UpdateTfxCli() {
-    Write-Host "Updating tfx-cli..."
-    & npm up -g tfx-cli
-}
+$buildDirectoryPath = "$basePath/dist"
 
 function IsPublishRequired($extensionManifest){
     $manifest = Get-Content $extensionManifest | ConvertFrom-Json
@@ -54,19 +51,17 @@ function PublishVSIX($vsixFile, $environment) {
 }
 
 function PublishAllExtensions($environment) {
-    $environmentArtifactsPath = "$buildArtifactsPath\$environment"
-    Write-Output "Looking for VSIX file(s) to publish in $environmentArtifactsPath..."
+    Write-Output "Looking for VSIX file(s) to publish in $packagePath..."
 
-    $vsixFiles = Get-ChildItem $environmentArtifactsPath -Include "*$version.vsix" -Recurse
+    $vsixFiles = Get-ChildItem $packagePath -Include "*$version.vsix"
     if ($vsixFiles) {
         foreach ($vsixFile in $vsixFiles) {
             PublishVSIX $vsixFile $environment
+            New-OctopusArtifact -Path $vsixFile
         }
     } else {
-        Write-Error "There were no VSIX files found for *$version.vsix in $environmentArtifactsPath"
+        Write-Error "There were no VSIX files found for *$version.vsix in $packagePath"
     }
 }
 
-
-UpdateTfxCli
 PublishAllExtensions $environment
