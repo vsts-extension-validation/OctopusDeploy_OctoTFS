@@ -6,6 +6,8 @@ param (
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
     $version,
+    [boolean]
+    $setupTaskDependencies,
     [string]
     $basePath = $PSScriptRoot
 )
@@ -127,5 +129,8 @@ function Pack($envName, $environment, $workingDirectory) {
     & ./node_modules/.bin/tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
 }
 
-SetupTaskDependencies $buildDirectoryPath
+if ($setupTaskDependencies -eq $true)
+{
+    SetupTaskDependencies $buildDirectoryPath
+}
 Pack "VSTSExtensions" $environment $buildDirectoryPath

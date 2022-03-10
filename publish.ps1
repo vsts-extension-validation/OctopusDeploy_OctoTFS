@@ -49,18 +49,23 @@ function PublishVSIX($vsixFile, $environment) {
     }
 }
 
-function PublishAllExtensions($environment) {
+function PublishExtension($environment) {
     Write-Output "Looking for VSIX file(s) to publish in $packagePath..."
 
-    $vsixFiles = Get-ChildItem $packagePath -Include "*$version.vsix" -Recurse
+    $include = ''
+    if ($environment -ne "Production")
+    {
+        $include = "$environment-".ToLowerInvariant()
+    }
+
+    $vsixFiles = Get-ChildItem $packagePath -Include "*$include$version.vsix" -Recurse
     if ($vsixFiles) {
         foreach ($vsixFile in $vsixFiles) {
             PublishVSIX $vsixFile $environment
-            New-OctopusArtifact -Path $vsixFile
         }
     } else {
         Write-Error "There were no VSIX files found for *$version.vsix in $packagePath"
     }
 }
 
-PublishAllExtensions $environment
+PublishExtension $environment
