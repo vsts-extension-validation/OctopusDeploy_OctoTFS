@@ -6,7 +6,7 @@ param (
     [Parameter(Mandatory=$true,HelpMessage="The three number version for this release")]
     [string]
     $version,
-    [boolean]
+    [switch]
     $setupTaskDependencies,
     [string]
     $basePath = $PSScriptRoot
