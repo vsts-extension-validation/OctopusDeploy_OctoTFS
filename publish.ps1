@@ -29,7 +29,7 @@ function IsPublishRequired($extensionManifest){
 }
 
 function PublishVSIX($vsixFile, $environment) {
-    $manifest = "$manifestsPath/extension-manifest.$environment.json"
+    $manifest = "$manifestsPath/dist/extension-manifest.$environment.json"
 
     if(!($environment -eq "Production") -and !($environment -eq "Test")){
         throw "The valid environments are 'Test' and 'Production'"
