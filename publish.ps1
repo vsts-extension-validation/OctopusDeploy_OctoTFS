@@ -12,15 +12,14 @@ param (
     [Parameter(Mandatory=$true,HelpMessage="The path where the vsix file is")]
     [string]
     $packagePath,
+    [Parameter(Mandatory=$true,HelpMessage="The path where the manifest files are")]
     [string]
-    $shareWith="octopus-deploy-test",
+    $manifestsPath,
     [string]
-    $basePath= $PSScriptRoot
+    $shareWith="octopus-deploy-test"
 )
 
 $ErrorActionPreference = "Stop"
-
-$buildDirectoryPath = "$basePath/dist"
 
 function IsPublishRequired($extensionManifest){
     $manifest = Get-Content $extensionManifest | ConvertFrom-Json
@@ -30,7 +29,7 @@ function IsPublishRequired($extensionManifest){
 }
 
 function PublishVSIX($vsixFile, $environment) {
-    $manifest = "$buildDirectoryPath/extension-manifest.$environment.json"
+    $manifest = "$manifestsPath/extension-manifest.$environment.json"
 
     if(!($environment -eq "Production") -and !($environment -eq "Test")){
         throw "The valid environments are 'Test' and 'Production'"
@@ -45,7 +44,7 @@ function PublishVSIX($vsixFile, $environment) {
         Write-Host "Publishing $vsixFile to everyone (public extension)..."
         & tfx extension publish --vsix $vsixFile --token $accessToken --no-prompt
     } elseif ($environment -eq "Test") {
-        Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith using access token $accessToken"
+        Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith"
         & tfx extension publish --vsix $vsixFile --token $accessToken --share-with $shareWith --no-prompt
     }
 }

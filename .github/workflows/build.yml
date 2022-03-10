@@ -35,12 +35,13 @@ jobs:
       - name: Replace versions in tasks and create vsix
         run: |
           pwsh ./pack.ps1 -environment $OCTOPUS_ENVIRONMENT -version $OCTOPUS_VERSION
-      - name: Create Package
+      - name: Create Packages
         run: |
           tar -czf OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz ./dist/Artifacts/$OCTOPUS_ENVIRONMENT/*.vsix
+          tar -czf OctoTFS.publish.$OCTOPUS_VERSION.tar.gz ./publish.ps1 /dist/extension-manifest*.json
       - name: Push Package
         run: |
-          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
+          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --package OctoTFS.publish.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
       - name: Create Release
         run: |
           docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo create-release --space "Integrations" --project "Azure DevOps Extension" --packageVersion $OCTOPUS_VERSION --releaseNumber $OCTOPUS_VERSION
