@@ -33,8 +33,8 @@ jobs:
           pwsh ./embed-octo.ps1
       - name: Replace versions in tasks and create vsix
         run: |
-          ./pack.ps1 -environment Production -version $OCTOPUS_VERSION -setupTaskDependencies
-          ./pack.ps1 -environment Test -version $OCTOPUS_VERSION
+          ./pack.ps1 -environment Production -version $Env:OCTOPUS_VERSION -setupTaskDependencies
+          ./pack.ps1 -environment Test -version $Env:OCTOPUS_VERSION
         shell: pwsh
       - name: Create Packages
         run: |
