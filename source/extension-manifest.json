@@ -47,9 +47,6 @@
         }
     },
     "links": {
-        "home": {
-            "uri": "https://octopus.com"
-        },
         "getstarted": {
             "uri": "https://g.octopushq.com/TFS-VSTS"
         },
@@ -57,14 +54,21 @@
             "uri": "https://octopus.com/legal/customer-agreement"
         },
         "support": {
-            "uri": "https://octopus.com/support"
+            "uri": "https://github.com/OctopusDeploy/OctoTFS/issues"
         },
         "repository": {
             "uri": "https://github.com/OctopusDeploy/OctoTFS"
         },
         "privacypolicy": {
             "uri": "https://octopus.com/legal/privacy"
+        },
+        "issues": {
+            "uri": "https://github.com/OctopusDeploy/OctoTFS/issues"
         }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/OctopusDeploy/OctoTFS"
     },
     "files": [
         {
