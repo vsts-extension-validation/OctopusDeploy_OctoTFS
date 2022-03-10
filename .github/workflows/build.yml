@@ -11,7 +11,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      OCTOPUS_ENVIRONMENT: Production
       OCTOPUS_VERSION: 4.3.${{ github.run_number }}
     steps:
       - uses: actions/checkout@v2
