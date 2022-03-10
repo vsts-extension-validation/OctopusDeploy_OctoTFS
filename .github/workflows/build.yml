@@ -38,7 +38,7 @@ jobs:
       - name: Create Packages
         run: |
           tar -czf OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz ./dist/Artifacts/$OCTOPUS_ENVIRONMENT/*.vsix
-          tar -czf OctoTFS.publish.$OCTOPUS_VERSION.tar.gz ./publish.ps1 /dist/extension-manifest*.json
+          tar -czf OctoTFS.publish.$OCTOPUS_VERSION.tar.gz ./publish.ps1 ./dist/extension-manifest*.json
       - name: Push Package
         run: |
           docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --package OctoTFS.publish.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
