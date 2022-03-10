@@ -52,7 +52,7 @@ function PublishVSIX($vsixFile, $environment) {
 function PublishAllExtensions($environment) {
     Write-Output "Looking for VSIX file(s) to publish in $packagePath..."
 
-    $vsixFiles = Get-ChildItem $packagePath -Include "*$version.vsix"
+    $vsixFiles = Get-ChildItem $packagePath -Include "*$version.vsix" -Recurse
     if ($vsixFiles) {
         foreach ($vsixFile in $vsixFiles) {
             PublishVSIX $vsixFile $environment
