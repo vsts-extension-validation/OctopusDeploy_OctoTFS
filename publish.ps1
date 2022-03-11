@@ -9,21 +9,17 @@ param (
     [Parameter(Mandatory=$true,HelpMessage="Get a personal access token from https://octopus-deploy.visualstudio.com/_details/security/tokens following the instructions https://www.visualstudio.com/en-us/integrate/extensions/publish/command-line")]
     [string]
     $accessToken,
+    [Parameter(Mandatory=$true,HelpMessage="The path where the vsix file is")]
     [string]
-    $shareWith="octopus-deploy-test",
+    $packagePath,
+    [Parameter(Mandatory=$true,HelpMessage="The path where the manifest files are")]
     [string]
-    $basePath= $PSScriptRoot
+    $manifestsPath,
+    [string]
+    $shareWith="octopus-deploy-test"
 )
 
 $ErrorActionPreference = "Stop"
-
-$buildArtifactsPath = "$basePath\dist\Artifacts"
-$buildDirectoryPath = "$basePath\dist"
-
-function UpdateTfxCli() {
-    Write-Host "Updating tfx-cli..."
-    & npm up -g tfx-cli
-}
 
 function IsPublishRequired($extensionManifest){
     $manifest = Get-Content $extensionManifest | ConvertFrom-Json
@@ -33,7 +29,7 @@ function IsPublishRequired($extensionManifest){
 }
 
 function PublishVSIX($vsixFile, $environment) {
-    $manifest = "$buildDirectoryPath/extension-manifest.$environment.json"
+    $manifest = "$manifestsPath/dist/extension-manifest.$environment.json"
 
     if(!($environment -eq "Production") -and !($environment -eq "Test")){
         throw "The valid environments are 'Test' and 'Production'"
@@ -48,25 +44,28 @@ function PublishVSIX($vsixFile, $environment) {
         Write-Host "Publishing $vsixFile to everyone (public extension)..."
         & tfx extension publish --vsix $vsixFile --token $accessToken --no-prompt
     } elseif ($environment -eq "Test") {
-        Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith using access token $accessToken"
+        Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith"
         & tfx extension publish --vsix $vsixFile --token $accessToken --share-with $shareWith --no-prompt
     }
 }
 
-function PublishAllExtensions($environment) {
-    $environmentArtifactsPath = "$buildArtifactsPath\$environment"
-    Write-Output "Looking for VSIX file(s) to publish in $environmentArtifactsPath..."
+function PublishExtension($environment) {
+    Write-Output "Looking for VSIX file(s) to publish in $packagePath..."
 
-    $vsixFiles = Get-ChildItem $environmentArtifactsPath -Include "*$version.vsix" -Recurse
+    $include = ''
+    if ($environment -ne "Production")
+    {
+        $include = "$environment-".ToLowerInvariant()
+    }
+
+    $vsixFiles = Get-ChildItem $packagePath -Include "*$include$version.vsix" -Recurse
     if ($vsixFiles) {
         foreach ($vsixFile in $vsixFiles) {
             PublishVSIX $vsixFile $environment
         }
     } else {
-        Write-Error "There were no VSIX files found for *$version.vsix in $environmentArtifactsPath"
+        Write-Error "There were no VSIX files found for *$version.vsix in $packagePath"
     }
 }
 
-
-UpdateTfxCli
-PublishAllExtensions $environment
+PublishExtension $environment

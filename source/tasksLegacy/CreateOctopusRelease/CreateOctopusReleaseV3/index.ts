@@ -8,6 +8,7 @@ import os from "os";
 
 async function run() {
     try {
+        tasks.warning("This task is deprecated, please use latest version instead.");
         const environmentVariables = getVstsEnvironmentVariables();
         const vstsConnection = createVstsConnection(environmentVariables);
         const octoConnection = getDefaultOctopusConnectionDetailsOrThrow();
