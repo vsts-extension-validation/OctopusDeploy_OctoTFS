@@ -16,7 +16,7 @@ param (
     [string]
     $manifestsPath,
     [string]
-    $shareWith="octopus-deploy-test"
+    $shareWith=""
 )
 
 $ErrorActionPreference = "Stop"
