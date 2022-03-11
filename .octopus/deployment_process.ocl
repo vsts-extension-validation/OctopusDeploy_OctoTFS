@@ -43,7 +43,7 @@ step "Push to Azure Marketplace" {
                 artifactFile="$(basename -- $artifactFilePath)"
                 cp $artifactFilePath /home/Octopus/
                 
-                new_octopusartifact /home/Octopus/$artifactFile
+                new_octopusartifact "/home/Octopus/$artifactFile"
                  
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
