@@ -1,0 +1,156 @@
+step "Push to Azure Marketplace" {
+
+    action {
+        action_type = "Octopus.Script"
+        notes = "For Test environment this only pushes to the test project"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                set -euo pipefail
+                
+                # Download the Microsoft repository GPG keys
+                wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb
+                
+                # Register the Microsoft repository GPG keys
+                dpkg -i packages-microsoft-prod.deb
+                
+                # Update the list of products
+                apt-get update
+                
+                # Install PowerShell
+                apt-get install -y powershell
+                
+                environment=$(get_octopusvariable "Octopus.Environment.Name")
+                version=$(get_octopusvariable "Octopus.Release.Number")
+                accessToken=$(get_octopusvariable "AccessToken")
+                shareWith=$(get_octopusvariable "ShareWith")
+                vsixPath=$(get_octopusvariable "Octopus.Action.Package[OctoTFS.vsix].ExtractedPath")
+                publishPath=$(get_octopusvariable "Octopus.Action.Package[OctoTFS.publish].ExtractedPath")
+                
+                npm install -g tfx-cli
+                
+                pwsh $publishPath/publish.ps1 -environment $environment -version $version -accessToken $accessToken -packagePath $vsixPath -manifestsPath $publishPath  -shareWith "$shareWith"
+                
+                if [ "$environment" == "Test" ]
+                then
+                	postfix="test-"
+                else
+                	postfix="" 
+                fi
+                
+                artifactFilePath=$(find . -name "*tasks-$postfix$version.vsix")
+                
+                # Workaround for https://github.com/OctopusDeploy/Issues/issues/7424
+                artifactFile="$(basename -- $artifactFilePath)"
+                cp $artifactFilePath /home/Octopus/
+                
+                new_octopusartifact /home/Octopus/$artifactFile
+                 
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "Bash"
+        }
+        worker_pool = "Hosted Ubuntu"
+
+        container {
+            feed = "Docker Hub"
+            image = "node:buster"
+        }
+
+        packages "OctoTFS.vsix" {
+            acquisition_location = "Server"
+            feed = "Octopus Server (built-in)"
+            package_id = "OctoTFS.vsix"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
+
+        packages "OctoTFS.publish" {
+            acquisition_location = "Server"
+            feed = "Octopus Server (built-in)"
+            package_id = "OctoTFS.publish"
+            properties = {
+                Extract = "True"
+                Purpose = ""
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "Queue and verify a test build" {
+
+    action {
+        action_type = "Octopus.Script"
+        environments = ["Test"]
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $queueBuildUrl = "https://octopus-deploy-test.visualstudio.com/DefaultCollection/VSTS.Extensions.TestProject/_apis/build/builds?api-version=2.0"
+                $definitionUrl = "https://octopus-deploy-test.visualstudio.com/DefaultCollection/VSTS.Extensions.TestProject/_apis/build/definitions/$($TestProjectDefinitionId)?api-version=2.0"
+                
+                $tokenBytes = [System.Text.Encoding]::UTF8.GetBytes(":$AccessToken");
+                $base64Pat = [System.Convert]::ToBase64String($tokenBytes);
+                
+                $builParameters =  ConvertTo-Json @{
+                  "system.debug" = "true"
+                  "BuildConfiguration" = "debug"
+                  "BuildPlatform" = "x64"
+                } -Compress 
+                
+                $postData = ConvertTo-Json @{
+                    "definition" = @{
+                        "id" = $TestProjectDefinitionId
+                    }
+                    "sourceBranch" = "refs/heads/master"
+                    "parameters" = $builParameters
+                } -Depth 100
+                
+                #$postData = '{"definition": {"id": ' + $TestProjectDefinitionId + ',"sourceBranch": "refs/heads/master", "parameters": "{\"system.debug\":\"true\",\"BuildConfiguration\":\"debug\",\"BuildPlatform\":\"x64\"}"}"}'
+                $headers = @{
+                	"Authorization" = "Basic $base64Pat"
+                    "Accept" = "application/json"
+                };
+                
+                Write-Verbose "Queuing definition with body:"
+                Write-Verbose $postData
+                # Get definition name so we at least know we are using the correct one
+                $definition = Invoke-RestMethod -Uri $definitionUrl -Method Get -Headers $headers
+                
+                Write-Host "Using Build Definition $($definition.name)"
+                
+                # Queue a new build
+                $buildResponse = Invoke-RestMethod -Uri $queueBuildUrl -Method Post -Body $postData -ContentType "application/json" -Headers $headers
+                $buildUrl = $buildResponse.url;
+                
+                Write-Host "Test build has been queued: ($buildUrl)"
+                # Wait 10 seconds, then get the status of the build. It should take ~65 seconds per platform target, but we'll give it 35min.
+                # Other tasks may be running causing things to be backed up as well
+                $succeeded = $false;
+                for ($i=0; $i -lt 210; $i++) {
+                    Start-Sleep -s 10
+                    Write-Host "Checking Build progress..."
+                    $status = Invoke-RestMethod -Uri $buildUrl -Method Get -ContentType "application/json" -Headers $headers
+                    Write-Host "Build status is $($status.status) [$($status.result)]"
+                    if ($status.result -eq "succeeded") {
+                        $succeeded = $true
+                        break;
+                    } elseif ($status.status -eq "completed") {
+                        $succeeded = $false
+                        break;
+                    }
+                }
+                if ($succeeded) {
+                    Write-Host "Build succeeded!"
+                } else {
+                    Write-Error "Build failed or didn't finish within 5 minutes!"
+                }
+                
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "Hosted Ubuntu"
+    }
+}
