@@ -29,6 +29,13 @@ jobs:
           npm install
           npm run build -- --extensionVersion $OCTOPUS_VERSION
           npm run test
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()
+        name: Tests report
+        with:
+          name: Tests report
+          path: 'reports/jest-*.xml'
+          reporter: jest-junit
       - name: Embed octo portable
         run: |
           pwsh ./embed-octo.ps1

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "jest",
+    "test": "jest --ci --reporters=default --reporters=jest-junit",
     "build": "tsc --noEmit && node esbuild.mjs",
     "lint:fix": "eslint . --fix",
     "lint": "eslint ."
@@ -28,7 +28,9 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "express": "^4.17.3",
-    "jest": "27.5.1",
+    "jest": "^27.5.1",
+    "jest-junit": "^13.0.0",
+    "jest-runner-eslint": "^1.0.0",
     "prettier": "2.5.1",
     "rimraf": "2.6.2",
     "test-console": "^2.0.0",
