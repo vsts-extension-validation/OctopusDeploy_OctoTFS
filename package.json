@@ -49,5 +49,14 @@
     "typed-rest-client": "1.8.6",
     "uuid": "8.3.2",
     "vss-web-extension-sdk": "5.141.0"
+  },
+  "jest-junit": {
+    "outputDirectory": "reports",
+    "outputName": "jest-junit.xml",
+    "ancestorSeparator": " › ",
+    "uniqueOutputName": "false",
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
   }
 }
