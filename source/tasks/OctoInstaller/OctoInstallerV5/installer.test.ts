@@ -2,11 +2,11 @@ import { Installer } from "./installer";
 import { mkdtemp, rm } from "fs/promises";
 import * as path from "path";
 import os, { platform } from "os";
-import { stdout } from "test-console";
 import express from "express";
 import { Server } from "http";
 import { AddressInfo } from "net";
 import archiver from "archiver";
+import { executeCommand } from "../../Utils/testing";
 
 describe("OctoInstaller", () => {
     let tempOutDir: string;
@@ -53,11 +53,11 @@ describe("OctoInstaller", () => {
             res.send(latestToolsPayload);
         });
 
-        app.get("/octopus-tools/*", (_, res) => {
+        app.get("/octopus-tools/*", async (_, res) => {
             const archive = archiver(platform() === "win32" ? "zip" : "tar", { gzip: true });
             archive.append("Hello world", { name: "octo" });
             archive.pipe(res);
-            archive.finalize();
+            await archive.finalize();
         });
 
         server = await new Promise<Server>((resolve) => {
@@ -82,14 +82,6 @@ describe("OctoInstaller", () => {
         process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
         process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
 
-        const output = (
-            await stdout.inspectAsync(async () => {
-                await new Installer(octopusUrl).run("8.0.0");
-            })
-        ).join(os.EOL);
-
-        console.log(output);
-
-        expect(output).toContain("task.complete result=Succeeded");
+        await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
     });
 });

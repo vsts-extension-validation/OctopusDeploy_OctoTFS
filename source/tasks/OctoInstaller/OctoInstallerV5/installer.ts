@@ -4,6 +4,7 @@ import os from "os";
 import { IProxyConfiguration } from "typed-rest-client/Interfaces";
 import * as TypedRestClient from "typed-rest-client";
 import path from "path";
+import { executeWithSetResult } from "../../Utils/octopusTasks";
 
 const TOOL_NAME = "octo";
 
@@ -33,22 +34,20 @@ export class Installer {
     constructor(readonly octopusUrl: string) {}
 
     public async run(version: string) {
-        try {
-            let toolPath = tools.findLocalTool(TOOL_NAME, version);
+        await executeWithSetResult(
+            async () => {
+                let toolPath = tools.findLocalTool(TOOL_NAME, version);
 
-            if (!toolPath) {
-                toolPath = await this.installTool(version);
-                toolPath = tools.findLocalTool(TOOL_NAME, version);
-            }
+                if (!toolPath) {
+                    toolPath = await this.installTool(version);
+                    toolPath = tools.findLocalTool(TOOL_NAME, version);
+                }
 
-            tools.prependPath(toolPath);
-
-            tasks.setResult(tasks.TaskResult.Succeeded, `Installed octo v${version}.`);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                tasks.setResult(tasks.TaskResult.Failed, `"Failed to install octo. ${error.message}${os.EOL}${error.stack}`, true);
-            }
-        }
+                tools.prependPath(toolPath);
+            },
+            `Installed octo v${version}.`,
+            `Failed to install octo v${version}.`
+        );
     }
 
     private applyTemplate(dictionary: Dictionary, template: string) {
