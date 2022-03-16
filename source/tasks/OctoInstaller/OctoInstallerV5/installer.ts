@@ -116,7 +116,7 @@ export class Installer {
             }
 
             extPath = path.join(extPath, "n"); // use as short a path as possible due to nested node_modules folders
-            extPath = await tools.extract7z(downloadPath, extPath);
+            extPath = await tools.extractZip(downloadPath, extPath);
         } else {
             extPath = await tools.extractTar(downloadPath);
         }
