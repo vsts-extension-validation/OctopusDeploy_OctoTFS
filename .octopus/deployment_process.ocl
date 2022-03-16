@@ -28,7 +28,7 @@ step "Push to Azure Marketplace" {
                 
                 npm install -g tfx-cli
                 
-                pwsh $publishPath/publish.ps1 -environment $environment -version $version -accessToken $accessToken -packagePath $vsixPath -manifestsPath $publishPath  -shareWith "$shareWith"
+                pwsh $publishPath/publish.ps1 -environment $environment -version $version -accessToken $accessToken -packagePath $vsixPath -manifestsPath $publishPath  -shareWith "$shareWith" || exit 1
                 
                 if [ "$environment" == "Test" ]
                 then
