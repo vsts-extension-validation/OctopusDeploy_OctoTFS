@@ -44,8 +44,8 @@ describe("Push", () => {
             }).run("my space", [packagePath1, packagePath2], ReplaceOverwriteMode.true, "--myAdditionalArgumentToInclude")
         );
 
-        expect(output).toContain(
-            `push --space "my space" --overwrite-mode "OverwriteExisting" --enableServiceMessages --package "${packagePath1}" --package "${packagePath2}" --server http://octopus.com --apiKey myapikey --myAdditionalArgumentToInclude`
+        expect(output).toMatch(
+            /push --space "my space" --overwrite-mode "OverwriteExisting" --enableServiceMessages --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --server http:\/\/octopus.com --apiKey myapikey --myAdditionalArgumentToInclude/
         );
     });
 
