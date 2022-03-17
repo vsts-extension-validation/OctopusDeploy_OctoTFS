@@ -11,11 +11,11 @@ export class Push {
         const matchedPackages = await this.resolveGlobs(packages);
 
         this.tool.arg("push");
-        this.tool.arg(["--space", `"${space}"`]);
+        this.tool.arg(["--space", space]);
         this.tool.arg(["--overwrite-mode", overwriteMode]);
         this.tool.arg("--enableServiceMessages");
         for (const item of matchedPackages) {
-            this.tool.arg(["--package", `"${item}"`]);
+            this.tool.arg(["--package", item]);
         }
 
         await executeTask(this.tool, this.connection, "Package(s) pushed.", "Failed to push package(s).", additionalArguments);

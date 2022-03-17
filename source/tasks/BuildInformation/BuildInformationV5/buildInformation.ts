@@ -85,11 +85,13 @@ export class BuildInformation {
         await tasks.writeFile(buildInformationFile, JSON.stringify(buildInformation, null, 2));
 
         this.tool.arg("build-information");
-        this.tool.arg(["--space", `"${space}"`]);
-        this.tool.arg(["--version", `"${packageVersion}"`]);
-        this.tool.arg(["--file", `"${buildInformationFile}"`]);
+        this.tool.arg(["--space", space]);
+        this.tool.arg(["--version", packageVersion]);
+        this.tool.arg(["--file", buildInformationFile]);
         this.tool.arg(["--overwrite-mode", overwriteMode]);
-        this.tool.arg(packageIds.map((s) => `--package-id "${s}"`));
+        for (const item of packageIds) {
+            this.tool.arg(["--package-id", item]);
+        }
 
         await executeTask(this.tool, this.connection, "Build information successfully pushed.", "Failed to push build information.", additionalArguments);
     }

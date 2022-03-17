@@ -45,7 +45,7 @@ describe("Push", () => {
         );
 
         expect(output).toMatch(
-            /push --space "my space" --overwrite-mode OverwriteExisting --enableServiceMessages --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --server http:\/\/octopus.com --apiKey myapikey --myAdditionalArgumentToInclude/
+            /push --space my space --overwrite-mode OverwriteExisting --enableServiceMessages --package .*(foo|boo)\.1\.2\.3\.(tar.gz|zip) --package .*(foo|boo)\.1\.2\.3\.(tar.gz|zip) --server http:\/\/octopus.com --apiKey myapikey --myAdditionalArgumentToInclude/
         );
     });
 
@@ -58,8 +58,6 @@ describe("Push", () => {
             }).run("my space", [path.join(tempOutDir, "*.*")], ReplaceOverwriteMode.false)
         );
 
-        expect(output).toMatch(
-            /push --space "my space" --overwrite-mode FailIfExists --enableServiceMessages --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --package ".*(foo|boo)\.1\.2\.3\.(tar.gz|zip)" --server http:\/\/octopus.com --apiKey myapikey/
-        );
+        expect(output).toMatch(/push --space my space --overwrite-mode FailIfExists --enableServiceMessages --package .*(foo|boo)\.1\.2\.3\.(tar.gz|zip) --package .*(foo|boo)\.1\.2\.3\.(tar.gz|zip) --server http:\/\/octopus.com --apiKey myapikey/);
     });
 });
