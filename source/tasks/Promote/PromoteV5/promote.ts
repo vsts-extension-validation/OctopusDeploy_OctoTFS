@@ -12,18 +12,15 @@ export class Promote {
         this.tool.arg(["--from", `"${from}"`]);
         this.tool.arg("--enableServiceMessages");
         this.tool.argIf(showProgress, "--progress");
-        this.tool.argIf(
-            to.length > 0,
-            to.map((s) => `--to "${s}"`)
-        );
-        this.tool.argIf(
-            deployForTenants.length > 0,
-            deployForTenants.map((s) => `--tenant "${s}"`)
-        );
-        this.tool.argIf(
-            deployForTenantTags.length > 0,
-            deployForTenantTags.map((s) => `--tenantTag "${s}"`)
-        );
+        for (const item of to) {
+            this.tool.arg(["--to", `"${item}"`]);
+        }
+        for (const item of deployForTenants) {
+            this.tool.arg(["--tenant", `"${item}"`]);
+        }
+        for (const item of deployForTenantTags) {
+            this.tool.arg(["--tenantTag", `"${item}"`]);
+        }
 
         await executeTask(this.tool, this.connection, "Promote release succeeded.", "Failed to promote release.", additionalArguments);
     }

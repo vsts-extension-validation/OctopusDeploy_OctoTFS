@@ -21,18 +21,15 @@ export class Deploy {
         this.tool.argIf(releaseNumber, ["--releaseNumber", `"${releaseNumber}"`]);
         this.tool.arg("--enableServiceMessages");
         this.tool.argIf(showProgress, "--progress");
-        this.tool.argIf(
-            deployToEnvironments.length > 0,
-            deployToEnvironments.map((s) => `--deployTo "${s}"`)
-        );
-        this.tool.argIf(
-            deployForTenants.length > 0,
-            deployForTenants.map((s) => `--tenant "${s}"`)
-        );
-        this.tool.argIf(
-            deployForTenantTags.length > 0,
-            deployForTenantTags.map((s) => `--tenantTag "${s}"`)
-        );
+        for (const item of deployToEnvironments) {
+            this.tool.arg(["--deployTo", `"${item}"`]);
+        }
+        for (const item of deployForTenants) {
+            this.tool.arg(["--tenant", `"${item}"`]);
+        }
+        for (const item of deployForTenantTags) {
+            this.tool.arg(["--tenantTag", `"${item}"`]);
+        }
 
         await executeTask(this.tool, this.connection, "Deployment succeeded.", "Failed to deploy release.", additionalArguments);
     }

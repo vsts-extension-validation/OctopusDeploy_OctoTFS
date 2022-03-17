@@ -14,10 +14,9 @@ export class Push {
         this.tool.arg(["--space", `"${space}"`]);
         this.tool.arg(["--overwrite-mode", overwriteMode]);
         this.tool.arg("--enableServiceMessages");
-        this.tool.argIf(
-            matchedPackages.length > 0,
-            matchedPackages.map((s) => `--package "${s}"`)
-        );
+        for (const item of matchedPackages) {
+            this.tool.arg(["--package", `"${item}"`]);
+        }
 
         await executeTask(this.tool, this.connection, "Package(s) pushed.", "Failed to push package(s).", additionalArguments);
     }
