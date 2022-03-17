@@ -12,7 +12,7 @@ export class Push {
 
         this.tool.arg("push");
         this.tool.arg(["--space", `"${space}"`]);
-        this.tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
+        this.tool.arg(["--overwrite-mode", overwriteMode]);
         this.tool.arg("--enableServiceMessages");
         this.tool.argIf(
             matchedPackages.length > 0,

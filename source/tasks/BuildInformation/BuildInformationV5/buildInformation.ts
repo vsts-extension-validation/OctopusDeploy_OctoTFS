@@ -88,7 +88,7 @@ export class BuildInformation {
         this.tool.arg(["--space", `"${space}"`]);
         this.tool.arg(["--version", `"${packageVersion}"`]);
         this.tool.arg(["--file", `"${buildInformationFile}"`]);
-        this.tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
+        this.tool.arg(["--overwrite-mode", overwriteMode]);
         this.tool.arg(packageIds.map((s) => `--package-id "${s}"`));
 
         await executeTask(this.tool, this.connection, "Build information successfully pushed.", "Failed to push build information.", additionalArguments);

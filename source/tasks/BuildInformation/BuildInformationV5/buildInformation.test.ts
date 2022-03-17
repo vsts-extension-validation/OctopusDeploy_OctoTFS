@@ -214,7 +214,7 @@ describe("Build Information", () => {
   ]
 }`);
         expect(output).toContain(
-            `build-information --space "my space" --version "1.2.3" --file "${buildInformationJsonFile}" --overwrite-mode "OverwriteExisting" --package-id "Hello" --package-id "World" --package-id "GoodBye" --server http://octopus.com --apiKey myapikey --ignoreSslErrors --myAdditionalArgumentToInclude`
+            `build-information --space "my space" --version "1.2.3" --file "${buildInformationJsonFile}" --overwrite-mode OverwriteExisting --package-id "Hello" --package-id "World" --package-id "GoodBye" --server http://octopus.com --apiKey myapikey --ignoreSslErrors --myAdditionalArgumentToInclude`
         );
     });
 });
