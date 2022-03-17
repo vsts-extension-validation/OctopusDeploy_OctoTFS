@@ -7,12 +7,13 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  OCTOPUS_VERSION: 5.0.${{ github.run_number }}
+
 jobs:
   build:
     name: Build code
     runs-on: ubuntu-latest
-    env:
-      OCTOPUS_VERSION: 5.0.${{ github.run_number }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
