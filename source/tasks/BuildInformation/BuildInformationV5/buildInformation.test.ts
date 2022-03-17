@@ -181,7 +181,7 @@ describe("Build Information", () => {
         process.env["AGENT_BUILDDIRECTORY"] = tempOutDir;
 
         const output = await executeCommand(() =>
-            new BuildInformation((command) => new MockOctopusToolRunner(command), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: true }).run(
+            new BuildInformation(new MockOctopusToolRunner(), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: true }).run(
                 "my space",
                 ["Hello", "World", "GoodBye"],
                 "1.2.3",

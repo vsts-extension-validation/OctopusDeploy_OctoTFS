@@ -37,7 +37,7 @@ describe("Push", () => {
 
     test("Pushes multiple packages with fixed paths", async () => {
         const output = await executeCommand(() =>
-            new Push((command) => new MockOctopusToolRunner(command), {
+            new Push(new MockOctopusToolRunner(), {
                 url: "http://octopus.com",
                 apiKey: "myapikey",
                 ignoreSslErrors: false,
@@ -51,7 +51,7 @@ describe("Push", () => {
 
     test("Pushes multiple packages with wildcards", async () => {
         const output = await executeCommand(() =>
-            new Push((command) => new MockOctopusToolRunner(command), {
+            new Push(new MockOctopusToolRunner(), {
                 url: "http://octopus.com",
                 apiKey: "myapikey",
                 ignoreSslErrors: false,

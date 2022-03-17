@@ -3,7 +3,7 @@ import { executeTask } from "../../Utils/octopusTasks";
 import { OctoServerConnectionDetails } from "../../Utils/connection";
 
 export class CreateRelease {
-    constructor(readonly toolFactory: (tool: string) => OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
+    constructor(readonly tool: OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
 
     public async run(
         space: string,
@@ -19,30 +19,29 @@ export class CreateRelease {
         gitRef?: string | undefined,
         gitCommit?: string | undefined
     ) {
-        const tool = this.toolFactory("create-release");
-
-        tool.arg(["--space", `"${space}"`]);
-        tool.arg(["--project", `"${project}"`]);
-        tool.argIf(releaseNumber, ["--releaseNumber", `"${releaseNumber}"`]);
-        tool.argIf(channel, ["--channel", `"${channel}"`]);
-        tool.argIf(gitCommit, ["--gitCommit", `"${gitCommit}"`]);
-        tool.argIf(gitRef, ["--gitRef", `"${gitRef}"`]);
-        tool.argIf(customReleaseNotes, ["--releaseNotes", `"${customReleaseNotes}"`]);
-        tool.arg("--enableServiceMessages");
-        tool.argIf(deploymentProgress, "--progress");
-        tool.argIf(
+        this.tool.arg("create-release");
+        this.tool.arg(["--space", `"${space}"`]);
+        this.tool.arg(["--project", `"${project}"`]);
+        this.tool.argIf(releaseNumber, ["--releaseNumber", `"${releaseNumber}"`]);
+        this.tool.argIf(channel, ["--channel", `"${channel}"`]);
+        this.tool.argIf(gitCommit, ["--gitCommit", `"${gitCommit}"`]);
+        this.tool.argIf(gitRef, ["--gitRef", `"${gitRef}"`]);
+        this.tool.argIf(customReleaseNotes, ["--releaseNotes", `"${customReleaseNotes}"`]);
+        this.tool.arg("--enableServiceMessages");
+        this.tool.argIf(deploymentProgress, "--progress");
+        this.tool.argIf(
             deployToEnvironments.length > 0,
             deployToEnvironments.map((s) => `--deployTo "${s}"`)
         );
-        tool.argIf(
+        this.tool.argIf(
             deployForTenants.length > 0,
             deployForTenants.map((s) => `--tenant "${s}"`)
         );
-        tool.argIf(
+        this.tool.argIf(
             deployForTenantTags.length > 0,
             deployForTenantTags.map((s) => `--tenantTag "${s}"`)
         );
 
-        await executeTask(tool, this.connection, "Create release succeeded.", "Failed to create release.", additionalArguments);
+        await executeTask(this.tool, this.connection, "Create release succeeded.", "Failed to create release.", additionalArguments);
     }
 }

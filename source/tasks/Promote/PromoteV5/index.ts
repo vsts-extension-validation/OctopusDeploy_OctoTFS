@@ -2,6 +2,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
 import { getDelimitedInput, getRequiredInput } from "../../Utils/inputs";
 import { Promote } from "./promote";
+import { getOctopusCliTool } from "../../Utils/tool";
 
 const space = getRequiredInput("Space");
 const project = getRequiredInput("Project");
@@ -14,4 +15,4 @@ const additionalArguments = tasks.getInput("AdditionalArguments");
 
 const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
-new Promote(tasks.tool, connection).run(space, project, from, to, deployForTenants, deployForTenantTags, deploymentProgress, additionalArguments);
+new Promote(getOctopusCliTool(), connection).run(space, project, from, to, deployForTenants, deployForTenantTags, deploymentProgress, additionalArguments);

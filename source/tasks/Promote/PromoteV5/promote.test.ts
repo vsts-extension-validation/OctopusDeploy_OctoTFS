@@ -4,7 +4,7 @@ import { Promote } from "./promote";
 describe("Promote Release", () => {
     test("Run a simple promote", async () => {
         const output = await executeCommand(() =>
-            new Promote((command) => new MockOctopusToolRunner(command), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: true }).run(
+            new Promote(new MockOctopusToolRunner(), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: true }).run(
                 "my space",
                 "my project",
                 "Dev",

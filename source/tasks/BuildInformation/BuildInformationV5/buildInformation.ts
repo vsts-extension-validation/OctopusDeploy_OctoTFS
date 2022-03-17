@@ -54,7 +54,7 @@ export interface SystemEnvironmentVariables {
 export type VstsEnvironmentVariables = ReleaseEnvironmentVariables & BuildEnvironmentVariables & AgentEnvironmentVariables & SystemEnvironmentVariables;
 
 export class BuildInformation {
-    constructor(readonly toolFactory: (tool: string) => OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
+    constructor(readonly tool: OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
 
     public async run(space: string, packageIds: string[], packageVersion: string, overwriteMode: ReplaceOverwriteMode, additionalArguments: string | undefined) {
         const environment = this.getVstsEnvironmentVariables();
@@ -84,15 +84,14 @@ export class BuildInformation {
         await tasks.mkdirP(buildInformationDir);
         await tasks.writeFile(buildInformationFile, JSON.stringify(buildInformation, null, 2));
 
-        const tool = this.toolFactory("build-information");
+        this.tool.arg("build-information");
+        this.tool.arg(["--space", `"${space}"`]);
+        this.tool.arg(["--version", `"${packageVersion}"`]);
+        this.tool.arg(["--file", `"${buildInformationFile}"`]);
+        this.tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
+        this.tool.arg(packageIds.map((s) => `--package-id "${s}"`));
 
-        tool.arg(["--space", `"${space}"`]);
-        tool.arg(["--version", `"${packageVersion}"`]);
-        tool.arg(["--file", `"${buildInformationFile}"`]);
-        tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
-        tool.arg(packageIds.map((s) => `--package-id "${s}"`));
-
-        await executeTask(tool, this.connection, "Build information successfully pushed.", "Failed to push build information.", additionalArguments);
+        await executeTask(this.tool, this.connection, "Build information successfully pushed.", "Failed to push build information.", additionalArguments);
     }
 
     private getVcsTypeFromProvider = (buildRepositoryProvider: string) => {

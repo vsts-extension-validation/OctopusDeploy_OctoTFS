@@ -7,8 +7,6 @@ import os from "os";
 export class MockOctopusToolRunner implements OctopusToolRunner {
     arguments: string[] = [];
 
-    constructor(readonly command: string) {}
-
     arg(val: string | string[]): void {
         if (typeof val === "string") {
             this.arguments.push(val);
@@ -25,7 +23,7 @@ export class MockOctopusToolRunner implements OctopusToolRunner {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     exec(_?: IExecOptions): Q.Promise<number> {
-        console.log(this.command + " " + this.arguments.join(" "));
+        console.log(this.arguments.join(" "));
         return Q.resolve(0);
     }
 

@@ -3,14 +3,14 @@ import { executeCommand, MockOctopusToolRunner } from "../../Utils/testing";
 
 describe("Create Release", () => {
     test("Create a minimum release", async () => {
-        const output = await executeCommand(() => new CreateRelease((command) => new MockOctopusToolRunner(command), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: false }).run("my space", "my project"));
+        const output = await executeCommand(() => new CreateRelease(new MockOctopusToolRunner(), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: false }).run("my space", "my project"));
 
         expect(output).toContain('create-release --space "my space" --project "my project" --enableServiceMessages --server http://octopus.com --apiKey "myapikey"');
     });
 
     test("Create a release and deployment", async () => {
         const output = await executeCommand(() =>
-            new CreateRelease((command) => new MockOctopusToolRunner(command), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: false }).run(
+            new CreateRelease(new MockOctopusToolRunner(), { url: "http://octopus.com", apiKey: "myapikey", ignoreSslErrors: false }).run(
                 "my space",
                 "my project",
                 "1.2.3",

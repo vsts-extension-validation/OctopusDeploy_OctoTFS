@@ -1,26 +1,25 @@
-import { OctopusToolRunner } from "../../Utils/tool";
 import { OctoServerConnectionDetails } from "../../Utils/connection";
 import { ReplaceOverwriteMode } from "../../Utils/inputs";
 import { executeTask } from "../../Utils/octopusTasks";
 import glob from "glob";
+import { OctopusToolRunner } from "../../Utils/tool";
 
 export class Push {
-    constructor(readonly toolFactory: (tool: string) => OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
+    constructor(readonly tool: OctopusToolRunner, readonly connection: OctoServerConnectionDetails) {}
 
     public async run(space: string, packages: string[], overwriteMode: ReplaceOverwriteMode, additionalArguments?: string | undefined) {
-        const tool = this.toolFactory("push");
-
         const matchedPackages = await this.resolveGlobs(packages);
 
-        tool.arg(["--space", `"${space}"`]);
-        tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
-        tool.arg("--enableServiceMessages");
-        tool.argIf(
+        this.tool.arg("push");
+        this.tool.arg(["--space", `"${space}"`]);
+        this.tool.arg(["--overwrite-mode", `"${overwriteMode}"`]);
+        this.tool.arg("--enableServiceMessages");
+        this.tool.argIf(
             matchedPackages.length > 0,
             matchedPackages.map((s) => `--package "${s}"`)
         );
 
-        await executeTask(tool, this.connection, "Package(s) pushed.", "Failed to push package(s).", additionalArguments);
+        await executeTask(this.tool, this.connection, "Package(s) pushed.", "Failed to push package(s).", additionalArguments);
     }
 
     private resolveGlobs = async (globs: string[]): Promise<string[]> => {

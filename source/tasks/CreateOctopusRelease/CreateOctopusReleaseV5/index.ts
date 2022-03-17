@@ -2,6 +2,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import { getDelimitedInput, getRequiredInput } from "../../Utils/inputs";
 import { CreateRelease } from "./createRelease";
 import { getDefaultOctopusConnectionDetailsOrThrow } from "../../Utils/connection";
+import { getOctopusCliTool } from "../../Utils/tool";
 
 const space = getRequiredInput("Space");
 const project = getRequiredInput("ProjectName");
@@ -18,4 +19,4 @@ const gitCommit = tasks.getInput("GitCommit");
 
 const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
-new CreateRelease(tasks.tool, connection).run(space, project, releaseNumber, channel, customReleaseNotes, deployToEnvironments, deployForTenants, deployForTenantTags, deploymentProgress, additionalArguments, gitRef, gitCommit);
+new CreateRelease(getOctopusCliTool(), connection).run(space, project, releaseNumber, channel, customReleaseNotes, deployToEnvironments, deployForTenants, deployForTenantTags, deploymentProgress, additionalArguments, gitRef, gitCommit);

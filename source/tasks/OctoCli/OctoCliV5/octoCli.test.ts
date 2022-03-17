@@ -4,7 +4,7 @@ import { OctoCli } from "./octoCli";
 describe("Promote Release", () => {
     test("Run a simple promote", async () => {
         const output = await executeCommand(() =>
-            new OctoCli((command) => new MockOctopusToolRunner(command), "list-projects", {
+            new OctoCli(new MockOctopusToolRunner(), "list-projects", {
                 url: "http://octopus.com",
                 apiKey: "myapikey",
                 ignoreSslErrors: true,
