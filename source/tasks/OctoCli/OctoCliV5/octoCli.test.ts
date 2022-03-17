@@ -11,6 +11,6 @@ describe("Promote Release", () => {
             }).run('--space "my space"')
         );
 
-        expect(output).toContain('list-projects --server http://octopus.com --apiKey "myapikey" --ignoreSslErrors --space "my space"');
+        expect(output).toContain('list-projects --server http://octopus.com --apiKey myapikey --ignoreSslErrors --space "my space"');
     });
 });

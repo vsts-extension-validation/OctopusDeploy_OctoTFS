@@ -17,7 +17,7 @@ describe("Promote Release", () => {
         );
 
         expect(output).toContain(
-            'promote-release --space "my space" --project "my project" --from "Dev" --enableServiceMessages --progress --to "int" --to "prod" --tenant "tenantA" --tenant "tenantB" --tenantTag "tagme" --tenantTag "tagyou" --server http://octopus.com --apiKey "myapikey" --ignoreSslErrors --myAdditionalArgumentToInclude'
+            'promote-release --space "my space" --project "my project" --from "Dev" --enableServiceMessages --progress --to "int" --to "prod" --tenant "tenantA" --tenant "tenantB" --tenantTag "tagme" --tenantTag "tagyou" --server http://octopus.com --apiKey myapikey --ignoreSslErrors --myAdditionalArgumentToInclude'
         );
     });
 });

@@ -26,7 +26,7 @@ export function getRequiredInput(name: string) {
 
 export function connectionArguments({ url, apiKey, ignoreSslErrors }: OctoServerConnectionDetails, tool: OctopusToolRunner) {
     tool.arg(["--server", url]);
-    tool.arg(["--apiKey", `"${apiKey}"`]);
+    tool.arg(["--apiKey", apiKey]);
     if (ignoreSslErrors) {
         tool.arg("--ignoreSslErrors");
     }
@@ -43,8 +43,8 @@ export function includeAdditionalArgumentsAndProxyConfig(url: string, additional
                 "Using agent configured proxy. If this command should not be sent via the agent's proxy, you might need to add or modify the agent's .proxybypass file. See https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/proxy#specify-proxy-bypass-urls."
             );
             tool.arg(["--proxy", proxyConfig.proxyUrl]);
-            tool.argIf(proxyConfig.proxyUsername, ["--proxyUser", `"${proxyConfig.proxyUsername}"`]);
-            tool.argIf(proxyConfig.proxyPassword, ["--proxyPass", `"${proxyConfig.proxyPassword}"`]);
+            tool.argIf(proxyConfig.proxyUsername, ["--proxyUser", `${proxyConfig.proxyUsername}`]);
+            tool.argIf(proxyConfig.proxyPassword, ["--proxyPass", `${proxyConfig.proxyPassword}`]);
         }
     }
 
