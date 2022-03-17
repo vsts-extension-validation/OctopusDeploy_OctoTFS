@@ -1,8 +1,8 @@
 ﻿{
     "id": "1627fcfe-f292-4904-adac-26cfb14bdb07",
     "name": "OctopusPromote",
-    "friendlyName": "Promote Octopus Release",
-    "description": "Promote an Octopus release from one environment to another",
+    "friendlyName": "[DEPRECATED] Promote Octopus Release",
+    "description": "This task is deprecated, please use latest version instead. Promote an Octopus release from one environment to another",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Deploy",
     "visibility": [
@@ -15,6 +15,7 @@
         "Minor": 3,
         "Patch": 0
     },
+    "deprecated": true,
     "demands": [],
     "minimumAgentVersion": "2.144.0",
     "groups": [
@@ -189,7 +190,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Promote Project in Octopus",
+    "instanceNameFormat": "[DEPRECATED] Promote Project in Octopus",
     "execution": {
         "Node10": {
             "target": "index.js"

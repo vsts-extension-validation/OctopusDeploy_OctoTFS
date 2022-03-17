@@ -1,8 +1,8 @@
 ﻿{
     "id": "57342b23-3a76-490a-8e78-25d4ade2f2e3",
     "name": "OctoInstaller",
-    "friendlyName": "Octopus CLI Installer",
-    "description": "Install a specific version of the Octopus CLI",
+    "friendlyName": "[DEPRECATED] Octopus CLI Installer",
+    "description": "This task is deprecated, please use latest version instead. Install a specific version of the Octopus CLI",
     "helpMarkDown": "Install a specific version of the Octopus CLI",
     "category": "Tool",
     "runsOn": [
@@ -19,6 +19,7 @@
         "Minor": 3,
         "Patch": 0
     },
+    "deprecated": true,
     "satisfies": ["Octo"],
     "demands": [],
     "minimumAgentVersion": "2.144.0",
@@ -39,7 +40,7 @@
             "helpMarkDown": "Specify `latest` or the version number to download. If you specify `embedded`, or the download fails, a built-in copy of the tool will be used."
         }
     ],
-    "instanceNameFormat": "Use Octopus CLI tool version $(version)",
+    "instanceNameFormat": "[DEPRECATED] Use Octopus CLI tool version $(version)",
     "execution": {
         "Node10": {
             "target": "index.js"

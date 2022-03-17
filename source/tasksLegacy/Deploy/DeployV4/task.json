@@ -1,8 +1,8 @@
 ﻿{
     "id": "8ca1d96a-151d-44b7-bc4f-9251e2ea6971",
     "name": "OctopusDeployRelease",
-    "friendlyName": "Deploy Octopus Release",
-    "description": "Deploy an Octopus Deploy Release",
+    "friendlyName": "[DEPRECATED] Deploy Octopus Release",
+    "description": "This task is deprecated, please use latest version instead. Deploy an Octopus Deploy Release",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Deploy",
     "visibility": [
@@ -15,6 +15,7 @@
         "Minor": 3,
         "Patch": 0
     },
+    "deprecated": true,
     "demands": [],
     "minimumAgentVersion": "2.144.0",
     "groups": [
@@ -176,7 +177,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Deploy Octopus Release",
+    "instanceNameFormat": "[DEPRECATED] Deploy Octopus Release",
     "execution": {
         "Node10": {
             "target": "index.js"

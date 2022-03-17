@@ -1,8 +1,8 @@
 ﻿{
     "id": "25fee290-e578-491b-b1db-dbc3980df1d0",
     "name": "OctoCli",
-    "friendlyName": "Invoke Octopus CLI command",
-    "description": "Invoke an Octopus CLI command",
+    "friendlyName": "[DEPRECATED] Invoke Octopus CLI command",
+    "description": "This task is deprecated, please use latest version instead. Invoke an Octopus CLI command",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Tool",
     "visibility": [
@@ -15,6 +15,7 @@
         "Minor": 3,
         "Patch": 0
     },
+    "deprecated": true,
     "demands": [],
     "minimumAgentVersion": "2.144.0",
     "groups": [
@@ -50,7 +51,7 @@
             "helpMarkDown": "The arguments to use for the command."
         }
     ],
-    "instanceNameFormat": "Invoke an Octopus CLI command",
+    "instanceNameFormat": "[DEPRECATED] Invoke an Octopus CLI command",
     "execution": {
         "Node10": {
             "target": "index.js"
