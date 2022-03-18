@@ -94,10 +94,7 @@ Alternatively, you can supply the tool using the system `PATH` environment varia
  * **Project**: The Octopus project to create a release for.
  * **Release Number**: Release number for the new release (leave blank to let Octopus decide).
  * **Channel**: Channel to use for the new release.
- * **Release Notes** section:
-   * **Include Changeset Comments**:  Whether to include changeset/commit comments in the Octopus release notes.
-   * **Include Work Items**:  Whether to include linked work item titles in the Octopus release notes.
-   * **Custom Notes**: Any additional static release notes to be included in the Octopus release.
+ * **Release Notes**: Any static release notes to be included in the Octopus release.
  * **Deployment** section:
    * **To Environment**:  Optional environment to deploy to after release creation.
    * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
