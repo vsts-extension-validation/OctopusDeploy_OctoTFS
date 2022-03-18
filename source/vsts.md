@@ -1,4 +1,4 @@
-This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com), as well as a dashboard widget to show the status of a deployment in Octopus.
+This extension provides Build and Release tasks to integrate with [Octopus Deploy](https://octopus.com), as well as a dashboard widget to show the status of a deployment in Octopus.
 
 [Octopus Deploy](https://octopus.com) is great for deploying ASP.NET or .NET Core applications running on IIS or Azure, Windows services, SQL databases, and much, much more.
 
