@@ -1,8 +1,8 @@
 ﻿{
     "id": "b1861ef4-b62e-40c1-bcb0-be00d454a8a7",
     "name": "OctopusMetadata",
-    "friendlyName": "Push Package Build Information to Octopus",
-    "description": "Collect information related to the build, including work items from commit messages, and push to your Octopus Deploy Server.",
+    "friendlyName": "[DEPRECATED] Push Package Build Information to Octopus",
+    "description": "This task is deprecated, please use latest version instead. Collect information related to the build, including work items from commit messages, and push to your Octopus Deploy Server.",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Package",
     "visibility": [
@@ -90,7 +90,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "Push Package Build Information to Octopus",
+    "instanceNameFormat": "[DEPRECATED] Push Package Build Information to Octopus",
     "execution": {
         "Node10": {
             "target": "index.js"
