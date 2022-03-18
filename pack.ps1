@@ -123,6 +123,8 @@ function Pack($envName, $environment, $workingDirectory) {
     & npm install tfx-cli
 
     & ./node_modules/.bin/tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
+
+    if (-not $?) {throw "Failed to create extension. Exit Code $LASTEXITCODE"}
 }
 
 if ($setupTaskDependencies -eq $true)

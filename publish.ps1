@@ -25,6 +25,9 @@ function IsPublishRequired($extensionManifest){
     $manifest = Get-Content $extensionManifest | ConvertFrom-Json
 	Write-Host "Checking whether publish is required for '$($manifest.publisher)' extension id '$($manifest.id)' version '$version'"
     $versions = & tfx extension show --publisher $manifest.publisher --extension-id $manifest.id --token $accessToken --json --no-prompt | ConvertFrom-Json | Select-Object -ExpandProperty versions | Group-Object -AsHashTable -Property version
+
+    if (-not $?) {throw "Failed to check whether publish is required. Exit Code $LASTEXITCODE"}
+
     return !($versions.ContainsKey($version))
 }
 
@@ -47,6 +50,8 @@ function PublishVSIX($vsixFile, $environment) {
         Write-Host "Publishing $vsixFile as a private extension, sharing with $shareWith"
         & tfx extension publish --vsix $vsixFile --token $accessToken --share-with $shareWith --no-prompt
     }
+
+    if (-not $?) {throw "Failed to publish. Exit Code $LASTEXITCODE"}
 }
 
 function PublishExtension($environment) {
