@@ -10,7 +10,6 @@ OctoTFS is made up of several tasks to make it easy to integrate TFS and ADO wit
 
 To learn more about how to use the extension and custom tasks, read the [VSTS README](source/vsts.md).
 
-* [Package Application for Octopus](source/tasks/Pack)
 * [Push Package(s) to Octopus](source/tasks/Push)
 * [Push Package Build Information to Octopus](source/tasks/BuildInformation)
 * [Create Octopus Release](source/tasks/CreateOctopusRelease)

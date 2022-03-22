@@ -57,7 +57,7 @@ function noFolders(src) {
 build({
     entryPoints: entryPoints(),
     bundle: true,
-    target: "es6",
+    target: "es2018",
     platform: "node",
     outdir: "dist",
     metafile: true,
@@ -67,7 +67,7 @@ build({
         copyStaticFiles({ src: "./source", dest: "dist", recursive: false, filter: noFolders }),
         copyStaticFiles({ src: "./source/widgets", dest: "dist/widgets" }),
         copyStaticFiles({ src: "./node_modules/vss-web-extension-sdk/lib", dest: "dist/widgets/ProjectStatus/lib" }),
-        //copyStaticFiles({ src: "./source/tasks", dest: "dist/tasks", recursive: true, filter: noTSFiles }),
+        copyStaticFiles({ src: "./source/tasks", dest: "dist/tasks", filter: noTSFiles }),
         copyStaticFiles({ src: "./source/tasksLegacy", dest: "dist/tasks", filter: noTSFiles }),
         esbuildPluginNodeExternals(),
     ],

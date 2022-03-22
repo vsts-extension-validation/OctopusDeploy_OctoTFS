@@ -139,7 +139,7 @@ async function resolvePublishedOctoVersion(version?: string): Promise<DownloadOp
 }
 
 function addToolToPath(toolPath: string) {
-    if (!process.env["PATH"].startsWith(path.dirname(toolPath))) {
+    if (!process.env["PATH"]?.startsWith(path.dirname(toolPath))) {
         tools.debug(`Adding ${ToolName} to path`);
         tools.prependPath(path.dirname(toolPath));
     }
@@ -169,9 +169,9 @@ async function getEmbeddedOcto(folderPath: string): Promise<string> {
     );
 }
 
-async function readFile(path: string, encoding = "utf8"): Promise<string> {
+async function readFile(path: string, encoding: BufferEncoding = "utf8"): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-        fs.readFile(path, encoding, (err, data) => {
+        fs.readFile(path, { encoding: encoding }, (err, data) => {
             if (err) {
                 reject(err);
             } else {

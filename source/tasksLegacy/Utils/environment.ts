@@ -38,21 +38,21 @@ export type VstsEnvironmentVariables = ReleaseEnvironmentVariables & BuildEnviro
 
 export const getVstsEnvironmentVariables = (): VstsEnvironmentVariables => {
     return {
-        projectId: process.env["SYSTEM_TEAMPROJECTID"],
-        projectName: process.env["SYSTEM_TEAMPROJECT"],
-        buildNumber: process.env["BUILD_BUILDNUMBER"],
+        projectId: process.env["SYSTEM_TEAMPROJECTID"] || "",
+        projectName: process.env["SYSTEM_TEAMPROJECT"] || "",
+        buildNumber: process.env["BUILD_BUILDNUMBER"] || "",
         buildId: Number(process.env["BUILD_BUILDID"]),
-        buildName: process.env["BUILD_DEFINITIONNAME"],
-        buildRepositoryName: process.env["BUILD_REPOSITORY_NAME"],
-        releaseName: process.env["RELEASE_RELEASENAME"],
-        releaseUri: process.env["RELEASE_RELEASEWEBURL"],
-        releaseId: process.env["RELEASE_RELEASEID"],
-        teamCollectionUri: process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"],
-        defaultWorkingDirectory: process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"],
-        buildRepositoryProvider: process.env["BUILD_REPOSITORY_PROVIDER"],
-        buildRepositoryUri: process.env["BUILD_REPOSITORY_URI"],
-        buildSourceVersion: process.env["BUILD_SOURCEVERSION"],
-        agentBuildDirectory: process.env["AGENT_BUILDDIRECTORY"],
+        buildName: process.env["BUILD_DEFINITIONNAME"] || "",
+        buildRepositoryName: process.env["BUILD_REPOSITORY_NAME"] || "",
+        releaseName: process.env["RELEASE_RELEASENAME"] || "",
+        releaseUri: process.env["RELEASE_RELEASEWEBURL"] || "",
+        releaseId: process.env["RELEASE_RELEASEID"] || "",
+        teamCollectionUri: process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"] || "",
+        defaultWorkingDirectory: process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] || "",
+        buildRepositoryProvider: process.env["BUILD_REPOSITORY_PROVIDER"] || "",
+        buildRepositoryUri: process.env["BUILD_REPOSITORY_URI"] || "",
+        buildSourceVersion: process.env["BUILD_SOURCEVERSION"] || "",
+        agentBuildDirectory: process.env["AGENT_BUILDDIRECTORY"] || "",
     };
 };
 

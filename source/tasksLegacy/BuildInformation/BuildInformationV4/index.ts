@@ -26,6 +26,7 @@ export interface IOctopusBuildInformationCommit {
 
 async function run() {
     try {
+        tasks.warning("This task is deprecated, please use latest version instead.");
         const environment = getVstsEnvironmentVariables();
         const vstsConnection = createVstsConnection(environment);
 

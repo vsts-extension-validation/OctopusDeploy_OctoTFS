@@ -90,6 +90,7 @@ export const getInputs = (): PackageInputs => {
 
 async function run() {
     try {
+        tasks.warning("This task is deprecated, please use http://go.microsoft.com/fwlink/?LinkId=809083 instead.");
         const octo = await getOrInstallOctoCommandRunner("pack");
         const configureTool = configure(getInputs());
 

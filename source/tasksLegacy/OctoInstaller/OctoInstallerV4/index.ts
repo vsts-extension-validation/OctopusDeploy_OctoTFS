@@ -4,6 +4,7 @@ import * as tasks from "azure-pipelines-task-lib/task";
 import * as os from "os";
 
 async function run() {
+    tasks.warning("This task is deprecated, please use latest version instead.");
     const version = tasks.getInput("version");
     // @ts-ignore
     const forceEmbedded = /embedded/i.test(version);

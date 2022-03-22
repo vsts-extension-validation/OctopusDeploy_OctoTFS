@@ -43,10 +43,6 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
         $task = ConvertFrom-JSON -InputObject (Get-Content $taskManifestFile -Raw)
         $netVersion = [System.Version]::Parse($version)
 
-        if ($task.version.Major -gt 3) {
-            $task.version.Major  = $netVersion.Major
-            $task.version.Minor = $netVersion.Minor
-        }
         $task.version.Patch = $netVersion.Build
 
         $task.helpMarkDown = "Version: $version. [More Information](https://g.octopushq.com/TFS-VSTS)"
@@ -127,6 +123,8 @@ function Pack($envName, $environment, $workingDirectory) {
     & npm install tfx-cli
 
     & ./node_modules/.bin/tfx extension create --root $workingDirectory --manifest-globs extension-manifest.json --overridesFile $overridesFile --outputPath "$buildArtifactsPath/$environment" --no-prompt
+
+    if (-not $?) {throw "Failed to create extension. Exit Code $LASTEXITCODE"}
 }
 
 if ($setupTaskDependencies -eq $true)

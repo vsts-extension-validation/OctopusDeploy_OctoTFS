@@ -10,8 +10,9 @@ param (
     $basePath = $PSScriptRoot
 )
 
-$buildDirectoryPath = "$basePath/dist"
+$ErrorActionPreference = "Stop"
 
+$buildDirectoryPath = "$basePath/dist"
 
 function Copy-Object($object){
     $result = New-Object PsObject

@@ -1,4 +1,4 @@
-This extension provides Build and Release tasks to integrate with [Octopus Deploy](http://octopus.com), as well as a dashboard widget to show the status of a deployment in Octopus.
+This extension provides Build and Release tasks to integrate with [Octopus Deploy](https://octopus.com), as well as a dashboard widget to show the status of a deployment in Octopus.
 
 [Octopus Deploy](https://octopus.com) is great for deploying ASP.NET or .NET Core applications running on IIS or Azure, Windows services, SQL databases, and much, much more.
 
@@ -15,9 +15,8 @@ You will need a minimum build agent version of `2.115.0` with .NET Core SDK `2.0
 
 The Octopus tasks require the Octopus CLI tool, which can be supplied any of the following ways:
 
-* Add the **Octopus CLI installer** task to the build pipeline, before other Octopus tasks. If you leave the version as `embedded`, a built-in copy of the Octopus CLI tool will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
+* Add the **Octopus CLI installer** task to the build pipeline, before other Octopus tasks. Specific a version number like `8.0.0`, that version will be downloaded and supplied to the other tasks.
 * Update the system `PATH` environment variable to include a folder containing the Octopus CLI, on all systems running VSTS agents. You will need to restart the `VSTS Agent` service (or the whole system) for the change to take effect.
-* If the Octopus CLI tool is not supplied, the Octopus tasks will attempt to download the latest version themselves.
 
 ## Add a service connection to Octopus Deploy
 
@@ -35,7 +34,6 @@ For example, if your build needs to create a Release for Project A, the user who
 This extension adds the following tasks:
 
 - Octopus CLI Installer
-- Package Application for Octopus
 - Push Package(s) to Octopus
 - Push Package Build Information to Octopus
 - Create Octopus Release
@@ -57,24 +55,8 @@ Alternatively, you can supply the tool using the system `PATH` environment varia
 
  Options include:
 
- * **Octopus CLI Version**: If you leave the version as `embedded`, a built-in copy of the Octopus CLI will be supplied to the other tasks. If you set the version to `latest` or a specific number like `6.10.0`, that version will be downloaded and supplied to the other tasks. If the download fails, the built-in copy of the tool will be used.
-
-## <a name="package-application"></a>![Package Icon](img/octopus_package-03.png) Package Application for Octopus
-
-*Note: You can still use [OctoPack](https://g.octopushq.com/ExternalToolOctoPack) as part of your MSBuild task to package and push Nuget packages to Octopus when targeting full .NET framework projects.*
-
-![Configure Package Application Step](img/create-package-options.png)
-
-Options include:
-
- * **Package ID**: The ID of the package. e.g. MyCompany.App
- * **Package Format**: NuPkg or Zip.
- * **Package Version**: The version of the package; must be a valid [SemVer](http://semver.org/) version; defaults to a timestamp-based version.
- * **Source Path**: The folder containing the files and folders to package. Defaults to working directory.
- * **Output Path**: The directory into which the generated package will be written. Defaults to working directory.
- * **NuGet** section: Additional details for the NuGet Package Metadata.
- * **Advanced Options** section: Additional files to include in the package, whether to overwrite any existing file of the same name, and additional [Octopus CLI arguments](https://g.octopushq.com/OctopusCliPack) to include.
-
+ * **Octopus CLI Version**: Specific a version number like `8.0.0`, that version will be downloaded and supplied to the other tasks.
+ 
 ## <a name="push-packages-to-octopus"></a>![Push Package Icon](img/octopus_push-01.png) Push Packages to Octopus
 
  ![Configure Push Application Step](img/push-packages-options.png)
@@ -112,10 +94,7 @@ Options include:
  * **Project**: The Octopus project to create a release for.
  * **Release Number**: Release number for the new release (leave blank to let Octopus decide).
  * **Channel**: Channel to use for the new release.
- * **Release Notes** section:
-   * **Include Changeset Comments**:  Whether to include changeset/commit comments in the Octopus release notes.
-   * **Include Work Items**:  Whether to include linked work item titles in the Octopus release notes.
-   * **Custom Notes**: Any additional static release notes to be included in the Octopus release.
+ * **Release Notes**: Any static release notes to be included in the Octopus release.
  * **Deployment** section:
    * **To Environment**:  Optional environment to deploy to after release creation.
    * **Show Deployment Progress**: Whether to wait for the operation to finish, recording output in the log. When enabled, the task only succeeds if the operation finished successfully.
