@@ -90,7 +90,11 @@ export const getInputs = (): PackageInputs => {
 
 async function run() {
     try {
-        tasks.warning("This task is deprecated, please use http://go.microsoft.com/fwlink/?LinkId=809083 instead.");
+        tasks.warning(`This task is supported, but it no longer actively maintained.
+It was originally created for the Octopus CLI when Octopus Deploy only supported NuGet packages.
+It is recommended to migrate to the built-in 'Archive Files' task (https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/archive-files).
+Alternatively, if NuGet package metadata is required, consider using the 'NuGet' task (https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget) or the 'dotnet pack' task (https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli).`);
+
         const octo = await getOrInstallOctoCommandRunner("pack");
         const configureTool = configure(getInputs());
 
