@@ -15,17 +15,11 @@ describe("OctoInstaller", () => {
 
     jest.setTimeout(100000);
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         tempOutDir = await mkdtemp(path.join(os.tmpdir(), "octopus_"));
         process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
         process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
-    });
 
-    afterAll(async () => {
-        await rm(tempOutDir, { recursive: true });
-    });
-
-    beforeEach(async () => {
         const app = express();
 
         app.get("/LatestTools", (_, res) => {
@@ -94,6 +88,8 @@ describe("OctoInstaller", () => {
                 resolve();
             });
         });
+
+        await rm(tempOutDir, { recursive: true });
     });
 
     test("Installs specific version", async () => {
