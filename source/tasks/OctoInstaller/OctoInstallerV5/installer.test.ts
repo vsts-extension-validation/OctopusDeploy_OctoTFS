@@ -94,19 +94,25 @@ describe("OctoInstaller", () => {
 
     test("Installs specific version", async () => {
         const output = await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
-        expect(output).toContain("/8.0.0/OctopusTools.");
-        expect(output).toContain("/octo/8.0.0");
+        assertions(output, "8.0.0");
     });
 
     test("Installs wildcard version", async () => {
         const output = await executeCommand(() => new Installer(octopusUrl).run("7.*"));
-        expect(output).toContain("/7.4.1/OctopusTools.");
-        expect(output).toContain("/octo/7.4.1");
+        assertions(output, "7.4.1");
     });
 
     test("Installs latest of latest", async () => {
         const output = await executeCommand(() => new Installer(octopusUrl).run("*"));
-        expect(output).toContain("/8.2.0/OctopusTools.");
-        expect(output).toContain("/octo/8.2.0");
+        assertions(output, "8.2.0");
     });
+
+    function assertions(output: string, version: string) {
+        expect(output).toContain(toPath([version, "OctopusTools."]));
+        expect(output).toContain(toPath(["octo", version]));
+    }
+
+    function toPath(parts: string[]) {
+        return `${path.sep}${parts.join(path.sep)}`;
+    }
 });
