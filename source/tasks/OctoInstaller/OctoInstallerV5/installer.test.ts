@@ -108,7 +108,7 @@ describe("OctoInstaller", () => {
     });
 
     function assertions(output: string, version: string) {
-        expect(output).toContain(toPath([version, "OctopusTools."]));
+        expect(output).toContain(`/${version}/OctopusTools`);
         expect(output).toContain(toPath(["octo", version]));
     }
 
