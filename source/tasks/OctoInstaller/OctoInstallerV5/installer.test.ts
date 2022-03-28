@@ -53,6 +53,20 @@ describe("OctoInstaller", () => {
             res.send(latestToolsPayload);
         });
 
+        app.get("/OctopusCLIVersions", (_, res) => {
+            res.send(`{
+  "versions": [
+    "3.36.3",
+    "3.39.2",
+    "4.30.10",
+    "4.31.0",
+    "4.31.1",
+    "4.31.2",
+    "8.0.0"
+    ]
+  }`);
+        });
+
         app.get("/octopus-tools/*", async (_, res) => {
             const archive = archiver(platform() === "win32" ? "zip" : "tar", { gzip: true });
             archive.append("Hello world", { name: "octo" });
