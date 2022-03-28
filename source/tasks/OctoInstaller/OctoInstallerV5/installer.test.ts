@@ -17,6 +17,8 @@ describe("OctoInstaller", () => {
 
     beforeAll(async () => {
         tempOutDir = await mkdtemp(path.join(os.tmpdir(), "octopus_"));
+        process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
+        process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
     });
 
     afterAll(async () => {
@@ -62,7 +64,9 @@ describe("OctoInstaller", () => {
     "4.31.0",
     "4.31.1",
     "4.31.2",
-    "8.0.0"
+    "7.4.1",
+    "8.0.0",
+    "8.2.0"
     ]
   }`);
         });
@@ -93,9 +97,20 @@ describe("OctoInstaller", () => {
     });
 
     test("Installs specific version", async () => {
-        process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
-        process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
+        const output = await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
+        expect(output).toContain("/8.0.0/OctopusTools.");
+        expect(output).toContain("/octo/8.0.0");
+    });
 
-        await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
+    test("Installs wildcard version", async () => {
+        const output = await executeCommand(() => new Installer(octopusUrl).run("7.*"));
+        expect(output).toContain("/7.4.1/OctopusTools.");
+        expect(output).toContain("/octo/7.4.1");
+    });
+
+    test("Installs latest of latest", async () => {
+        const output = await executeCommand(() => new Installer(octopusUrl).run("*"));
+        expect(output).toContain("/8.2.0/OctopusTools.");
+        expect(output).toContain("/octo/8.2.0");
     });
 });

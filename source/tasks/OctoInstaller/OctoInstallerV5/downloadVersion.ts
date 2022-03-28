@@ -28,12 +28,17 @@ interface Dictionary {
     [key: string]: Primitive;
 }
 
+export interface Endpoint {
+    downloadUrl: string | undefined;
+    version: string;
+}
+
 export class DownloadEndpointRetriever {
     private osPlat: string = os.platform();
 
     constructor(readonly octopusUrl: string) {}
 
-    public async getEndpoint(versionSpec: string) {
+    public async getEndpoint(versionSpec: string): Promise<Endpoint> {
         const octopurls = this.restClient();
 
         const versionsResponse = await octopurls.get<VersionsResponse>("OctopusCLIVersions");
@@ -70,7 +75,7 @@ export class DownloadEndpointRetriever {
             }
         }
 
-        return downloadUrl;
+        return { downloadUrl, version };
     }
 
     private restClient() {

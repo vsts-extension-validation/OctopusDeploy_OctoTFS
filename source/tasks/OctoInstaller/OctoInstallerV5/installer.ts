@@ -3,7 +3,7 @@ import * as tasks from "azure-pipelines-task-lib";
 import os from "os";
 import path from "path";
 import { executeWithSetResult } from "../../Utils/octopusTasks";
-import { DownloadEndpointRetriever } from "./downloadVersion";
+import { DownloadEndpointRetriever, Endpoint } from "./downloadVersion";
 
 const TOOL_NAME = "octo";
 
@@ -12,31 +12,30 @@ const osPlat: string = os.platform();
 export class Installer {
     constructor(readonly octopusUrl: string) {}
 
-    public async run(version: string) {
+    public async run(versionSpec: string) {
         await executeWithSetResult(
             async () => {
-                let toolPath = tools.findLocalTool(TOOL_NAME, version);
+                const endpoint = await new DownloadEndpointRetriever(this.octopusUrl).getEndpoint(versionSpec);
+                let toolPath = tools.findLocalTool(TOOL_NAME, endpoint.version);
 
                 if (!toolPath) {
-                    toolPath = await this.installTool(version);
-                    toolPath = tools.findLocalTool(TOOL_NAME, version);
+                    toolPath = await this.installTool(endpoint);
+                    toolPath = tools.findLocalTool(TOOL_NAME, endpoint.version);
                 }
 
                 tools.prependPath(toolPath);
             },
-            `Installed octo v${version}.`,
-            `Failed to install octo v${version}.`
+            `Installed octo v${versionSpec}.`,
+            `Failed to install octo v${versionSpec}.`
         );
     }
 
-    private async installTool(version: string): Promise<string> {
-        const downloadUrl = await new DownloadEndpointRetriever(this.octopusUrl).getEndpoint(version);
-
-        if (!downloadUrl) {
-            throw Error(`Failed to download Octopus CLI tool version ${version}.`);
+    private async installTool(endpoint: Endpoint): Promise<string> {
+        if (!endpoint.downloadUrl) {
+            throw Error(`Failed to download Octopus CLI tool version ${endpoint.version}.`);
         }
 
-        const downloadPath = await tools.downloadTool(downloadUrl);
+        const downloadPath = await tools.downloadTool(endpoint.downloadUrl);
 
         //
         // Extract
@@ -54,6 +53,6 @@ export class Installer {
             extPath = await tools.extractTar(downloadPath);
         }
 
-        return await tools.cacheDir(extPath, TOOL_NAME, version);
+        return await tools.cacheDir(extPath, TOOL_NAME, endpoint.version);
     }
 }
