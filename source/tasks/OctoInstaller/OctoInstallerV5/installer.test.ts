@@ -15,15 +15,11 @@ describe("OctoInstaller", () => {
 
     jest.setTimeout(100000);
 
-    beforeAll(async () => {
-        tempOutDir = await mkdtemp(path.join(os.tmpdir(), "octopus_"));
-    });
-
-    afterAll(async () => {
-        await rm(tempOutDir, { recursive: true });
-    });
-
     beforeEach(async () => {
+        tempOutDir = await mkdtemp(path.join(os.tmpdir(), "octopus_"));
+        process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
+        process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
+
         const app = express();
 
         app.get("/LatestTools", (_, res) => {
@@ -53,6 +49,22 @@ describe("OctoInstaller", () => {
             res.send(latestToolsPayload);
         });
 
+        app.get("/OctopusCLIVersions", (_, res) => {
+            res.send(`{
+  "versions": [
+    "3.36.3",
+    "3.39.2",
+    "4.30.10",
+    "4.31.0",
+    "4.31.1",
+    "4.31.2",
+    "7.4.1",
+    "8.0.0",
+    "8.2.0"
+    ]
+  }`);
+        });
+
         app.get("/octopus-tools/*", async (_, res) => {
             const archive = archiver(platform() === "win32" ? "zip" : "tar", { gzip: true });
             archive.append("Hello world", { name: "octo" });
@@ -76,12 +88,31 @@ describe("OctoInstaller", () => {
                 resolve();
             });
         });
+
+        await rm(tempOutDir, { recursive: true });
     });
 
     test("Installs specific version", async () => {
-        process.env["AGENT_TOOLSDIRECTORY"] = tempOutDir;
-        process.env["AGENT_TEMPDIRECTORY"] = tempOutDir;
-
-        await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
+        const output = await executeCommand(() => new Installer(octopusUrl).run("8.0.0"));
+        assertions(output, "8.0.0");
     });
+
+    test("Installs wildcard version", async () => {
+        const output = await executeCommand(() => new Installer(octopusUrl).run("7.*"));
+        assertions(output, "7.4.1");
+    });
+
+    test("Installs latest of latest", async () => {
+        const output = await executeCommand(() => new Installer(octopusUrl).run("*"));
+        assertions(output, "8.2.0");
+    });
+
+    function assertions(output: string, version: string) {
+        expect(output).toContain(`/${version}/OctopusTools`);
+        expect(output).toContain(toPath(["octo", version]));
+    }
+
+    function toPath(parts: string[]) {
+        return `${path.sep}${parts.join(path.sep)}`;
+    }
 });
