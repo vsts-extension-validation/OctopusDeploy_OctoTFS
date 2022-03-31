@@ -55,6 +55,11 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 }
 
 function SetupTaskDependencies($workingDirectory) {
+    $tempPath = "$env:TEMP/modules";
+
+    mkdir $tempPath
+    cd $tempPath
+
     & npm install azure-pipelines-task-lib azure-pipelines-tool-lib
 
     & go install github.com/tj/node-prune@latest
@@ -66,6 +71,8 @@ function SetupTaskDependencies($workingDirectory) {
 
     New-Item -ItemType Directory -Path "$buildDirectoryPath/tasks/node_modules"
     Copy-Item -Path "./node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
+
+    cd $workingDirectory
 }
 
 function Get-TaskId($envName, $taskName) {
