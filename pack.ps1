@@ -54,7 +54,7 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
     }
 }
 
-function SetupTaskDependencies($workingDirectory) {
+function SetupTaskDependencies() {
     $tempPath = "$basePath/modules";
 
     mkdir "$tempPath/node_modules"
@@ -126,6 +126,6 @@ function Pack($envName, $environment, $workingDirectory) {
 
 if ($setupTaskDependencies -eq $true)
 {
-    SetupTaskDependencies $buildDirectoryPath
+    SetupTaskDependencies
 }
 Pack "VSTSExtensions" $environment $buildDirectoryPath
