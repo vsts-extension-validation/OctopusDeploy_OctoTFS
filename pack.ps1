@@ -55,8 +55,6 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 }
 
 function SetupTaskDependencies($workingDirectory) {
-    Remove-Item ./node_modules -Recurse -Force
-
     & npm install azure-pipelines-task-lib azure-pipelines-tool-lib
 
     & go install github.com/tj/node-prune@latest
@@ -66,14 +64,8 @@ function SetupTaskDependencies($workingDirectory) {
 
     Invoke-Expression "$command ./node_modules"
 
-    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
-
-    foreach ($manifestFile in $taskManifestFiles) {
-        $directory = Split-Path -parent $manifestFile
-
-        New-Item -ItemType Directory -Path "$directory/node_modules"
-        Copy-Item -Path "./node_modules/*" -Destination "$directory/node_modules" -Recurse
-    }
+    New-Item -ItemType Directory -Path "$buildDirectoryPath/tasks/node_modules"
+    Copy-Item -Path "./node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
 }
 
 function Get-TaskId($envName, $taskName) {
