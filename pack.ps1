@@ -55,7 +55,7 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 }
 
 function SetupTaskDependencies($workingDirectory) {
-    $tempPath = "$env:TEMP/modules";
+    $tempPath = "$env:TMP/modules";
 
     mkdir $tempPath
     cd $tempPath
