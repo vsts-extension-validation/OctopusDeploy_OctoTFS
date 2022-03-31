@@ -54,7 +54,7 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
     }
 }
 
-function SetupTaskDependencies() {
+function SetupTaskDependencies($workingDirectory) {
     $tempPath = "$basePath/modules";
 
     mkdir "$tempPath/node_modules"
@@ -67,8 +67,14 @@ function SetupTaskDependencies() {
 
     Invoke-Expression "$command $tempPath/node_modules"
 
-    New-Item -ItemType Directory -Path "$buildDirectoryPath/tasks/node_modules"
-    Copy-Item -Path "$tempPath/node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
+    $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
+
+    foreach ($manifestFile in $taskManifestFiles) {
+        $directory = Split-Path -parent $manifestFile
+
+        New-Item -ItemType Directory -Path "$directory/node_modules"
+        Copy-Item -Path "$tempPath/node_modules/*" -Destination "$directory/node_modules" -Recurse
+    }
 }
 
 function Get-TaskId($envName, $taskName) {
@@ -126,6 +132,6 @@ function Pack($envName, $environment, $workingDirectory) {
 
 if ($setupTaskDependencies -eq $true)
 {
-    SetupTaskDependencies
+    SetupTaskDependencies $buildDirectoryPath
 }
 Pack "VSTSExtensions" $environment $buildDirectoryPath
