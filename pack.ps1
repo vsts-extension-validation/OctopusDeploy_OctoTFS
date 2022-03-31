@@ -60,17 +60,18 @@ function SetupTaskDependencies($workingDirectory) {
     mkdir $tempPath
     cd $tempPath
 
-    & npm install azure-pipelines-task-lib azure-pipelines-tool-lib
+    mkdir "$tempPath/node_modules"
+    & npm install --prefix $tempPath azure-pipelines-task-lib azure-pipelines-tool-lib
 
     & go install github.com/tj/node-prune@latest
 
     $goPath = go env GOPATH
     $command = "$goPath/bin/node-prune"
 
-    Invoke-Expression "$command ./node_modules"
+    Invoke-Expression "$command $tempPath/node_modules"
 
     New-Item -ItemType Directory -Path "$buildDirectoryPath/tasks/node_modules"
-    Copy-Item -Path "./node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
+    Copy-Item -Path "$tempPath/node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
 
     cd $workingDirectory
 }
