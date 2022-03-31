@@ -57,9 +57,6 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 function SetupTaskDependencies($workingDirectory) {
     $tempPath = "$basePath/modules";
 
-    mkdir $tempPath
-    cd $tempPath
-
     mkdir "$tempPath/node_modules"
     & npm install --prefix $tempPath azure-pipelines-task-lib azure-pipelines-tool-lib
 
@@ -72,8 +69,6 @@ function SetupTaskDependencies($workingDirectory) {
 
     New-Item -ItemType Directory -Path "$buildDirectoryPath/tasks/node_modules"
     Copy-Item -Path "$tempPath/node_modules/*" -Destination "$buildDirectoryPath/tasks/node_modules" -Recurse
-
-    cd $workingDirectory
 }
 
 function Get-TaskId($envName, $taskName) {
