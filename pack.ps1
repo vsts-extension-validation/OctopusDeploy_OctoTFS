@@ -69,8 +69,11 @@ function SetupTaskDependencies($workingDirectory) {
     foreach ($manifestFile in $taskManifestFiles) {
         $directory = Split-Path -parent $manifestFile
 
-        mkdir "$directory/node_modules"
-        Copy-Item -Path "./node_modules/*" -Destination "$directory/node_modules" -Recurse
+        mkdir "$directory/node_modules/azure-pipelines-task-lib"
+        Copy-Item -Path "./node_modules/azure-pipelines-task-lib/*" -Destination "$directory/node_modules/azure-pipelines-task-lib" -Recurse
+
+        mkdir "$directory/node_modules/azure-pipelines-tool-lib"
+        Copy-Item -Path "./node_modules/azure-pipelines-tool-lib/*" -Destination "$directory/node_modules/azure-pipelines-tool-lib" -Recurse
     }
 }
 

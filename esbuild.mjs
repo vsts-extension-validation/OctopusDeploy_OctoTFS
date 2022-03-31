@@ -1,6 +1,5 @@
 import { build } from "esbuild";
 import { cleanPlugin } from "esbuild-clean-plugin";
-import { esbuildPluginNodeExternals } from "esbuild-plugin-node-externals";
 import copyStaticFiles from "esbuild-copy-static-files";
 import glob from "glob";
 import { sep } from "path";
@@ -61,6 +60,8 @@ build({
     platform: "node",
     outdir: "dist",
     metafile: true,
+    minify: true,
+    external: ["./node_modules/azure-pipelines-task-lib/*", "./node_modules/azure-pipelines-tool-lib/*"],
     plugins: [
         cleanPlugin(),
         copyStaticFiles({ src: "./source/img", dest: "dist/img" }),
@@ -69,7 +70,6 @@ build({
         copyStaticFiles({ src: "./node_modules/vss-web-extension-sdk/lib", dest: "dist/widgets/ProjectStatus/lib" }),
         copyStaticFiles({ src: "./source/tasks", dest: "dist/tasks", filter: noTSFiles }),
         copyStaticFiles({ src: "./source/tasksLegacy", dest: "dist/tasks", filter: noTSFiles }),
-        esbuildPluginNodeExternals(),
     ],
     logLimit: 0,
     logLevel: "info",
