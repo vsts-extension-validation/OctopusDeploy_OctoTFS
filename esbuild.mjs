@@ -57,7 +57,9 @@ const bundleAsMuchAsWeCan = {
     name: 'my-special-bundle',
     setup(build) {
         build.onResolve( { filter: /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/ } , args => {
-            if(args.path.startsWith( "azure-pipelines-task-lib"))
+            console.log(args.path);
+            console.log(`args.resolveDir=${args.resolveDir}`);
+            if(args.path.startsWith("azure-pipelines-tool-lib") || args.path.startsWith( "azure-pipelines-task-lib"))
                 return { path: args.path, external: true };
         })
     },
