@@ -55,22 +55,25 @@ function UpdateTaskManifests($workingDirectory, $version, $envName) {
 }
 
 function SetupTaskDependencies($workingDirectory) {
-    & npm prune --production
+    $tempPath = "$basePath/modules";
 
+    mkdir "$tempPath/node_modules"
+    & npm install --prefix $tempPath azure-pipelines-task-lib azure-pipelines-tool-lib
+    & npm dedup --prefix $tempPath
     & go install github.com/tj/node-prune@latest
 
     $goPath = go env GOPATH
     $command = "$goPath/bin/node-prune"
 
-    Invoke-Expression "$command ./node_modules"
+    Invoke-Expression "$command $tempPath/node_modules"
 
     $taskManifestFiles = Get-ChildItem $workingDirectory -Include "task.json" -Recurse
 
     foreach ($manifestFile in $taskManifestFiles) {
         $directory = Split-Path -parent $manifestFile
 
-        mkdir "$directory/node_modules"
-        Copy-Item -Path "./node_modules/*" -Destination "$directory/node_modules" -Recurse
+        New-Item -ItemType Directory -Path "$directory/node_modules"
+        Copy-Item -Path "$tempPath/node_modules/*" -Destination "$directory/node_modules" -Recurse
     }
 }
 

@@ -1,6 +1,5 @@
 import { build } from "esbuild";
 import { cleanPlugin } from "esbuild-clean-plugin";
-import { esbuildPluginNodeExternals } from "esbuild-plugin-node-externals";
 import copyStaticFiles from "esbuild-copy-static-files";
 import glob from "glob";
 import { sep } from "path";
@@ -54,6 +53,18 @@ function noFolders(src) {
     return !isDirectory;
 }
 
+const bundleAsMuchAsWeCan = {
+    name: 'my-special-bundle',
+    setup(build) {
+        build.onResolve( { filter: /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/ } , args => {
+            console.log(args.path);
+            console.log(`args.resolveDir=${args.resolveDir}`);
+            if(args.path.startsWith("azure-pipelines-tool-lib") || args.path.startsWith( "azure-pipelines-task-lib"))
+                return { path: args.path, external: true };
+        })
+    },
+}
+
 build({
     entryPoints: entryPoints(),
     bundle: true,
@@ -61,6 +72,7 @@ build({
     platform: "node",
     outdir: "dist",
     metafile: true,
+    minify: true,
     plugins: [
         cleanPlugin(),
         copyStaticFiles({ src: "./source/img", dest: "dist/img" }),
@@ -69,7 +81,7 @@ build({
         copyStaticFiles({ src: "./node_modules/vss-web-extension-sdk/lib", dest: "dist/widgets/ProjectStatus/lib" }),
         copyStaticFiles({ src: "./source/tasks", dest: "dist/tasks", filter: noTSFiles }),
         copyStaticFiles({ src: "./source/tasksLegacy", dest: "dist/tasks", filter: noTSFiles }),
-        esbuildPluginNodeExternals(),
+        bundleAsMuchAsWeCan
     ],
     logLimit: 0,
     logLevel: "info",
