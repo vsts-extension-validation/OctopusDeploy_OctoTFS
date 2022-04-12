@@ -7,7 +7,7 @@ import os from "os";
 
 async function run() {
     try {
-        tasks.warning("This task is deprecated, please use latest version instead.");
+        tasks.warning("There is a later version of this task, we recommend using the latest version.");
         const connection = getDefaultOctopusConnectionDetailsOrThrow();
 
         const space = tasks.getInput("Space");

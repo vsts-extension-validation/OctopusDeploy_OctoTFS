@@ -1,14 +1,11 @@
 ﻿{
     "id": "4E131B60-5532-4362-95B6-7C67D9841B4F",
     "name": "OctopusCreateRelease",
-    "friendlyName": "[DEPRECATED] Create Octopus Release",
-    "description": "This task is deprecated, please use latest version instead. Create a Release in Octopus Deploy",
+    "friendlyName": "Create Octopus Release",
+    "description": "There is a later version of this task, we recommend using the latest version. Create a Release in Octopus Deploy",
     "helpMarkDown": "set-by-pack.ps1",
     "category": "Deploy",
-    "visibility": [
-        "Build",
-        "Release"
-    ],
+    "visibility": ["Build", "Release"],
     "author": "Octopus Deploy",
     "version": {
         "Major": 4,
@@ -260,7 +257,7 @@
             "resultTemplate": "{\"Value\":\"{{{Id}}}\",\"DisplayValue\":\"{{{Name}}}\"}"
         }
     ],
-    "instanceNameFormat": "[DEPRECATED] Create Octopus Release",
+    "instanceNameFormat": "Create Octopus Release",
     "execution": {
         "Node10": {
             "target": "index.js"
