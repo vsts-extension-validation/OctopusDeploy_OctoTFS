@@ -1,19 +1,32 @@
 name: Build
 
 on:
+  workflow_call:
   push:
     branches: [ main ]
-    tags: [ '*' ]
   pull_request:
     branches: [ main ]
 
+  release:
+    types: [created]
+
+  workflow_dispatch:
+    inputs:
+      release-tag:
+        description: "The tag of the release being replicated in Octopus Deploy"
+        required: true
+
 env:
-  OCTOPUS_VERSION: 5.0.${{ github.run_number }}
+  PACKAGE_VERSION: 5.2.${{ github.run_number }}
+  OCTOPUS_CLI_SERVER: ${{ secrets.OCTOPUS_URL }}
+  OCTOPUS_CLI_API_KEY: ${{ secrets.INTEGRATIONS_API_KEY }}
 
 jobs:
   build:
     name: Build code
     runs-on: ubuntu-latest
+    outputs:
+      package_version: ${{ steps.build.outputs.package_version }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -22,13 +35,16 @@ jobs:
           node-version: '16'
           cache: 'npm'
       - name: Build
+        id: build
         run: |
           npm install
-          npm run build -- --extensionVersion $OCTOPUS_VERSION
+          npm run build -- --extensionVersion $PACKAGE_VERSION
+          echo "::set-output name=package_version::$PACKAGE_VERSION"
       - uses: actions/upload-artifact@v2
         with:
           name: dist
           path: dist/
+  
   test:
     name: Run test matrix
     needs: build
@@ -58,41 +74,69 @@ jobs:
           name: Tests report
           path: 'reports/jest-*.xml'
           reporter: jest-junit
+  
   package:
     name: Package and Push artifacts to Octopus
-    needs: test
+    needs: [build, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v2
         with:
           name: dist
           path: dist
+
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
           cache: 'npm'
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '^1.17.7'
+
       - name: Embed octo portable
         run: |
           pwsh ./embed-octo.ps1
+
       - name: Replace versions in tasks and create vsix
         run: |
-          ./pack.ps1 -environment Production -version $Env:OCTOPUS_VERSION -setupTaskDependencies
-          ./pack.ps1 -environment Test -version $Env:OCTOPUS_VERSION
+          ./pack.ps1 -environment Production -version ${{ needs.build.outputs.package_version }} -setupTaskDependencies
+          ./pack.ps1 -environment Test -version ${{ needs.build.outputs.package_version }}
         shell: pwsh
-      - name: Create Packages
-        run: |
-          tar -czf OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz ./dist/Artifacts/**/*.vsix
-          tar -czf OctoTFS.publish.$OCTOPUS_VERSION.tar.gz ./publish.ps1 ./dist/extension-manifest*.json
-      - name: Push Package
-        run: |
-          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo push --space "Integrations" --package OctoTFS.vsix.$OCTOPUS_VERSION.tar.gz --package OctoTFS.publish.$OCTOPUS_VERSION.tar.gz --overwrite-mode OverwriteExisting
-      - name: Create Release
-        run: |
-          docker run -e "OCTOPUS_CLI_SERVER=${{ secrets.OCTOPUS_URL }}" -e "OCTOPUS_CLI_API_KEY=${{ secrets.INTEGRATIONS_API_KEY }}" -v $(pwd):/src octopusdeploy/octo create-release --space "Integrations" --project "Azure DevOps Extension" --packageVersion $OCTOPUS_VERSION --releaseNumber $OCTOPUS_VERSION --gitRef "${{ (github.ref_type == 'tag' && 'main' ) || (github.head_ref || github.ref) }}" --gitCommit "${{ github.event.after || github.event.pull_request.head.sha }}"
 
+      - name: Create Packages
+        id: create-packages
+        run: |
+          tar -czf OctoTFS.vsix.${{ needs.build.outputs.package_version }}.tar.gz ./dist/Artifacts/**/*.vsix
+          tar -czf OctoTFS.publish.${{ needs.build.outputs.package_version }}.tar.gz ./publish.ps1 ./dist/extension-manifest*.json
+
+      - name: Install Octopus CLI 🐙
+        uses: OctopusDeploy/install-octopus-cli-action@v1.2.0
+        with:
+          version: '*'
+
+      - name: Push Package 🐙
+        uses: OctopusDeploy/push-package-action@v1.1.2
+        with:
+            space: "Integrations"
+            packages: |
+              OctoTFS.vsix.${{ needs.build.outputs.package_version }}.tar.gz
+              OctoTFS.publish.${{ needs.build.outputs.package_version }}.tar.gz
+
+      - name: Fetch Release Notes
+        id: fetch-release-notes
+        if: github.event_name == 'release'
+        run: |
+          echo "::debug::${{github.event_name}}"
+          OUTPUT_FILE="release_notes.txt"
+          jq --raw-output '.release.body' ${{ github.event_path }} | sed 's#\r#  #g' > $OUTPUT_FILE
+          echo "::set-output name=release-note-file::$OUTPUT_FILE"
+
+      - name: Create a release in Octopus Deploy 🐙
+        uses: OctopusDeploy/create-release-action@v1.1.1
+        with:
+          space: "Integrations"
+          project: "Azure DevOps Extension"
+          package_version: ${{ needs.build.outputs.package_version }}
+          channel: ${{ (github.event_name == 'release' && 'Release') || '' }}
+          release_notes_file: ${{ (github.event_name == 'release' && steps.fetch-release-notes.outputs.release-note-file) || ''}}
+          git_ref: ${{ (github.ref_type == 'tag' && 'main' ) || (github.head_ref || github.ref) }}
+          git_commit: ${{ github.event.after || github.event.pull_request.head.sha }}
