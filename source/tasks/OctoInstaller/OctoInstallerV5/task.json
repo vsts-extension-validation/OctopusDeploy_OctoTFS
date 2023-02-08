@@ -2,8 +2,8 @@
     "id": "57342b23-3a76-490a-8e78-25d4ade2f2e3",
     "name": "OctoInstaller",
     "friendlyName": "Octopus CLI Installer",
-    "description": "Install a specific version of the Octopus CLI",
-    "helpMarkDown": "Install a specific version of the Octopus CLI",
+    "description": "Install a specific version of the Octopus CLI (C#)",
+    "helpMarkDown": "Install a specific version of the Octopus CLI (C#)",
     "category": "Tool",
     "runsOn": [
         "Agent",

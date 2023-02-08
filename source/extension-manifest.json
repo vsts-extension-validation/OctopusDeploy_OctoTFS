@@ -151,6 +151,24 @@
             }
         },
         {
+            "id": "octopus-deploy-tenanted",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/DeployTenant"
+            }
+        },
+        {
+            "id": "octopus-run-runbook",
+            "type": "ms.vss-distributed-task.task",
+            "targets": ["ms.vss-distributed-task.tasks"],
+            "properties": {
+                "name": "tasks/RunRunbook"
+            }
+        },
+        {
             "id": "octopus-pack",
             "type": "ms.vss-distributed-task.task",
             "targets": [
@@ -158,6 +176,26 @@
             ],
             "properties": {
                 "name": "tasks/Pack"
+            }
+        },
+        {
+            "id": "octopus-pack-zip",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/PackZip"
+            }
+        },
+        {
+            "id": "octopus-pack-nuget",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/PackNuGet"
             }
         },
         {
@@ -177,6 +215,16 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
+                "name": "tasks/OctopusMetadata"
+            }
+        },
+        {
+            "id": "octopus-build-information",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
                 "name": "tasks/BuildInformation"
             }
         },
@@ -186,7 +234,7 @@
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
-            "properties":{
+            "properties": {
                 "name": "tasks/OctoInstaller"
             }
         },
@@ -208,6 +256,16 @@
             ],
             "properties": {
                 "name": "tasks/OctoCli"
+            }
+        },
+        {
+            "id": "octopus-await-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/AwaitTask"
             }
         },
         {

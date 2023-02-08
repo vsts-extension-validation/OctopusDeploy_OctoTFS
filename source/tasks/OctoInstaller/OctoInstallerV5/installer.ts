@@ -3,19 +3,19 @@ import * as tasks from "azure-pipelines-task-lib";
 import os from "os";
 import path from "path";
 import { executeWithSetResult } from "../../Utils/octopusTasks";
-import { DownloadEndpointRetriever, Endpoint } from "./downloadVersion";
+import { DownloadEndpointRetriever, Endpoint } from "./downloadEndpointRetriever";
 
 const TOOL_NAME = "octo";
 
 const osPlat: string = os.platform();
 
 export class Installer {
-    constructor(readonly octopusUrl: string) {}
+    constructor(readonly octopurlsUrl: string) {}
 
     public async run(versionSpec: string) {
         await executeWithSetResult(
             async () => {
-                const endpoint = await new DownloadEndpointRetriever(this.octopusUrl).getEndpoint(versionSpec);
+                const endpoint = await new DownloadEndpointRetriever(this.octopurlsUrl).getEndpoint(versionSpec);
                 let toolPath = tools.findLocalTool(TOOL_NAME, endpoint.version);
 
                 if (!toolPath) {
