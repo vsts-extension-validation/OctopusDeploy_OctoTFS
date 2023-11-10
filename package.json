@@ -46,7 +46,7 @@
     "fp-ts": "1.19.5",
     "glob": "7.2.0",
     "ramda": "0.28.0",
-    "semver": "^7.3.7",
+    "semver": "^7.5.2",
     "shlex": "^2.1.2",
     "typed-rest-client": "1.8.9",
     "uuid": "8.3.2",
